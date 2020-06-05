@@ -1,3 +1,10 @@
+#!/bin/sh
+#
+# Init script for dotfiles.
+#
+# Based on the article 'The best way to store your dotfiles: A bare Git repository':
+# https://www.atlassian.com/git/tutorials/dotfiles
+
 git clone --bare https://github.com/abjoru/dotf.git $HOME/.dotf
 
 function config {
