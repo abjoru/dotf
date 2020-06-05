@@ -2,6 +2,6 @@
 
 # Installation
 
-'''sh
-curl -Lks http://bit.do/dotf-install | /bin/bash
-'''
+```sh
+curl -Lks http://bit.do/setup-dotf | /bin/bash
+```
