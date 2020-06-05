@@ -1,0 +1,101 @@
+#!/bin/sh
+#
+# dotf
+
+set -e 
+
+MODE="install"
+VERBOSE=false
+
+SCALA_VERSION=2.13
+
+AMM_VERSION=2.1.4
+AMM_RELEASE_VERSION="${SCALA_VERSION}-${AMM_VERSION}-2-ef9b0a0"
+AMM_URL="https://github.com/lihaoyi/Ammonite/releases/download/${AMM_VERSION}/${AMM_RELEASE_VERSION}"
+
+SC_DIR=${XDG_DATA_HOME:-~/.local/share}/dotf
+
+displayUsageAndExit() {
+  echo "dotf -- dotfiles management"
+  echo
+  echo "Usage: dotf [options] <cmd>"
+  echo
+  echo "Options:"
+  echo "  -d  Dry run a command"
+  echo "  -v  Verbose output for a command"
+  echo "  -h  Display this help"
+  echo
+  echo "Commands:"
+  echo "  list [<action>]"
+  echo "  update"
+  echo "  upgrade"
+  echo
+  echo "Actions:"
+  echo "  pkgs"
+  exit
+}
+
+initAmmonite() {
+  # Check for curl
+  if [ ! -x "$(which curl)" ]; then
+    if [[ "$OSTYPE" == "darwin"* ]]; then
+      brew install curl
+    elif [[ "$OSTYPE" == "linux-gnu"* && -x "$(which apt)" ]]; then
+      sudo apt install curl
+    elif [[ "$OSTYPE" == "linux-gnu"* && -x "$(which pacman)" ]]; then
+      sudo pacman -S curl
+    else
+      echo "Unsupported OS or package system!"
+      echo "Currently supported:"
+      echo "  - homebrew (osx)"
+      echo "  - apt (linux)"
+      echo "  - pacman (linux)"
+      exit 1
+    fi
+  fi
+
+  # Check for Ammonite
+  if [ ! -x "$(which amm)" ]; then
+    sudo curl -L "${AMM_URL}" > /usr/local/bin/amm && sudo chmod +x /usr/local/bin/amm
+  fi
+}
+
+invalidCommand() {
+  echo "Invalid Command!"
+  displayUsageAndExit
+}
+
+runList() {
+  echo "Not Implemented: list $1"
+  exit 1
+}
+
+runUpdate() {
+  echo "Not Implemented: update $1 $2"
+  exit 1
+}
+
+runUpgrade() {
+  echo "Not Implemented: upgrade $1 $2"
+  exit 1
+}
+
+# Initialize up front
+initAmmonite
+
+while getopts ':dvh' opts; do
+  case $opts in
+    d) MODE="dry" ;;
+    v) VERBOSE=true ;;
+    h) displayUsageAndExit ;;
+  esac
+done
+
+shift $((OPTIND-1))
+
+case $1 in
+  list) runList "$2" ;;
+  update) runUpdate "$MODE" "$VERBOSE" ;;
+  upgrade) runUpgrade "$MODE" "$VERBOSE" ;;
+  *) invalidCommand ;;
+esac
