@@ -26,12 +26,12 @@ displayUsageAndExit() {
   echo "  -h  Display this help"
   echo
   echo "Commands:"
-  echo "  list [<action>]"
-  echo "  update"
-  echo "  upgrade"
+  echo "  list [<action>]  list managed files"
+  echo "  update           update managed files"
+  echo "  upgrade          upgrade managed packages"
   echo
   echo "Actions:"
-  echo "  pkgs"
+  echo "  pkgs   list all packages"
   exit
 }
 
@@ -66,18 +66,25 @@ invalidCommand() {
 }
 
 runList() {
-  echo "Not Implemented: list $1"
-  exit 1
+  amm ${SC_DIR}/cmd_list.sc "$1"
+  exit
 }
 
 runUpdate() {
-  echo "Not Implemented: update $1 $2"
-  exit 1
+  pushd $HOME
+  if [ "$1" == "dry" ]; then
+    $(which git) --git-dir=$HOME/.dotf/ --work-tree=$HOME fetch 
+    $(which git) --git-dir=$HOME/.dotf/ --work-tree=$HOME diff HEAD..@{u}
+  else
+    $(which git) --git-dir=$HOME/.dotf/ --work-tree=$HOME pull
+  fi
+  popd
+  exit
 }
 
 runUpgrade() {
-  echo "Not Implemented: upgrade $1 $2"
-  exit 1
+  amm ${SC_DIR}/cmd_upgrade.sc "$1" "$2"
+  exit
 }
 
 # Initialize up front
