@@ -74,10 +74,13 @@ export PATH="$HOME/.yarn/bin:$HOME/.config/yarn/global/node_modules/.bin:$PATH"
 [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
 
 # zsh-syntax-highlighting
-if [ "$OSTYPE" == "darwin"* ]; then
-if type brew &>/dev/null; then
-  source $(brew --prefix)/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
-fi
-elif [ "$OSTYPE" == "linux-gnu"* ]; then
+if [[ "$OSTYPE" == "darwin"* ]]; then
+  #if type brew &>/dev/null; then
+  if [ $(which brew) == 0 ]; then
+    source $(brew --prefix)/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
+  fi
+elif [[ "$OSTYPE" == "linux-gnu"* ]]; then
   # TODO source for linux by pkg manager
+  echo "TODO: add syntax highlighting package!!"
 fi
+
