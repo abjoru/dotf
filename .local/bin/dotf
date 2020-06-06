@@ -29,6 +29,7 @@ displayUsageAndExit() {
   echo "  list [<action>]  list managed files"
   echo "  update           update managed files"
   echo "  upgrade          upgrade managed packages"
+  echo "  status           show git status"
   echo
   echo "Actions:"
   echo "  pkgs   list all packages"
@@ -87,6 +88,11 @@ runUpgrade() {
   exit
 }
 
+runStatus() {
+  $(which git) --git-dir=$HOME/.dotf/ --work-tree=$HOME status --short
+  exit
+}
+
 # Initialize up front
 initAmmonite
 
@@ -104,5 +110,6 @@ case $1 in
   list) runList "$2" ;;
   update) runUpdate "$MODE" "$VERBOSE" ;;
   upgrade) runUpgrade "$MODE" "$VERBOSE" ;;
+  status) runStatus ;;
   *) invalidCommand ;;
 esac
