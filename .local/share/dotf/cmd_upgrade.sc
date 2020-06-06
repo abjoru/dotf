@@ -1,8 +1,7 @@
 import ammonite.ops._
+import ammonite.ops.ImplicitWd._
 
 import $file.common, common._
-
-implicit val wc = home
 
 @main
 def main(mode: String = "install", verbose: Boolean = false): Unit = {
@@ -25,9 +24,10 @@ def main(mode: String = "install", verbose: Boolean = false): Unit = {
       if (batch.nonEmpty) println(s"sudo apt install ${batch.mkString(" ")}")
       specials.foreach(p => println(s"sudo apt install ${p.mkString(" ")}"))
     case ("install", Some(Apt)) =>
-      %("sudo", "apt", "update", "&&", "sudo", "apt", "upgrade")
-      if (batch.nonEmpty) %("sudo", "apt", "install", batch)
-      specials.foreach(p => %("sudo", "apt", "install", p))
+      %sudo("apt", "update")
+      %sudo("apt", "upgrade")
+      if (batch.nonEmpty) %sudo("apt", "install", batch)
+      specials.foreach(p => %sudo("apt", "install", p))
 
     case ("dry", Some(Pacman)) =>
       println("sudo pacman -Syy && sudo pacman -Su")

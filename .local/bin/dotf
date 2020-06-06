@@ -57,7 +57,7 @@ initAmmonite() {
 
   # Check for Ammonite
   if [ ! -x "$(which amm)" ]; then
-    sudo curl -L "${AMM_URL}" > /usr/local/bin/amm && sudo chmod +x /usr/local/bin/amm
+    curl -L "${AMM_URL}" > $HOME/.local/bin/amm && chmod +x $HOME/.local/bin/amm
   fi
 }
 

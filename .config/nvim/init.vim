@@ -1,6 +1,6 @@
 " ~/.vimrc
 " Configuration for vim-plug
-call plug#begin('~/.vim/plugged')
+call plug#begin('~/.cache/nvim/plugged')
 Plug 'derekwyatt/vim-scala'
 Plug 'neoclide/coc.nvim', {'branch': 'release'}
 " Plug 'neoclide/coc.nvim', {'tag': 'v0.0.73'}
