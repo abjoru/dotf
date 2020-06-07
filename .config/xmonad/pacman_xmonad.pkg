@@ -1,5 +1,6 @@
 xmonad
-libghc-xmonad-contrib-dev
+xmonad-contrib
 xterm
 dmenu
+xmobar
 nitrogen
