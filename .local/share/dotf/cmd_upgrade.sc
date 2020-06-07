@@ -22,7 +22,8 @@ def main(mode: String = "install", verbose: Boolean = false, action: String = "a
       specials.foreach(p => %("brew", "install", p))
 
     case ("dry", Some(Apt)) =>
-      println("sudo apt update && sudo apt upgrade")
+      println("sudo apt update")
+      println("sudo apt upgrade")
       if (batch.nonEmpty) println(s"sudo apt install ${batch.mkString(" ")}")
       specials.foreach(p => println(s"sudo apt install ${p.mkString(" ")}"))
     case ("install", Some(Apt)) =>
@@ -32,11 +33,13 @@ def main(mode: String = "install", verbose: Boolean = false, action: String = "a
       specials.foreach(p => %sudo("apt", "install", p))
 
     case ("dry", Some(Pacman)) =>
-      println("sudo pacman -Syy && sudo pacman -Su")
+      println("sudo pacman -Syy")
+      println("sudo pacman -Su")
       if (batch.nonEmpty) println(s"sudo pacman -S ${batch.mkString(" ")}")
       specials.foreach(p => println(s"sudo pacman -S ${p.mkString(" ")}"))
     case ("install", Some(Pacman)) =>
-      %("sudo", "pacman", "-Syy", "&&", "sudo", "pacman", "-Su")
+      %sudo("pacman", "-Syy")
+      %sudo("pacman", "-Su")
       if (batch.nonEmpty) %("sudo", "pacman", "-S", batch)
       specials.foreach(p => %("sudo", "pacman", "-S", p))
     case _ =>

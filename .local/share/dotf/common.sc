@@ -1,5 +1,6 @@
 import ammonite.ops._
 import Console._
+import scala.util.Try
 
 object Const {
 
@@ -61,7 +62,7 @@ object OS {
 
   private def which(bin: String): Boolean = {
     implicit val wc = home
-    %%("which", bin).exitCode == 0
+    Try(%%("which", bin).exitCode == 0).isSuccess
   }
 
 }

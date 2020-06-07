@@ -26,6 +26,7 @@ displayUsageAndExit() {
   echo "  -h  Display this help"
   echo
   echo "Commands:"
+  echo "  add 			add all modified tracked files"
   echo "  list [<action>]  	list managed files"
   echo "  update           	update managed files"
   echo "  upgrade [<action>]    upgrade managed packages"
@@ -92,6 +93,11 @@ runUpgrade() {
   exit
 }
 
+runAddModified() {
+  $(which git) --git-dir=$HOME/.dotf/ --work-tree=$HOME add -u
+  exit
+}
+
 runStatus() {
   $(which git) --git-dir=$HOME/.dotf/ --work-tree=$HOME status --short
   exit
@@ -111,6 +117,7 @@ done
 shift $((OPTIND-1))
 
 case $1 in
+  add) runAddModified ;;
   list) runList "$2" ;;
   update) runUpdate "$MODE" "$VERBOSE" ;;
   upgrade) runUpgrade "$MODE" "$VERBOSE" "$2" ;;
