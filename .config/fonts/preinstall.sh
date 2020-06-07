@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 # .config/fonts/preinstall.sh
 #
 # Installs 'all' NerdFonts from git repo
