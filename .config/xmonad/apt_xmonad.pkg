@@ -1,4 +1,7 @@
 xmonad
 libghc-xmonad-contrib-dev
+xterm
+dmenu
 xmobar
 nitrogen
+compton

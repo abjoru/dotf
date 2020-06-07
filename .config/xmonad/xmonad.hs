@@ -110,12 +110,13 @@ windowCount = gets $ Just . show . length . W.integrate' . W.stack . W.workspace
 myStartupHook :: X ()
 myStartupHook = do
   spawnOnce "nitrogen --restore &"
-  spawnOnce "picom &"
-  spawnOnce "nm-applet &"
-  spawnOnce "volumeicon &"
-  spawnOnce "trayer --edge top --align right --widthtype request --padding 6 --SetDocType true --SetPartialStrut true --expand true --monitor 1 --transparent true --alpha 0 --tint 0x292d3e --height 18 &"
-  spawnOnce "kak -d -s mysession &"
-  setWMName "LG3D"
+  --spawnOnce "picom &"
+  spawnOnce "compton &"
+  --spawnOnce "nm-applet &"
+  --spawnOnce "volumeicon &"
+  --spawnOnce "trayer --edge top --align right --widthtype request --padding 6 --SetDocType true --SetPartialStrut true --expand true --monitor 1 --transparent true --alpha 0 --tint 0x292d3e --height 18 &"
+  --spawnOnce "kak -d -s mysession &"
+  setWMName "Blueberry"
 
 ------------------------------------------------------------------------
 -- GRID SELECT
@@ -500,9 +501,11 @@ myScratchPads = [ NS "terminal" spawnTerm findTerm manageTerm
 main :: IO ()
 main = do
 	-- Launching three instances of xmobar on their monitors.
-	xmproc0 <- spawnPipe "xmobar -x 0 /home/abjoru/.config/xmobar/xmobarrc0"
+	xmproc <- spawnPipe "xmobar -x 0 /home/abjoru/.config/xmobar/xmobarrc0"
+	--xmproc0 <- spawnPipe "xmobar -x 0 /home/abjoru/.config/xmobar/xmobarrc0"
 	--xmproc1 <- spawnPipe "xmobar -x 1 /home/abjoru/.config/xmobar/xmobarrc1"
 	--xmproc2 <- spawnPipe "xmobar -x 2 /home/abjoru/.config/xmobar/xmobarrc2"
+	
 	-- xmonad stuff
 	xmonad $ ewmh desktopConfig
 		{ manageHook = ( isFullscreen --> doFullFloat ) <+> myManageHook <+> manageHook desktopConfig <+> manageDocks
