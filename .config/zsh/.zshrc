@@ -1,3 +1,5 @@
+export ZSH=${XDG_CONFIG_HOME:-$HOME/.config}
+
 setopt extended_glob
 
 # Stash your environment variables in ~/.localrc. This means they'll stay out
@@ -76,7 +78,7 @@ export PATH="$HOME/.yarn/bin:$HOME/.config/yarn/global/node_modules/.bin:$PATH"
 # zsh-syntax-highlighting
 if [[ "$OSTYPE" == "darwin"* ]]; then
   #if type brew &>/dev/null; then
-  if [ $(which brew) == 0 ]; then
+  if [[ $(which brew) == 0 ]]; then
     source $(brew --prefix)/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
   fi
 elif [[ "$OSTYPE" == "linux-gnu"* ]]; then

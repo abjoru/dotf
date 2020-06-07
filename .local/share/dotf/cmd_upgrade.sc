@@ -9,6 +9,8 @@ def main(mode: String = "install", verbose: Boolean = false): Unit = {
   val batch = pkgs.filterNot(_.isSpecial).map(_.cmd.mkString)
   val specials = pkgs.filter(_.isSpecial).map(_.cmd)
 
+  runPreInstall(mode, verbose, Const.preInstallFiles())
+
   (mode, OS.pkgSystem) match {
     case ("dry", Some(Homebrew)) =>
       println("brew update && brew upgrade")
@@ -40,6 +42,22 @@ def main(mode: String = "install", verbose: Boolean = false): Unit = {
     case _ =>
       Printer.err("Unsupported!")
   }
+
+  runPostInstall(mode, verbose, Const.postInstallFiles())
+}
+
+private def runPreInstall(mode: String, verbose: Boolean, files: Seq[os.Path]): Unit = mode match {
+  case "dry" =>
+    files.foreach(f => println(s"sh -c ${f.toString}"))
+  case _ =>
+    files.foreach(f => %("bash", "-c", f.toString))
+}
+
+private def runPostInstall(mode: String, verbose: Boolean, files: Seq[os.Path]): Unit = mode match {
+  case "dry" =>
+    files.foreach(f => println(s"sh -c ${f.toString}"))
+  case _ =>
+    files.foreach(f => %("bash", "-c", f.toString))
 }
 
 private def filteredPkgs(): Seq[Pkg] = {

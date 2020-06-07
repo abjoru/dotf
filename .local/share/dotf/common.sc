@@ -12,6 +12,12 @@ object Const {
     cmd.out.lines.map(l => os.Path(s"${home.toString}/$l")).toSeq
   }
 
+  def preInstallFiles(): Seq[os.Path] = 
+    managedFiles().filter(f => f.ext == "sh" && f.last.contains("preinstall"))
+
+  def postInstallFiles(): Seq[os.Path] = 
+    managedFiles().filter(f => f.ext == "sh" && f.last.contains("postinstall"))
+
   def pkgFiles(): Seq[PkgFile] = {
     managedFiles().filter(_.ext == "pkg").collect {
       case f if isSupported(f) => PkgFile(f)
