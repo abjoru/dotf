@@ -4,12 +4,12 @@ import ammonite.ops.ImplicitWd._
 import $file.common, common._
 
 @main
-def main(mode: String = "install", verbose: Boolean = false): Unit = {
+def main(mode: String = "install", verbose: Boolean = false, action: String = "all"): Unit = {
   val pkgs = filteredPkgs()
   val batch = pkgs.filterNot(_.isSpecial).map(_.cmd.mkString)
   val specials = pkgs.filter(_.isSpecial).map(_.cmd)
 
-  runPreInstall(mode, verbose, Const.preInstallFiles())
+  if (action != "pkgs") runPreInstall(mode, verbose, Const.preInstallFiles())
 
   (mode, OS.pkgSystem) match {
     case ("dry", Some(Homebrew)) =>
@@ -43,7 +43,7 @@ def main(mode: String = "install", verbose: Boolean = false): Unit = {
       Printer.err("Unsupported!")
   }
 
-  runPostInstall(mode, verbose, Const.postInstallFiles())
+  if (action != "pkgs") runPostInstall(mode, verbose, Const.postInstallFiles())
 }
 
 private def runPreInstall(mode: String, verbose: Boolean, files: Seq[os.Path]): Unit = mode match {

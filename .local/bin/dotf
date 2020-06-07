@@ -26,10 +26,10 @@ displayUsageAndExit() {
   echo "  -h  Display this help"
   echo
   echo "Commands:"
-  echo "  list [<action>]  list managed files"
-  echo "  update           update managed files"
-  echo "  upgrade          upgrade managed packages"
-  echo "  status           show git status"
+  echo "  list [<action>]  	list managed files"
+  echo "  update           	update managed files"
+  echo "  upgrade [<action>]    upgrade managed packages"
+  echo "  status           	show git status"
   echo
   echo "Actions:"
   echo "  pkgs   list all packages"
@@ -84,7 +84,7 @@ runUpdate() {
 }
 
 runUpgrade() {
-  amm ${SC_DIR}/cmd_upgrade.sc "$1" "$2"
+  amm ${SC_DIR}/cmd_upgrade.sc "$1" "$2" "$3"
   exit
 }
 
@@ -109,7 +109,7 @@ shift $((OPTIND-1))
 case $1 in
   list) runList "$2" ;;
   update) runUpdate "$MODE" "$VERBOSE" ;;
-  upgrade) runUpgrade "$MODE" "$VERBOSE" ;;
+  upgrade) runUpgrade "$MODE" "$VERBOSE" "$2" ;;
   status) runStatus ;;
   *) invalidCommand ;;
 esac

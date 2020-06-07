@@ -83,7 +83,7 @@ myModMask = mod4Mask
 
 -- sets default terminal
 myTerminal :: [Char]
-myTerminal = "st" 
+myTerminal = "alacritty" 
 
 -- sets border width for windows
 myBorderWidth :: Dimension
@@ -111,7 +111,7 @@ myStartupHook :: X ()
 myStartupHook = do
   spawnOnce "nitrogen --restore &"
   --spawnOnce "picom &"
-  spawnOnce "compton &"
+  spawnOnce "compton --config /home/abjoru/.config/compton/compton.conf &"
   --spawnOnce "nm-applet &"
   --spawnOnce "volumeicon &"
   --spawnOnce "trayer --edge top --align right --widthtype request --padding 6 --SetDocType true --SetPartialStrut true --expand true --monitor 1 --transparent true --alpha 0 --tint 0x292d3e --height 18 &"
