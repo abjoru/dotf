@@ -84,7 +84,11 @@ runUpdate() {
 }
 
 runUpgrade() {
-  amm ${SC_DIR}/cmd_upgrade.sc "$1" "$2" "$3"
+  if [ -z "$3" ]; then
+    amm ${SC_DIR}/cmd_upgrade.sc "$1" "$2" "all"
+  else
+    amm ${SC_DIR}/cmd_upgrade.sc "$1" "$2" "$3"
+  fi
   exit
 }
 

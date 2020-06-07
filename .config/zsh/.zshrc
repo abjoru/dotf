@@ -2,6 +2,11 @@ export ZSH=${XDG_CONFIG_HOME:-$HOME/.config}
 
 setopt extended_glob
 
+# Make sure we have XDG bin directory on our path (looking at you OSX)
+if [[ ":$PATH:" != *":$HOME/.local/bin:"* ]]; then
+  export PATH=$HOME/.local/bin:$PATH
+fi
+
 # Stash your environment variables in ~/.localrc. This means they'll stay out
 # of your main dotfiles repository (which may be public, like this one), but
 # you'll have access to them in your scripts.

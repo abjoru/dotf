@@ -13,11 +13,11 @@ def main(mode: String = "install", verbose: Boolean = false, action: String = "a
 
   (mode, OS.pkgSystem) match {
     case ("dry", Some(Homebrew)) =>
-      println("brew update && brew upgrade")
+      println("brew upgrade")
       if (batch.nonEmpty) println(s"brew install ${batch.mkString(" ")}")
       specials.foreach(p => println(s"brew install ${p.mkString(" ")}"))
     case ("install", Some(Homebrew)) =>
-      %("brew", "update", "&&", "brew", "upgrade")
+      %("brew", "upgrade")
       if (batch.nonEmpty) %("brew", "install", batch)
       specials.foreach(p => %("brew", "install", p))
 
