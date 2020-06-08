@@ -4,12 +4,16 @@ else
   export PS1='%3~$(git_info_for_prompt)%# '
 fi
 
+export VISUAL=nvim
 export LSCOLORS='exfxcxdxbxegedabagacad'
 export CLICOLOR=true
+
+bindkey -v
 
 fpath=($ZSH/zsh/functions $fpath)
 
 autoload -U $ZSH/zsh/functions/*(:t)
+autoload -U edit-command-line
 
 HISTFILE=~/.zsh_history
 HISTSIZE=10000
@@ -37,7 +41,14 @@ setopt HIST_REDUCE_BLANKS
 #   like: git comm-[tab]
 setopt complete_aliases
 
+zle -N edit-command-line
 zle -N newtab
+
+bindkey '^E' edit-command-line 				# opens editor to edit current command line
+bindkey '^R' history-incremental-search-backward 	# perform backward search in command line history
+bindkey '^S' history-incremental-search-forward 	# perform forward search in command line history
+bindkey '^P' history-search-backward 			# go back/search in history (autocomplete)
+bindkey '^N' history-search-forward 			# go forward/search in history (autocomplete)
 
 # TODO: figure out keybinding syntax for zsh
 bindkey '^[^[[D' backward-word

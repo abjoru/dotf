@@ -1,0 +1,19 @@
+- xmonad:
+    brew:
+      ignore: true
+- xmonad-contrib:
+    apt:
+      name: libghc-xmonad-contrib-dev
+    brew:
+      ignore: true
+- xterm:
+    brew:
+      ignore: true
+- dmenu:
+    pacman:
+      name: dmenu-manjaro
+    brew:
+      ignore: true
+- nitrogen:
+    brew:
+      ignore: true

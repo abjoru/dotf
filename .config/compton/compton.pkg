@@ -1,0 +1,5 @@
+- compton:
+    brew:
+      ignore: true
+    pacman:
+      ignore: true

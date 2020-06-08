@@ -32,7 +32,7 @@ do
 done
 
 # initialize autocomplete here, otherwise functions won't be loaded
-autoload -U compinit
+autoload -Uz compinit
 compinit
 
 # load every completion after autocomplete loads
@@ -61,34 +61,23 @@ export BAT_PAGER="less -R"
 
 # Better history
 # Credits to https://coderwall.com/p/jpj_6q/zsh-better-history-searching-with-arrow-keys
-autoload -U up-line-or-beginning-search
-autoload -U down-line-or-beginning-search
-zle -N up-line-or-beginning-search
-zle -N down-line-or-beginning-search
-bindkey "^[[A" up-line-or-beginning-search # Up
-bindkey "^[[B" down-line-or-beginning-search # Down
+#autoload -U up-line-or-beginning-search
+#autoload -U down-line-or-beginning-search
+#zle -N up-line-or-beginning-search
+#zle -N down-line-or-beginning-search
+#bindkey "^[[A" up-line-or-beginning-search # Up
+#bindkey "^[[B" down-line-or-beginning-search # Down
 
 unsetopt ignoreeof
 
-export VISUAL=vim
-autoload edit-command-line; zle -N edit-command-line
-bindkey -M vicmd v edit-command-line
+#export VISUAL=nvim
+#autoload edit-command-line; zle -N edit-command-line
+#bindkey -M vicmd v edit-command-line
 
 test -e "${HOME}/.iterm2_shell_integration.zsh" && source "${HOME}/.iterm2_shell_integration.zsh"
 
+# TODO move to xdg dir
 export PATH="$HOME/.yarn/bin:$HOME/.config/yarn/global/node_modules/.bin:$PATH"
 
+# TODO move to xdg dir
 [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
-
-# zsh-syntax-highlighting
-if [[ "$OSTYPE" == "darwin"* ]]; then
-  #if type brew &>/dev/null; then
-  if [[ $(which brew) == 0 ]]; then
-    source $(brew --prefix)/share/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
-  fi
-elif [[ "$OSTYPE" == "linux-gnu"* ]]; then
-  # TODO source for linux by pkg manager
-  source /usr/share/zsh/plugins/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
-  source /usr/share/zsh/plugins/zsh-autosuggestions/zsh-autosuggestions.zsh
-fi
-

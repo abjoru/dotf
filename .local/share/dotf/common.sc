@@ -1,6 +1,12 @@
 import ammonite.ops._
 import Console._
 import scala.util.Try
+import scala.io.Source
+
+import $ivy.`io.circe::circe-yaml:0.12.0`
+
+import io.circe._
+import io.circe.yaml.parser
 
 object Const {
 
@@ -13,17 +19,19 @@ object Const {
     cmd.out.lines.map(l => os.Path(s"${home.toString}/$l")).toSeq
   }
 
-  def preInstallFiles(): Seq[os.Path] = 
-    managedFiles().filter(f => f.ext == "sh" && f.last.contains("preinstall"))
+  def pkgs(): Seq[Pkg] = {
+    val pkgFiles = managedFiles().filter(_.ext == "pkg")
+    val objs = pkgFiles.flatMap(f => parser.parse(Source.fromFile(f.toString).reader()).toOption)
 
-  def postInstallFiles(): Seq[os.Path] = 
-    managedFiles().filter(f => f.ext == "sh" && f.last.contains("postinstall"))
+    val result = objs.flatMap(_.asArray.getOrElse(Seq.empty[Json]).collect {
+      case o if o.isObject => Pkg(o.asObject.get)
+    })
 
-  def pkgFiles(): Seq[PkgFile] = {
-    managedFiles().filter(_.ext == "pkg").collect {
-      case f if isSupported(f) => PkgFile(f)
-    }
+    result.filterNot(_.isIgnored)
   }
+
+  def customInstalls(): Seq[os.Path] =
+    managedFiles().filter(_.last == "install.sh")
 
   private def isSupported(path: os.Path): Boolean = {
     path.last.split('_').toList match {
@@ -67,19 +75,57 @@ object OS {
 
 }
 
-final case class PkgFile(path: os.Path) {
-  private val pattern = """^([a-zA-Z]+)\['(.+[^\]])'\]$""".r
+final case class Pkg(data: JsonObject) {
+  private val root = data.toList.head
+  private val apt: Option[Json] = getObj("apt")
+  private val brew: Option[Json] = getObj("brew")
+  private val pacman: Option[Json] = getObj("pacman")
 
-  def pkgs(): Seq[Pkg] = {
-    val lines = (read.lines! path).filterNot(l => l.startsWith("#") || l.isEmpty)
-
-    lines.map {
-      case pattern(name, cmd) => Pkg(name, cmd.split("\\s+").toSeq)
-      case name => Pkg(name, Seq(name))
-    }
+  val name: String = OS.pkgSystem match {
+    case Some(Apt) => nameFor(apt)
+    case Some(Pacman) => nameFor(pacman)
+    case Some(Homebrew) => nameFor(brew)
+    case _ => root._1
   }
-}
 
-final case class Pkg(name: String, cmd: Seq[String]) {
-  def isSpecial: Boolean = cmd.size > 1
+  def isSpecial: Boolean = preInstall.nonEmpty || postInstall.nonEmpty || pkgPreInstall.nonEmpty || pkgPostInstall.nonEmpty
+
+  def isIgnored: Boolean = OS.pkgSystem match {
+    case Some(Apt) => apt.flatMap(_.hcursor.downField("ignore").as[Boolean].toOption).getOrElse(false)
+    case Some(Pacman) => pacman.flatMap(_.hcursor.downField("ignore").as[Boolean].toOption).getOrElse(false)
+    case Some(Homebrew) => brew.flatMap(_.hcursor.downField("ignore").as[Boolean].toOption).getOrElse(false)
+    case _ => false
+  }
+
+  def preInstall: Seq[String] = 
+    root._2.hcursor.downField("preinstall").as[String].toOption.map(_.split("\\s+").toSeq).getOrElse(Seq.empty)
+
+  def pkgPreInstall: Seq[String] = OS.pkgSystem match {
+    case Some(Apt) => preInstallFor(apt)
+    case Some(Pacman) => preInstallFor(pacman)
+    case Some(Homebrew) => preInstallFor(brew)
+    case _ => Seq.empty
+  }
+
+  def postInstall: Seq[String] =
+    root._2.hcursor.downField("postinstall").as[String].toOption.map(_.split("\\s+").toSeq).getOrElse(Seq.empty)
+
+  def pkgPostInstall: Seq[String] = OS.pkgSystem match {
+    case Some(Apt) => postInstallFor(apt)
+    case Some(Pacman) => postInstallFor(pacman)
+    case Some(Homebrew) => postInstallFor(brew)
+    case _ => Seq.empty
+  }
+
+  private def nameFor(node: Option[Json]): String = 
+    node.flatMap(_.hcursor.downField("name").as[String].toOption).getOrElse(root._1)
+
+  private def preInstallFor(node: Option[Json]): Seq[String] =
+    node.flatMap(_.hcursor.downField("preinstall").as[String].toOption).map(_.split("\\s+").toSeq).getOrElse(Seq.empty)
+
+  private def postInstallFor(node: Option[Json]): Seq[String] =
+    node.flatMap(_.hcursor.downField("postinstall").as[String].toOption).map(_.split("\\s+").toSeq).getOrElse(Seq.empty)
+
+  private def getObj(key: String): Option[Json] = 
+    root._2.hcursor.downField(key).as[Option[Json]].toOption.getOrElse(None)
 }
