@@ -1,0 +1,10 @@
+#!/bin/zsh
+#
+# This script simply opens nvim in target directory
+#
+# Example:
+#   alias myproject="nvim_in ~/path/to/project/root"
+#
+
+cd "$1"
+nvim

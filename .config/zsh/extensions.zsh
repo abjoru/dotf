@@ -6,7 +6,7 @@ if [[ "$OSTYPE" == "darwin"* ]]; then
 
   # zsh-autosuggestions
   if [[ -f "$(brew --prefix)/share/zsh-autosuggestions/zsh-autosuggestions.zsh" ]]; then
-    source /usr/share/zsh/plugins/zsh-autosuggestions/zsh-autosuggestions.zsh
+    source $(brew --prefix)/share/zsh-autosuggestions/zsh-autosuggestions.zsh
   fi
 elif [[ "$OSTYPE" == "linux-gnu"* ]]; then
   # zsh-syntax-highlighting
