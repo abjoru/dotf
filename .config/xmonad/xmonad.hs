@@ -95,7 +95,7 @@ myNormColor = "#292d3e"
 
 -- border color of focused windows
 myFocusColor :: [Char]
-myFocusColor = "$bbc5ff"
+myFocusColor = "#bbc5ff"
 
 -- setting this for use in xprompts
 altMask :: KeyMask
@@ -431,7 +431,7 @@ mySpacing' i = spacingRaw True (Border i i i i) True (Border i i i i) True
 
 tall		= renamed [Replace "tall"]
 		  $ limitWindows 12
-		  $ mySpacing 8
+		  $ mySpacing 6
 		  $ ResizableTall 1 (3/100) (1/2) []
 
 monocle		= renamed [Replace "monocle"]
@@ -444,12 +444,12 @@ floats		= renamed [Replace "floats"]
 
 grid		= renamed [Replace "grid"]
 		  $ limitWindows 12
-		  $ mySpacing 8
+		  $ mySpacing 6
 		  $ mkToggle (single MIRROR)
 		  $ Grid (16/10)
 
 spirals		= renamed [Replace "spirals"]
-		  $ mySpacing' 8
+		  $ mySpacing' 6
 		  $ spiral (6/7)
 
 threeCol	= renamed [Replace "threeCol"]

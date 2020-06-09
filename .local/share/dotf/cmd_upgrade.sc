@@ -85,7 +85,7 @@ private def filteredPkgs(): Seq[Pkg] = {
       pkgs.filterNot(p => installed.contains(p.name))
 
     case Some(Pacman) =>
-      val installed = %%("pacman", "-Qet").out.lines.foldLeft(Seq.empty[String]) {
+      val installed = %%("pacman", "-Q").out.lines.foldLeft(Seq.empty[String]) {
         case (acc, line) => acc :+ line.split("\\s+")(0)
       }
 
