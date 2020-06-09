@@ -81,3 +81,5 @@ export PATH="$HOME/.yarn/bin:$HOME/.config/yarn/global/node_modules/.bin:$PATH"
 
 # TODO move to xdg dir
 [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
+
+neofetch

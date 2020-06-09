@@ -1,11 +1,27 @@
 --------COMPUTER-------
 https://distrowatch.com/news/dw.xml "~Computer: DistroWatch"
 https://www.gamingonlinux.com/article_rss.php "~Computer: GamingOnLinux"
+http://xkcd.com/atom.xml "~Computer: XKCD"
+http://rss.slashdot.org/Slashdot/slashdot "~Computer: Slashdot"
+http://feeds.macrumors.com/MacRumors-All "~Computer: MacRumors"
+http://feeds.gawker.com/kotaku/full "~Computer: Kotaku"
 --------YOUTUBE--------
 https://www.youtube.com/feeds/videos.xml?channel_id=UCVls1GmFKf6WlTraIb_IaJg "~YouTube: DistroTube"
 https://www.youtube.com/feeds/videos.xml?channel_id=UCkWQ0gDrqOCarmUKmppD7GQ "~YouTube: JayzTwoCents"
 https://www.youtube.com/feeds/videos.xml?channel_id=UCiufyZv8iRPTafTw0D4CvnQ "~YouTube: Neebs Gaming"
 -------GIT-REPOS-------
 https://gitlab.com/dwt1.atom "~Git: DistroTube"
+---------LIFE----------
+http://feeds.feedburner.com/TEDTalks_video "~Life: TEDTalks"
+----------FUN----------
+http://thepunchlineismachismo.com/feed "~Fun: Manly Guys Doing Manly Things"
+http://oglaf.com/feeds/rss/ "~Fun: Oglaf"
+http://www.awkwardzombie.com/awkward.php "~Fun: Awkward Zombie"
+http://feeds.feedburner.com/satwcomic "~Fun: Scandinavia and the World"
 ---------NEWS----------
 http://rss.cnn.com/rss/cnn_topstories.rss "~News: CNN Top Stories"
+http://www.npr.org/rss/rss.php?id=1001 "~News: NPR"
+http://www.nytimes.com/services/xml/rss/nyt/HomePage.xml "~News: NYTimes"
+http://feeds.mashable.com/Mashable "~News: Mashable"
+http://www.theverge.com/rss/index.xml "~News: The Verge"
+http://feeds.wired.com/wired/index "~News: Wired"
