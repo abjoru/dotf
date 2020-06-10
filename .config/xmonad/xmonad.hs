@@ -83,7 +83,8 @@ myModMask = mod4Mask
 
 -- sets default terminal
 myTerminal :: [Char]
-myTerminal = "alacritty" 
+--myTerminal = "alacritty" 
+myTerminal = "termonad"
 
 -- sets border width for windows
 myBorderWidth :: Dimension
@@ -333,11 +334,11 @@ myKeys =
 
   -- Dmenu Scripts (Alt+Ctrl+Key)
   --, ("M-S-<Return>", spawn "dmenu_run")
-  , ("M1-C-e", spawn "./.dmenu/dmenu-edit-configs.sh")
-  , ("M1-C-h", spawn "./.dmenu/dmenu-hugo.sh")
-  , ("M1-C-m", spawn "./.dmenu/dmenu-sysmon.sh")
-  , ("M1-C-s", spawn "./.dmenu/dmenu-surfraw.sh")
-  , ("M1-C-/", spawn "./.dmenu/dmenu-scrot.sh")
+  , ("M1-C-e", spawn "/home/abjoru/.config/dmenu/dmenu-edit-configs.sh")
+  --, ("M1-C-h", spawn "./.dmenu/dmenu-hugo.sh")
+  --, ("M1-C-m", spawn "./.dmenu/dmenu-sysmon.sh")
+  --, ("M1-C-s", spawn "./.dmenu/dmenu-surfraw.sh")
+  --, ("M1-C-/", spawn "./.dmenu/dmenu-scrot.sh")
 
   -- My Applications (Super+Alt+Key)
   , ("M-M1-a", spawn (myTerminal ++ " -e ncpamixer"))

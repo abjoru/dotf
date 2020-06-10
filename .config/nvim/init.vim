@@ -3,8 +3,6 @@
 call plug#begin('~/.cache/nvim/plugged')
 Plug 'derekwyatt/vim-scala'
 Plug 'neoclide/coc.nvim', {'branch': 'release'}
-" Plug 'neoclide/coc.nvim', {'tag': 'v0.0.73'}
-" Plug 'scalameta/coc-metals', {'do': 'yarn install --frozen-lockfile'}
 Plug 'scrooloose/nerdtree'
 Plug 'preservim/nerdcommenter'
 Plug 'Xuyuanp/nerdtree-git-plugin'

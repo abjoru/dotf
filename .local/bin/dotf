@@ -37,6 +37,15 @@ displayUsageAndExit() {
   exit
 }
 
+checkJava() {
+  if [ ! -x "$(which java)" ]; then
+    echo "ERROR: missing java runtime!"
+    echo 
+    echo "Please install a Java runtime environment before running this program"
+    exit 1
+  fi
+}
+
 initAmmonite() {
   # Check for curl
   if [ ! -x "$(which curl)" ]; then
@@ -102,6 +111,9 @@ runStatus() {
   $(which git) --git-dir=$HOME/.dotf/ --work-tree=$HOME status --short
   exit
 }
+
+# Verify that we have a JRE
+checkJava
 
 # Initialize up front
 initAmmonite
