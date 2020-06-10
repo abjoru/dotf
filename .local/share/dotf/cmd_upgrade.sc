@@ -9,7 +9,7 @@ def main(mode: String = "install", verbose: Boolean = false, action: String = "a
 
   if (pkgs.isEmpty) Printer.ok("System is up to date!")
   else {
-    val batch = pkgs.filterNot(_.isSpecial).map(_.name)
+    val batch = pkgs.filterNot(_.isSpecial)
     val specials = pkgs.filter(_.isSpecial)
     runPreInstall(mode, specials)
     runPkgInstall(mode, batch)
@@ -37,31 +37,37 @@ private def runPostInstall(mode: String, pkgs: Seq[Pkg]): Unit = pkgs.foreach { 
   }
 }
 
-private def runPkgInstall(mode: String, pkgs: Seq[String]): Unit = (mode, OS.pkgSystem) match {
-    case ("dry", Some(Homebrew)) =>
+private def runPkgInstall(mode: String, pkgs: Seq[Pkg]): Unit = (mode, OS.pkgSystem) match {
+    case ("dry", Some(Homebrew)) if pkgs.nonEmpty =>
+      val (casks, normals) = pkgs.partition(_.isCask)
       println("brew upgrade")
-      if (pkgs.nonEmpty) println(s"brew install ${pkgs.mkString(" ")}")
-    case ("install", Some(Homebrew)) =>
+      if (normals.nonEmpty) println(s"brew install ${normals.map(_.name).mkString(" ")}")
+      if (casks.nonEmpty) println(s"brew cask install ${casks.map(_.name).mkString(" ")}")
+    case ("install", Some(Homebrew)) if pkgs.nonEmpty =>
       %("brew", "upgrade")
-      if (pkgs.nonEmpty) %("brew", "install", pkgs)
+      val (casks, normals) = pkgs.partition(_.isCask)
+      if (normals.nonEmpty) %("brew", "install", normals.map(_.name))
+      if (casks.nonEmpty) %("brew", "cask", "install", casks.map(_.name))
 
-    case ("dry", Some(Apt)) =>
+    case ("dry", Some(Apt)) if pkgs.nonEmpty =>
       println("sudo apt update")
       println("sudo apt upgrade")
-      if (pkgs.nonEmpty) println(s"sudo apt install ${pkgs.mkString(" ")}")
-    case ("install", Some(Apt)) =>
+      println(s"sudo apt install ${pkgs.map(_.name).mkString(" ")}")
+    case ("install", Some(Apt)) if pkgs.nonEmpty =>
       %sudo("apt", "update")
       %sudo("apt", "upgrade")
-      if (pkgs.nonEmpty) %sudo("apt", "install", pkgs)
+      %sudo("apt", "install", pkgs.map(_.name))
 
-    case ("dry", Some(Pacman)) =>
+    case ("dry", Some(Pacman)) if pkgs.nonEmpty =>
       println("sudo pacman -Syy")
       println("sudo pacman -Su")
-      if (pkgs.nonEmpty) println(s"sudo pacman -S ${pkgs.mkString(" ")}")
-    case ("install", Some(Pacman)) =>
+      println(s"sudo pacman -S ${pkgs.map(_.name).mkString(" ")}")
+    case ("install", Some(Pacman)) if pkgs.nonEmpty =>
       %sudo("pacman", "-Syy")
       %sudo("pacman", "-Su")
-      if (pkgs.nonEmpty) %("sudo", "pacman", "-S", pkgs)
+      %("sudo", "pacman", "-S", pkgs.map(_.name))
+    case (_, Some(_)) =>
+      Printer.ok("System is up to date!")
     case _ =>
       Printer.err("Unsupported!")
 }

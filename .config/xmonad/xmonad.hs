@@ -72,6 +72,88 @@ import XMonad.Layout.ThreeColumns
 import XMonad.Layout.ZoomRow (zoomRow, zoomReset, ZoomMessage(ZoomFullToggle))
 
 ------------------------------------------------------------------------
+-- GRUVBOX PALETTE (DARK)
+------------------------------------------------------------------------
+
+gruvBG0 :: [Char]
+gruvBG0 = "#282828"
+
+gruvBG1 :: [Char]
+gruvBG1 = "#3c3836"
+
+gruvBG2 :: [Char]
+gruvBG2 = "#504945"
+
+gruvBG3 :: [Char]
+gruvBG3 = "#665c54"
+
+gruvBG4 :: [Char]
+gruvBG4 = "#7c6f64"
+
+gruvFG0 :: [Char]
+gruvFG0 = "#ebdbb2"
+
+gruvFG1 :: [Char]
+gruvFG1 = "#ebdbb2"
+
+gruvFG2 :: [Char]
+gruvFG2 = "#d5c4a1"
+
+gruvFG3 :: [Char]
+gruvFG3 = "#bdae93"
+
+gruvFG4 :: [Char]
+gruvFG4 = "#a89984"
+
+gruvRed0 :: [Char]
+gruvRed0 = "#cc241d"
+
+gruvRed1 :: [Char]
+gruvRed1 = "#fb4934"
+
+gruvGreen0 :: [Char]
+gruvGreen0 = "#98971a"
+
+gruvGreen1 :: [Char]
+gruvGreen1 = "#b8bb26"
+
+gruvYellow0 :: [Char]
+gruvYellow0 = "#d79921"
+
+gruvYellow1 :: [Char]
+gruvYellow1 = "#fabd2f"
+
+gruvBlue0 :: [Char]
+gruvBlue0 = "#458588"
+
+gruvBlue1 :: [Char]
+gruvBlue1 = "#83a598"
+
+gruvPurple0 :: [Char]
+gruvPurple0 = "#b16286"
+
+gruvPurple1 :: [Char]
+gruvPurple1 = "#d3869b"
+
+gruvAqua0 :: [Char]
+gruvAqua0 = "#689d6a"
+
+gruvAqua1 :: [Char]
+gruvAqua1 = "#8ec07c"
+
+gruvGray0 :: [Char]
+gruvGray0 = "#a89984"
+
+gruvGray1 :: [Char]
+gruvGray1 = "#928374"
+
+gruvOrange0 :: [Char]
+gruvOrange0 = "#d65d0e"
+
+gruvOrange1 :: [Char]
+gruvOrange1 = "#fe8019"
+
+------------------------------------------------------------------------
 -- VARIABLES
 ------------------------------------------------------------------------
 myFont :: [Char]
@@ -92,11 +174,13 @@ myBorderWidth = 2
 
 -- border color of normal windows
 myNormColor :: [Char]
-myNormColor = "#292d3e"
+--myNormColor = "#292d3e"
+myNormColor = gruvBG0
 
 -- border color of focused windows
 myFocusColor :: [Char]
-myFocusColor = "#bbc5ff"
+--myFocusColor = "#bbc5ff"
+myFocusColor = gruvFG1
 
 -- setting this for use in xprompts
 altMask :: KeyMask
@@ -124,11 +208,16 @@ myStartupHook = do
 ------------------------------------------------------------------------
 myColorizer :: Window -> Bool -> X (String, String)
 myColorizer = colorRangeFromClassName
-  (0x31,0x2e,0x39) -- lowest inactive bg
-  (0x31,0x2e,0x39) -- highest inactive bg
-  (0x61,0x57,0x72) -- active bg
-  (0xc0,0xa7,0x9a) -- inactive fg
-  (0xff,0xff,0xff) -- active fg
+  --(0x31,0x2e,0x39) -- lowest inactive bg 	RGB: (49, 46, 57) 	GRUV: #1d2021 (29, 32, 33)
+  (0x1d,0x20,0x21)
+  --(0x31,0x2e,0x39) -- highest inactive bg 	RGB: (49, 46, 57) 	GRUV: #282828 (40, 40, 40)
+  (0x28,0x28,0x28)
+  --(0x61,0x57,0x72) -- active bg 		RGB: (97, 87, 114)      GRUV: #665c54 (102, 92, 84)
+  (0x66,0x5c,0x54)
+  --(0xc0,0xa7,0x9a) -- inactive fg 		RGB: (192, 167, 154) 	GRUV: #a89984 (168, 153, 132)
+  (0xa8,0x99,0x84)
+  --(0xff,0xff,0xff) -- active fg 		RGB: (255, 255, 255) 	GRUV: #fbf1c7 (251, 241, 199)
+  (0xfb,0xf1,0xc7)
 
 -- gridSelect menu layout
 myGridConfig :: p -> GSConfig Window
@@ -193,11 +282,15 @@ dtXPKeymap = M.fromList $
 dtXPConfig :: XPConfig
 dtXPConfig = def
   { font		= "xft:Mononoki Nerd Font:size=9"
-  , bgColor		= "#292d3e"
-  , fgColor		= "#d0d0d0"
-  , bgHLight		= "c792ea"
+  --, bgColor		= "#292d3e"
+  , bgColor 		= gruvBG0
+  --, fgColor		= "#d0d0d0"
+  , fgColor 		= gruvFG0
+  --, bgHLight		= "c792ea"
+  , bgHLight 		= gruvBlue0
   , fgHLight		= "#00000"
-  , borderColor		= "#535974"
+  --, borderColor	= "#535974"
+  , borderColor 	= gruvBG3
   , promptBorderWidth	= 0
   , promptKeymap	= dtXPKeymap
   , position		= Top
@@ -521,13 +614,13 @@ main = do
 		, focusedBorderColor	= myFocusColor
 		, logHook = dynamicLogWithPP xmobarPP
 			{ ppOutput = \x -> hPutStrLn xmproc x -- \x -> hPutStrLn xmproc0 x >> hPutStrLn xmproc1 x >> hPutStrLn xmproc2 x
-			, ppCurrent = xmobarColor "#c3e88d" "" . wrap "[" "]"	-- Current workspace in xmobar
-			, ppVisible = xmobarColor "#c3e88d" ""			-- Visible but not current workspace
-			, ppHidden = xmobarColor "#82AAFF" "" . wrap "*" ""	-- Hidden workspaces in xmobar
-			, ppHiddenNoWindows = xmobarColor "#F07178" ""		-- Hidden workspaces (no windows)
-			, ppTitle = xmobarColor "#d0d0d0" "" . shorten 60	-- Title of active window in xmobar
+			, ppCurrent = xmobarColor gruvGreen0 "" . wrap "[" "]"	-- Current workspace in xmobar
+			, ppVisible = xmobarColor gruvGreen1 ""			-- Visible but not current workspace
+			, ppHidden = xmobarColor gruvBlue0 "" . wrap "*" ""	-- Hidden workspaces in xmobar
+			, ppHiddenNoWindows = xmobarColor gruvRed0 ""		-- Hidden workspaces (no windows)
+			, ppTitle = xmobarColor gruvGray0 "" . shorten 60	-- Title of active window in xmobar
 			, ppSep = "<fc=#666666> | </fc>"			-- Separators in xmobar
-			, ppUrgent = xmobarColor "#C45500" "" . wrap "!" "!"	-- Urgent workspace
+			, ppUrgent = xmobarColor gruvOrange0 "" . wrap "!" "!"	-- Urgent workspace
 			, ppExtras = [windowCount]				-- # of windows in current workspace
 			, ppOrder = \(ws:l:t:ex) -> [ws,l]++ex++[t]
 			}

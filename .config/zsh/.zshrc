@@ -43,6 +43,11 @@ done
 
 unset config_files
 
+# Keybindings
+
+# Bind ctrl + space to accept autosuggest
+bindkey '^ ' autosuggest-accept
+
 # Use ripgrep in fzf search
 # --files: List files that would be searched but do not search
 # --no-ignore: Do not respect .gitignore, etc...

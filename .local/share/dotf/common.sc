@@ -97,6 +97,11 @@ final case class Pkg(data: JsonObject) {
     case _ => false
   }
 
+  def isCask: Boolean = OS.pkgSystem match {
+    case Some(Homebrew) => brew.flatMap(_.hcursor.downField("cask").as[Boolean].toOption).getOrElse(false)
+    case _ => false
+  }
+
   def preInstall: Seq[String] = 
     root._2.hcursor.downField("preinstall").as[String].toOption.map(_.split("\\s+").toSeq).getOrElse(Seq.empty)
 
