@@ -1,0 +1,6 @@
+= Vim Buffers =
+
+- *ctrl+^* :: Switch buffer
+- *:bn* :: Goto next buffer
+- *:bp* :: Goto prev buffer
+- *:1,5bd* :: Delete buffer range 1-5

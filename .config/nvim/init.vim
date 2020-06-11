@@ -1,4 +1,7 @@
 " ~/.vimrc
+
+set nocompatible
+
 " Configuration for vim-plug
 call plug#begin('~/.cache/nvim/plugged')
 Plug 'derekwyatt/vim-scala'
@@ -16,8 +19,8 @@ Plug 'morhetz/gruvbox'
 Plug 'ryanoasis/vim-devicons'
 Plug 'junegunn/fzf', { 'do': { -> fzf#install() } }
 Plug 'junegunn/fzf.vim'
-Plug 'xolox/vim-misc'
-Plug 'xolox/vim-notes'
+Plug 'vimwiki/vimwiki'
+Plug 'ap/vim-css-color'
 call plug#end()
 
 " General
