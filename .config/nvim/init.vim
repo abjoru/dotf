@@ -45,7 +45,8 @@ set splitright
 
 " Column Limits
 " highlight ColorColumn ctermbg=DarkGray
-" set colorcolumn=121
+highlight ColorColumn ctermbg=Black
+set colorcolumn=121
 
 " Configuration for vim-scala
 au BufRead,BufNewFile *.sbt set filetype=scala
