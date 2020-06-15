@@ -3,5 +3,5 @@
 # Installation
 
 ```sh
-curl -Lks http://bit.do/setup-dotf | /bin/bash
+curl -Lks https://git.io/Jf7Qq | /bin/bash
 ```
