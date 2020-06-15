@@ -49,6 +49,7 @@ import XMonad.Actions.WithAll (sinkAll, killAll)
 import XMonad.Actions.CycleWS (moveTo, shiftTo, WSType(..), nextScreen, prevScreen)
 import XMonad.Actions.GridSelect
 import XMonad.Actions.MouseResize
+import qualified XMonad.Actions.Search as S
 
   -- Layouts modifiers
 import XMonad.Layout.LayoutModifier
@@ -157,7 +158,7 @@ gruvOrange1 = "#fe8019"
 -- VARIABLES
 ------------------------------------------------------------------------
 myFont :: [Char]
-myFont = "xft:Mononoki Nerd Font:regular:pixelsize=11"
+myFont = "xft:Mononoki Nerd Font:bold:pixelsize=11"
 
 -- sets modkey to super/windows key
 myModMask :: KeyMask
@@ -222,9 +223,9 @@ myColorizer = colorRangeFromClassName
 -- gridSelect menu layout
 myGridConfig :: p -> GSConfig Window
 myGridConfig colorizer = (buildDefaultGSConfig myColorizer)
-  { gs_cellheight = 30
-  , gs_cellwidth = 200
-  , gs_cellpadding = 8
+  { gs_cellheight = 40
+  , gs_cellwidth = 250
+  , gs_cellpadding = 6
   , gs_originFractX = 0.5
   , gs_originFractY = 0.5
   , gs_font = myFont
@@ -282,19 +283,14 @@ dtXPKeymap = M.fromList $
 dtXPConfig :: XPConfig
 dtXPConfig = def
   { font		= "xft:Mononoki Nerd Font:size=9"
-  --, bgColor		= "#292d3e"
   , bgColor 		= gruvBG0
-  --, fgColor		= "#d0d0d0"
   , fgColor 		= gruvFG0
-  --, bgHLight		= "c792ea"
   , bgHLight 		= gruvBlue0
   , fgHLight		= "#00000"
-  --, borderColor	= "#535974"
   , borderColor 	= gruvBG3
   , promptBorderWidth	= 0
   , promptKeymap	= dtXPKeymap
   , position		= Top
---  , position		= CenteredAt { xpCenterY = 0.3, xpWidth = 0.3 }
   , height		= 20
   , historySize		= 256
   , historyFilter	= id
@@ -306,6 +302,22 @@ dtXPConfig = def
   , maxComplRows	= Nothing -- set to Just 5 for 5 rows
   }
 
+-- The same config minus the autocomplete flag which is annoying on
+-- certain Xprompts, like the search engine prompts.
+dtXPConfig' :: XPConfig
+dtXPConfig' = dtXPConfig
+  { autoComplete = Nothing }
+
+-- A list of all of the standard Xmonad prompts
+promptList :: [(String, XPConfig -> X ())]
+promptList = [ ("m", manPrompt) 		-- manpages prompt
+	     , ("p", passPrompt) 		-- get passwords (requires 'pass')
+	     , ("g", passGeneratePrompt) 	-- generate passwords (requires 'pass')
+	     , ("r", passRemovePrompt) 		-- remove passwords (requires 'pass')
+	     , ("s", sshPrompt) 		-- ssh prompt
+	     , ("x", xmonadPrompt) 		-- xmonad prompt
+	     ]
+
 calcPrompt :: XPConfig -> String -> X ()
 calcPrompt c ans = 
   inputPrompt c (trim ans) ?+ \input ->
@@ -314,8 +326,39 @@ calcPrompt c ans =
     trim = f . f
       where f = reverse . dropWhile isSpace
 
+-- Xmonad has several search engines available to use located in
+-- XMonad.Actions.Search. Additionally, you can add other search engines
+-- such as those listed below.
+archwiki, ebay, news, reddit, urban :: S.SearchEngine
+archwiki = S.searchEngine "archwiki" 	"https://wiki.archlinux.org/index.php?search="
+ebay 	 = S.searchEngine "ebay" 	"https://www.ebay.com/sch/i.html?_nkw="
+news 	 = S.searchEngine "news" 	"https://news.google.com/search?q="
+reddit 	 = S.searchEngine "reddit" 	"https://www.reddit.com/search/?q="
+urban 	 = S.searchEngine "urban" 	"https://www.urbandictionary.com/define.php?term="
+
+-- This is the list of search engines that I want to use. Some are from 
+-- XMonad.Actions.Search, and some are the ones defined above.
+searchList :: [(String, S.SearchEngine)]
+searchList = [ ("a", archwiki)
+	     , ("d", S.duckduckgo)
+	     , ("e", ebay)
+	     , ("g", S.google)
+	     , ("h", S.hoogle)
+	     , ("i", S.images)
+	     , ("n", news)
+	     , ("r", reddit)
+	     , ("s", S.stackage)
+	     , ("t", S.thesaurus)
+	     , ("v", S.vocabulary)
+	     , ("b", S.wayback)
+	     , ("u", urban)
+	     , ("w", S.wikipedia)
+	     , ("y", S.youtube)
+	     , ("z", S.amazon)
+	     ]
+
 ------------------------------------------------------------------------
--- KEYBINDINGS
+-- KEYBINDINGS (using XMonad.Util.EZConfig)
 ------------------------------------------------------------------------
 myKeys :: [([Char], X ())]
 myKeys =
@@ -326,15 +369,6 @@ myKeys =
 
   -- Prompts
   , ("M-S-<Return>", shellPrompt dtXPConfig)		-- Shell prompt
-  , ("M-S-o", xmonadPrompt dtXPConfig)			-- Xmonad prompt
-  , ("M-S-s", sshPrompt dtXPConfig)			-- Ssh prompt
-  , ("M-S-m", manPrompt dtXPConfig)			-- Manpage prompt
-  -- Requires pass to be installed
-  , ("M1-C-p", passPrompt dtXPConfig)			-- Get passwords prompt
-  , ("M1-C-g", passGeneratePrompt dtXPConfig)		-- Generate passwords prompt
-  , ("M1-C-r", passRemovePrompt dtXPConfig)		-- Remove passwords prompt
-  -- Calculator prompt
-  , ("M1-C-c", calcPrompt dtXPConfig "qalc")		-- Requires qalculate-gtk
 
   -- Windows
   , ("M-S-c", kill1)					-- Kill the currently focused client
@@ -345,23 +379,7 @@ myKeys =
   , ("M-S-<Delete>", sinkAll)				-- Push all floating windows back to tile
 
   -- Grid Select
-  , (("M-S-t"), spawnSelected'
-    [ ("Audacity", "audacity")
-    , ("Deadbeef", "deadbeef")
-    , ("Firefox", "firefox")
-    , ("Geany", "geany")
-    , ("Geary", "geary")
-    , ("Gimp", "gimp")
-    , ("Kdenlive", "kdenlive")
-    , ("LibreOffice Impress", "loimpress")
-    , ("LibreOffice Writer", "lowriter")
-    , ("OBS", "obs")
-    , ("PCManFM", "pcmanfm")
-    , ("Simple Terminal", "st")
-    , ("Stream", "steam")
-    , ("Surf Browser", "surf suckless.org")
-    , ("Xonotic", "xonotic-glx")
-    ])
+  , ("M-S-t", spawnSelected' myAppGrid) 		-- grid select favirite apps
   , ("M-S-g", goToSelected $ myGridConfig myColorizer)	-- goto selected
   , ("M-S-b", bringSelected $ myGridConfig myColorizer)	-- bring selected
 
@@ -463,7 +481,14 @@ myKeys =
   , ("<XF86Calculator>", runOrRaise "gcalctool" (resource =? "gcalctool"))
   , ("<XF86Eject>", spawn "toggleeject")
   , ("<Print>", spawn "scrotd 0")
-  ] where nonNSP		= WSIs (return (\ws -> W.tag ws /= "nsp"))
+  ] 
+  -- Appending search engines to keybinding list
+  ++ [("M-s " ++ k, S.promptSearch dtXPConfig' f) | (k,f) <- searchList ]
+  ++ [("M-S-s " ++ k, S.selectSearch f) | (k,f) <- searchList ]
+  ++ [("M-p " ++ k, f dtXPConfig') | (k,f) <- promptList ]
+  ++ [("M-p " ++ k, f dtXPConfig' g) | (k,f,g) <- promptList' ]
+  -- Appending named scratchpads to keybinding list
+    where nonNSP		= WSIs (return (\ws -> W.tag ws /= "nsp"))
   	  nonEmptyNonNSP	= WSIs (return (\ws -> isJust (W.stack ws) && W.tag ws /= "nsp"))
 
 ------------------------------------------------------------------------
@@ -495,7 +520,7 @@ myWorkspaces = clickable . (map xmobarEscape)
 -- if you are using clickable workspaces. You need the className or title
 -- of the program. Use xprop to get this info.
 
-myManageHook :: Query (Data.Monoid.Endo WindowSet)
+myManageHook :: XMonad.Query (Data.Monoid.Endo WindowSet)
 myManageHook = composeAll
   -- using 'doShift ( myWorkspaces !! 7)' sends program to workspace 8!
   -- I'm doing it this way because otherwise I would have to write out
