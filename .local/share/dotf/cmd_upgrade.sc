@@ -9,8 +9,8 @@ def main(mode: String = "install", verbose: Boolean = false, action: String = "a
 
   if (pkgs.isEmpty) Printer.ok("System is up to date!")
   else {
-    val batch = pkgs.filterNot(_.isSpecial)
-    val specials = pkgs.filter(_.isSpecial)
+    val (batch, specials) = pkgs.partition(_.isSpecial)
+
     runPreInstall(mode, specials)
     runPkgInstall(mode, batch)
     runPostInstall(mode, specials)

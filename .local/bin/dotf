@@ -37,6 +37,10 @@ displayUsageAndExit() {
   exit
 }
 
+dotfConfig() {
+  $(which git) --git-dir=$HOME/.dotf/ --work-tree=$HOME $@
+}
+
 checkJava() {
   if [ ! -x "$(which java)" ]; then
     echo "ERROR: missing java runtime!"
@@ -84,31 +88,29 @@ runList() {
 runUpdate() {
   pushd $HOME
   if [ "$1" == "dry" ]; then
-    $(which git) --git-dir=$HOME/.dotf/ --work-tree=$HOME fetch 
-    $(which git) --git-dir=$HOME/.dotf/ --work-tree=$HOME diff HEAD..@{u}
+    dotfConfig fetch
+    dotfConfig diff HEAD..@{u}
   else
-    $(which git) --git-dir=$HOME/.dotf/ --work-tree=$HOME pull
+    dotfConfig pull
   fi
   popd
   exit
 }
 
 runUpgrade() {
-  if [ -z "$3" ]; then
-    amm ${SC_DIR}/cmd_upgrade.sc "$1" "$2" "all"
-  else
-    amm ${SC_DIR}/cmd_upgrade.sc "$1" "$2" "$3"
-  fi
+  amm ${SC_DIR}/cmd_upgrade.sc "$1" "$2" "${3:-all}"
   exit
 }
 
 runAddModified() {
-  $(which git) --git-dir=$HOME/.dotf/ --work-tree=$HOME add -u
+  dotfConfig add -u
   exit
 }
 
+
+
 runStatus() {
-  $(which git) --git-dir=$HOME/.dotf/ --work-tree=$HOME status --short
+  dotfConfig status --short
   exit
 }
 

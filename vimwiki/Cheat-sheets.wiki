@@ -1,7 +1,0 @@
-= Vim Cheat Sheets =
-
-> [[Wiki]]: Wiki Management
-> [[Buffers]]: Buffer Management
-> [[Tabs]]: Tab Management
-> [[Windows]]: Window Management
-> [[Terminal]]: Embedded Terminal
