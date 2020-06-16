@@ -26,11 +26,10 @@ displayUsageAndExit() {
   echo "  -h  Display this help"
   echo
   echo "Commands:"
-  echo "  add 			add all modified tracked files"
   echo "  list [<action>]  	list managed files"
   echo "  update           	update managed files"
   echo "  upgrade [<action>]    upgrade managed packages"
-  echo "  status           	show git status"
+  echo "  * 			delegates to git commands"
   echo
   echo "Actions:"
   echo "  pkgs   list all packages"
@@ -102,18 +101,6 @@ runUpgrade() {
   exit
 }
 
-runAddModified() {
-  dotfConfig add -u
-  exit
-}
-
-
-
-runStatus() {
-  dotfConfig status --short
-  exit
-}
-
 # Verify that we have a JRE
 checkJava
 
@@ -131,10 +118,8 @@ done
 shift $((OPTIND-1))
 
 case $1 in
-  add) runAddModified ;;
   list) runList "$2" ;;
   update) runUpdate "$MODE" "$VERBOSE" ;;
   upgrade) runUpgrade "$MODE" "$VERBOSE" "$2" ;;
-  status) runStatus ;;
-  *) invalidCommand ;;
+  *) dotfConfig $@ ;;
 esac
