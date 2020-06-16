@@ -14,51 +14,47 @@ object Const {
 
   val dotfDir = home/".dotf"
 
+  /** Returns a sequence of paths managed by git. */
   def managedFiles(): Seq[os.Path] = {
     val cmd = %%("git", s"--git-dir=${dotfDir.toString}", s"--work-tree=${ws.toString}", "ls-files")
     cmd.out.lines.map(l => os.Path(s"${home.toString}/$l")).toSeq
   }
 
-  def pkgs(): Seq[Pkg] = {
-    val pkgFiles = managedFiles().filter(_.ext == "pkg")
-    val objs = pkgFiles.flatMap(f => parser.parse(Source.fromFile(f.toString).reader()).toOption)
+  /** Returns a sequence of managed `Pkg`s. */
+  def pkgAll(): Seq[Pkg] = for {
+    path <- managedFiles().filter(_.ext == "pkg")
+    file = Source.fromFile(path.toString).reader()
+    json <- parser.parse(file).toOption.flatMap(_.asArray).getOrElse(Seq.empty)
+    obj <- json.asObject
+  } yield Pkg(obj)
 
-    val result = objs.flatMap(_.asArray.getOrElse(Seq.empty[Json]).collect {
-      case o if o.isObject => Pkg(o.asObject.get)
-    })
-
-    result.filterNot(_.isIgnored)
-  }
-
-  def customInstalls(): Seq[os.Path] =
-    managedFiles().filter(_.last == "install.sh")
-
-  private def isSupported(path: os.Path): Boolean = {
-    path.last.split('_').toList match {
-      case "brew" :: _ => OS.pkgSystem == Some(Homebrew)
-      case "apt" :: _ => OS.pkgSystem == Some(Apt)
-      case "pacman" :: _ => OS.pkgSystem == Some(Pacman)
-      case _ => true
-    }
-  }
+  def pkgs(): Seq[Pkg] = pkgAll().filterNot(_.isIgnored)
 
 }
 
 object Printer {
+  /** Prints the given `msg` in terminal green. */
   def ok(msg: String): Unit = println(s"${GREEN}${msg}${RESET}")
+
+  /** Prints the given `msg` in terminal red. */
   def err(msg: String): Unit = println(s"${RED}${msg}${RESET}")
+
+  /** Prints the given `msg` in terminal yellow. */
   def warn(msg: String): Unit = println(s"${YELLOW}${msg}${RESET}")
+
+  /** Prints the given `msg` in terminal cyan. */
   def info(msg: String): Unit = println(s"${CYAN}${msg}${RESET}")
 }
 
 sealed abstract class PkgSys(val name: String)
 
-case object Homebrew extends PkgSys("brew")
 case object Apt extends PkgSys("apt")
 case object Pacman extends PkgSys("pacman")
+case object Homebrew extends PkgSys("brew")
 
 object OS {
 
+  /** Find the target package system if supported. */
   lazy val pkgSystem: Option[PkgSys] = System.getProperty("os.name", "generic").toLowerCase match {
     case s if s.contains("mac") || s.contains("osx") || s.contains("darwin") =>
       if (which("brew")) Some(Homebrew) else None
@@ -76,69 +72,50 @@ object OS {
 
 }
 
+/** Defines an OS dependent package descriptor.
+  *
+  * @param data package Json node
+  */
 final case class Pkg(data: JsonObject) {
   private val root = data.toList.head
-  private val apt: Option[Json] = getObj("apt")
-  private val brew: Option[Json] = getObj("brew")
-  private val pacman: Option[Json] = getObj("pacman")
 
-  val name: String = OS.pkgSystem match {
-    case Some(Apt) => nameFor(apt)
-    case Some(Pacman) => nameFor(pacman)
-    case Some(Homebrew) => nameFor(brew)
-    case _ => root._1
-  }
+  private def rootField[T: Decoder](name: String): Option[T] = 
+    root._2.hcursor.downField(name).as[T].toOption
 
-  val warn: Option[String] = OS.pkgSystem match {
-    case Some(Apt) => apt.flatMap(_.hcursor.downField("warn").as[String].toOption)
-    case Some(Pacman) => pacman.flatMap(_.hcursor.downField("warn").as[String].toOption)
-    case Some(Homebrew) => brew.flatMap(_.hcursor.downField("warn").as[String].toOption)
-    case _ => None
-  }
+  private val osNode: Option[Json] = for {
+    os <- OS.pkgSystem
+    nd <- root._2.hcursor.downField(os.name).as[Json].toOption
+  } yield nd
 
+  private def field[T: Decoder](name: String): Option[T] = for {
+    os <- osNode
+    fd <- os.hcursor.downField(name).as[T].toOption
+  } yield fd
+
+  /** Name of the package as determined by the pkg system. */
+  def name: String = field[String]("name").getOrElse(root._1)
+
+  /** Warning message to display for the target pkg system. (i.e. note) */
+  def warn: Option[String] = field[String]("warn")
+
+  /** Tests if the given package is set to be ignored for the target pkg system. */
+  def isIgnored: Boolean = field[Boolean]("ignore").getOrElse(false)
+
+  /** Tests if this pkg is in Homebrew cask. */
+  def isCask: Boolean = field[Boolean]("cask").getOrElse(false)
+
+  /** Tests if this pkg requires special instructions and cannot be batched. */
   def isSpecial: Boolean = preInstall.nonEmpty || postInstall.nonEmpty || pkgPreInstall.nonEmpty || pkgPostInstall.nonEmpty
 
-  def isIgnored: Boolean = OS.pkgSystem match {
-    case Some(Apt) => apt.flatMap(_.hcursor.downField("ignore").as[Boolean].toOption).getOrElse(false)
-    case Some(Pacman) => pacman.flatMap(_.hcursor.downField("ignore").as[Boolean].toOption).getOrElse(false)
-    case Some(Homebrew) => brew.flatMap(_.hcursor.downField("ignore").as[Boolean].toOption).getOrElse(false)
-    case _ => false
-  }
+  /** Get the pre-install instructions for this package (pkg system independent). */
+  def preInstall: Seq[String] = rootField[String]("preinstall").map(_.split("\\s+").toSeq).getOrElse(Seq.empty)
 
-  def isCask: Boolean = OS.pkgSystem match {
-    case Some(Homebrew) => brew.flatMap(_.hcursor.downField("cask").as[Boolean].toOption).getOrElse(false)
-    case _ => false
-  }
+  /** Get the post-install instructions for this package (pkg system independent). */
+  def postInstall: Seq[String] = rootField[String]("postinstall").map(_.split("\\s+").toSeq).getOrElse(Seq.empty)
 
-  def preInstall: Seq[String] = 
-    root._2.hcursor.downField("preinstall").as[String].toOption.map(_.split("\\s+").toSeq).getOrElse(Seq.empty)
+  /** Get the pre-install instruction for this package as defined by the pkg system. */
+  def pkgPreInstall: Seq[String] = field[String]("preinstall").map(_.split("\\s+").toSeq).getOrElse(Seq.empty)
 
-  def pkgPreInstall: Seq[String] = OS.pkgSystem match {
-    case Some(Apt) => preInstallFor(apt)
-    case Some(Pacman) => preInstallFor(pacman)
-    case Some(Homebrew) => preInstallFor(brew)
-    case _ => Seq.empty
-  }
-
-  def postInstall: Seq[String] =
-    root._2.hcursor.downField("postinstall").as[String].toOption.map(_.split("\\s+").toSeq).getOrElse(Seq.empty)
-
-  def pkgPostInstall: Seq[String] = OS.pkgSystem match {
-    case Some(Apt) => postInstallFor(apt)
-    case Some(Pacman) => postInstallFor(pacman)
-    case Some(Homebrew) => postInstallFor(brew)
-    case _ => Seq.empty
-  }
-
-  private def nameFor(node: Option[Json]): String = 
-    node.flatMap(_.hcursor.downField("name").as[String].toOption).getOrElse(root._1)
-
-  private def preInstallFor(node: Option[Json]): Seq[String] =
-    node.flatMap(_.hcursor.downField("preinstall").as[String].toOption).map(_.split("\\s+").toSeq).getOrElse(Seq.empty)
-
-  private def postInstallFor(node: Option[Json]): Seq[String] =
-    node.flatMap(_.hcursor.downField("postinstall").as[String].toOption).map(_.split("\\s+").toSeq).getOrElse(Seq.empty)
-
-  private def getObj(key: String): Option[Json] = 
-    root._2.hcursor.downField(key).as[Option[Json]].toOption.getOrElse(None)
+  /** Get the post-install instruction for this package as defined by the pkg system. */
+  def pkgPostInstall: Seq[String] = field[String]("postinstall").map(_.split("\\s+").toSeq).getOrElse(Seq.empty)
 }

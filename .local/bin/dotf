@@ -97,7 +97,7 @@ runUpdate() {
 }
 
 runUpgrade() {
-  amm ${SC_DIR}/cmd_upgrade.sc "$1" "$2" "${3:-all}"
+  amm ${SC_DIR}/cmd_upgrade.sc "$1" "$2"
   exit
 }
 
@@ -120,6 +120,6 @@ shift $((OPTIND-1))
 case $1 in
   list) runList "$2" ;;
   update) runUpdate "$MODE" "$VERBOSE" ;;
-  upgrade) runUpgrade "$MODE" "$VERBOSE" "$2" ;;
+  upgrade) runUpgrade "$MODE" "$VERBOSE" ;;
   *) dotfConfig $@ ;;
 esac

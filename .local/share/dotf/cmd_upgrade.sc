@@ -4,7 +4,7 @@ import ammonite.ops.ImplicitWd._
 import $file.common, common._
 
 @main
-def main(mode: String = "install", verbose: Boolean = false, action: String = "all"): Unit = {
+def main(mode: String = "install", verbose: Boolean = false): Unit = {
   val pkgs = filteredPkgs()
 
   if (pkgs.isEmpty) Printer.ok("System is up to date!")
