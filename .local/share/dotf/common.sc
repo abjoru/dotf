@@ -47,6 +47,7 @@ object Const {
 object Printer {
   def ok(msg: String): Unit = println(s"${GREEN}${msg}${RESET}")
   def err(msg: String): Unit = println(s"${RED}${msg}${RESET}")
+  def warn(msg: String): Unit = println(s"${YELLOW}${msg}${RESET}")
   def info(msg: String): Unit = println(s"${CYAN}${msg}${RESET}")
 }
 
@@ -86,6 +87,13 @@ final case class Pkg(data: JsonObject) {
     case Some(Pacman) => nameFor(pacman)
     case Some(Homebrew) => nameFor(brew)
     case _ => root._1
+  }
+
+  val warn: Option[String] = OS.pkgSystem match {
+    case Some(Apt) => apt.flatMap(_.hcursor.downField("warn").as[String].toOption)
+    case Some(Pacman) => pacman.flatMap(_.hcursor.downField("warn").as[String].toOption)
+    case Some(Homebrew) => brew.flatMap(_.hcursor.downField("warn").as[String].toOption)
+    case _ => None
   }
 
   def isSpecial: Boolean = preInstall.nonEmpty || postInstall.nonEmpty || pkgPreInstall.nonEmpty || pkgPostInstall.nonEmpty

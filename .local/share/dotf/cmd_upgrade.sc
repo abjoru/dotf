@@ -14,7 +14,9 @@ def main(mode: String = "install", verbose: Boolean = false, action: String = "a
     runPreInstall(mode, specials)
     runPkgInstall(mode, batch)
     runPostInstall(mode, specials)
+
   }
+
 }
 
 private def runPreInstall(mode: String, pkgs: Seq[Pkg]): Unit = pkgs.foreach { pkg =>
@@ -74,6 +76,9 @@ private def runPkgInstall(mode: String, pkgs: Seq[Pkg]): Unit = (mode, OS.pkgSys
 
 private def filteredPkgs(): Seq[Pkg] = {
   val pkgs = Const.pkgs()
+
+  // Always print warnings until physically removed!
+  pkgs.flatMap(_.warn).foreach(w => Printer.warn(w))
 
   OS.pkgSystem match {
     case Some(Homebrew) =>
