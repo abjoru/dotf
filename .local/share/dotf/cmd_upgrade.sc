@@ -6,6 +6,13 @@ import $file.common, common._
 @main
 def main(mode: String = "install", verbose: Boolean = false): Unit = {
   val pkgs = filteredPkgs()
+  val cust = Const.customInstallers()
+
+  // Custom installers
+  mode match {
+    case "dry" => cust.foreach(c => println(s"bash ${c.toString}"))
+    case _ => cust.foreach(c => %("bash", c.toString))
+  }
 
   if (pkgs.isEmpty) Printer.ok("System is up to date!")
   else {
@@ -20,21 +27,23 @@ def main(mode: String = "install", verbose: Boolean = false): Unit = {
 }
 
 private def runPreInstall(mode: String, pkgs: Seq[Pkg]): Unit = pkgs.foreach { pkg =>
-  val cmds = pkg.preInstall
-  if (cmds.nonEmpty) {
+  val scripts = pkg.preInstallScripts
+
+  if (scripts.nonEmpty) {
     mode match {
-      case "dry" => println(s"bash -c ${cmds.mkString(" ")}")
-      case _ => %("bash", "-c", cmds)
+      case "dry" => scripts.foreach(s => println(s"bash ${s.toString}"))
+      case _ => scripts.foreach(s => %("bash", s.toString))
     }
   }
 }
 
 private def runPostInstall(mode: String, pkgs: Seq[Pkg]): Unit = pkgs.foreach { pkg =>
-  val cmds = pkg.postInstall
-  if (cmds.nonEmpty) {
+  val scripts = pkg.postInstallScripts
+
+  if (scripts.nonEmpty) {
     mode match {
-      case "dry" => println(s"bash -c ${cmds.mkString(" ")}")
-      case _ => %("bash", "-c", cmds)
+      case "dry" => scripts.foreach(s => println(s"bash ${s.toString}"))
+      case _ => scripts.foreach(s => %("bash", s.toString))
     }
   }
 }

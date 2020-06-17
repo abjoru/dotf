@@ -26,14 +26,17 @@ displayUsageAndExit() {
   echo "  -h  Display this help"
   echo
   echo "Commands:"
-  echo "  list [<action>]  	list managed files"
+  echo "  list [<action>] 	list managed files"
   echo "  update           	update managed files"
-  echo "  upgrade [<action>]    upgrade managed packages"
+  echo "  upgrade           	upgrade managed packages"
   echo "  * 			delegates to git commands"
   echo
   echo "Actions:"
-  echo "  pkgs   list all packages"
-  echo "  warn   list all warnings"
+  echo "  pkgs   	list all packages"
+  echo "  warn   	list all warnings"
+  echo "  custom 	list all custom installers"
+  echo "  tracked 	list all tracked files"
+  echo "  untracked 	list all untracked files in established parent dirs"
   exit
 }
 
@@ -62,9 +65,9 @@ initAmmonite() {
     else
       echo "Unsupported OS or package system!"
       echo "Currently supported:"
-      echo "  - homebrew (osx)"
       echo "  - apt (linux)"
       echo "  - pacman (linux)"
+      echo "  - homebrew (osx)"
       exit 1
     fi
   fi

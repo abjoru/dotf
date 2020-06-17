@@ -20,13 +20,15 @@ object Const {
     cmd.out.lines.map(l => os.Path(s"${home.toString}/$l")).toSeq
   }
 
+  def customInstallers(): Seq[os.Path] = managedFiles().filter(_.last == "install.sh")
+
   /** Returns a sequence of managed `Pkg`s. */
   def pkgAll(): Seq[Pkg] = for {
     path <- managedFiles().filter(_.ext == "pkg")
     file = Source.fromFile(path.toString).reader()
     json <- parser.parse(file).toOption.flatMap(_.asArray).getOrElse(Seq.empty)
     obj <- json.asObject
-  } yield Pkg(obj)
+  } yield Pkg(path, obj)
 
   def pkgs(): Seq[Pkg] = pkgAll().filterNot(_.isIgnored)
 
@@ -73,7 +75,7 @@ object OS {
   *
   * @param data package Json node
   */
-final case class Pkg(data: JsonObject) {
+final case class Pkg(path: os.Path, data: JsonObject) {
   private val root = data.toList.head
 
   private def rootField[T: Decoder](name: String): Option[T] = 
@@ -97,17 +99,19 @@ final case class Pkg(data: JsonObject) {
   def isCask: Boolean = field[Boolean]("cask").getOrElse(false)
 
   /** Tests if this pkg requires special instructions and cannot be batched. */
-  def isSpecial: Boolean = preInstall.nonEmpty || postInstall.nonEmpty || pkgPreInstall.nonEmpty || pkgPostInstall.nonEmpty
+  def isSpecial: Boolean = preInstallScripts.nonEmpty || postInstallScripts.nonEmpty
 
-  /** Get the pre-install instructions for this package (pkg system independent). */
-  def preInstall: Seq[String] = rootField[String]("preinstall").map(_.split("\\s+").toSeq).getOrElse(Seq.empty)
+  /** Gets the path to the optional pre-install scripts. */
+  def preInstallScripts: Seq[os.Path] = {
+    val maybeGlobalScript = rootField[String]("preinstall").map(n => path/up/n)
+    val maybePkgScript = field[String]("preinstall").map(n => path/up/n)
+    Seq(maybeGlobalScript, maybePkgScript).flatten
+  }
 
-  /** Get the post-install instructions for this package (pkg system independent). */
-  def postInstall: Seq[String] = rootField[String]("postinstall").map(_.split("\\s+").toSeq).getOrElse(Seq.empty)
-
-  /** Get the pre-install instruction for this package as defined by the pkg system. */
-  def pkgPreInstall: Seq[String] = field[String]("preinstall").map(_.split("\\s+").toSeq).getOrElse(Seq.empty)
-
-  /** Get the post-install instruction for this package as defined by the pkg system. */
-  def pkgPostInstall: Seq[String] = field[String]("postinstall").map(_.split("\\s+").toSeq).getOrElse(Seq.empty)
+  /** Gets the path to the optional post-install scripts. */
+  def postInstallScripts: Seq[os.Path] = {
+    val maybeGlobalScript = rootField[String]("postinstall").map(n => path/up/n)
+    val maybePkgScript = field[String]("postinstall").map(n => path/up/n)
+    Seq(maybeGlobalScript, maybePkgScript).flatten
+  }
 }

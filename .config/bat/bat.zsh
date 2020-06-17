@@ -1,1 +1,1 @@
-export BAT_PAGER="less -R"
+export BAT_PAGER="less -RF"
