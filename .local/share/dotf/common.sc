@@ -56,13 +56,10 @@ object OS {
 
   /** Find the target package system if supported. */
   lazy val pkgSystem: Option[PkgSys] = System.getProperty("os.name", "generic").toLowerCase match {
-    case s if s.contains("mac") || s.contains("osx") || s.contains("darwin") =>
-      if (which("brew")) Some(Homebrew) else None
-
-    case s if s.contains("linux") =>
-      if (which("apt")) Some(Apt)
-      else if (which("pacman")) Some(Pacman)
-      else None
+    case s if s.contains("linux") && which("apt")     => Some(Apt)
+    case s if s.contains("linux") && which("pacman")  => Some(Pacman)
+    case s if s.contains("mac") && which("brew")      => Some(Homebrew)
+    case _                                            => None
   }
 
   private def which(bin: String): Boolean = {
@@ -82,13 +79,8 @@ final case class Pkg(data: JsonObject) {
   private def rootField[T: Decoder](name: String): Option[T] = 
     root._2.hcursor.downField(name).as[T].toOption
 
-  private val osNode: Option[Json] = for {
-    os <- OS.pkgSystem
-    nd <- root._2.hcursor.downField(os.name).as[Json].toOption
-  } yield nd
-
   private def field[T: Decoder](name: String): Option[T] = for {
-    os <- osNode
+    os <- OS.pkgSystem.flatMap(v => rootField[Json](v.name))
     fd <- os.hcursor.downField(name).as[T].toOption
   } yield fd
 
@@ -96,7 +88,7 @@ final case class Pkg(data: JsonObject) {
   def name: String = field[String]("name").getOrElse(root._1)
 
   /** Warning message to display for the target pkg system. (i.e. note) */
-  def warn: Option[String] = field[String]("warn")
+  def warn: Option[String] = field[String]("warn").map(w => s"${name}: $w")
 
   /** Tests if the given package is set to be ignored for the target pkg system. */
   def isIgnored: Boolean = field[Boolean]("ignore").getOrElse(false)

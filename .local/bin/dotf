@@ -33,6 +33,7 @@ displayUsageAndExit() {
   echo
   echo "Actions:"
   echo "  pkgs   list all packages"
+  echo "  warn   list all warnings"
   exit
 }
 
