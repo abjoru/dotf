@@ -20,7 +20,7 @@ Plug 'ryanoasis/vim-devicons'
 Plug 'junegunn/fzf', { 'do': { -> fzf#install() } }
 Plug 'junegunn/fzf.vim'
 Plug 'vimwiki/vimwiki'
-Plug 'ap/vim-css-color'
+Plug 'chrisbra/colorizer'
 call plug#end()
 
 " General
@@ -59,6 +59,7 @@ source ~/.config/nvim/coc-metals.vim
 source ~/.config/nvim/mergetool.vim
 source ~/.config/nvim/dvisuals.vim
 source ~/.config/nvim/vim-notes.vim
+source ~/.config/nvim/colorizer.vim
 
 " Better window resizing
 map <silent> <A-h> <C-w><

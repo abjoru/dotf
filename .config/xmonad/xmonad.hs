@@ -195,14 +195,8 @@ windowCount = gets $ Just . show . length . W.integrate' . W.stack . W.workspace
 ------------------------------------------------------------------------
 myStartupHook :: X ()
 myStartupHook = do
-  spawnOnce "nitrogen --restore &"
-  --spawnOnce "picom &"
-  spawnOnce "compton --config /home/abjoru/.config/compton/compton.conf &"
-  --spawnOnce "nm-applet &"
-  --spawnOnce "volumeicon &"
-  --spawnOnce "trayer --edge top --align right --widthtype request --padding 6 --SetDocType true --SetPartialStrut true --expand true --monitor 1 --transparent true --alpha 0 --tint 0x292d3e --height 18 &"
-  --spawnOnce "kak -d -s mysession &"
-  setWMName "Blueberry"
+  spawn "$HOME/.config/xmonad/scripts/autostart.sh"
+  setWMName "LG3D"
 
 ------------------------------------------------------------------------
 -- GRID SELECT
@@ -521,22 +515,43 @@ myWorkspaces = clickable . (map xmobarEscape)
 -- of the program. Use xprop to get this info.
 
 myManageHook :: XMonad.Query (Data.Monoid.Endo WindowSet)
-myManageHook = composeAll
+myManageHook = composeAll . concat $
+  [ [isDialog --> doCenterFloat]
+  , [className =? c --> doCenterFloat | c <- myCFloats]
+  , [title =? t --> doFloat | t <- myTFloats]
+  , [resource =? r --> doFloat | r <- myRFloats]
+  , [resource =? i --> doIgnore | i <- myIFloats]
+--    , [className =? c --> doShift (myWorkspaces !! 0) <+> viewShift (myWorkspaces !! 0)        | c <- my1Shifts]
+--    , [className =? c --> doShift (myWorkspaces !! 1) <+> viewShift (myWorkspaces !! 1)        | c <- my2Shifts]
+--    , [className =? c --> doShift (myWorkspaces !! 2) <+> viewShift (myWorkspaces !! 2)        | c <- my3Shifts]
+--    , [className =? c --> doShift (myWorkspaces !! 3) <+> viewShift (myWorkspaces !! 3)        | c <- my4Shifts]
+--    , [className =? c --> doShift (myWorkspaces !! 4) <+> viewShift (myWorkspaces !! 4)        | c <- my5Shifts]
+--    , [className =? c --> doShift (myWorkspaces !! 5) <+> viewShift (myWorkspaces !! 5)        | c <- my6Shifts]
+--    , [className =? c --> doShift (myWorkspaces !! 6) <+> viewShift (myWorkspaces !! 6)        | c <- my7Shifts]
+--    , [className =? c --> doShift (myWorkspaces !! 7) <+> viewShift (myWorkspaces !! 7)        | c <- my8Shifts]
+--    , [className =? c --> doShift (myWorkspaces !! 8) <+> viewShift (myWorkspaces !! 8)        | c <- my9Shifts]
+--    , [className =? c --> doShift (myWorkspaces !! 9) <+> viewShift (myWorkspaces !! 9)        | c <- my10Shifts]
+  ]
+  where
+    myCFloats = ["Arandr", "Gimp", "Galculator", "feh", "mpv", ]
+    myTFloats = ["Downloads", "Save As..."]
+    myRFloats = []
+    myIFloats = ["desktop_window"]
   -- using 'doShift ( myWorkspaces !! 7)' sends program to workspace 8!
   -- I'm doing it this way because otherwise I would have to write out
   -- the full name of my clickable workspaces, which would look like:
   -- doShift "<action xdotool super+8>gfx</action>"
-  [ className =? "obs"		--> doShift ( myWorkspaces !! 7)
-  , title =? "firefox"		--> doShift ( myWorkspaces !! 1)
-  , title =? "qutebrowser"	--> doShift ( myWorkspaces !! 1)
-  , className =? "mpv"		--> doShift ( myWorkspaces !! 7)
-  , className =? "vlc"		--> doShift ( myWorkspaces !! 7)
-  , className =? "Gimp"		--> doShift ( myWorkspaces !! 8)
-  , className =? "Gimp"		--> doFloat
-  , title =? "Oracle VM VirtualBox Manager"	--> doFloat
-  , className =? "Oracle VM VirtualBox Manager"	--> doShift ( myWorkspaces !! 6)
-  , (className =? "firefox" <&&> resource =? "Dialog")	--> doFloat -- Float Firefox Dialog
-  ] <+> namedScratchpadManageHook myScratchPads
+  --[ className =? "obs"		--> doShift ( myWorkspaces !! 7)
+  --, title =? "firefox"		--> doShift ( myWorkspaces !! 1)
+  --, title =? "qutebrowser"	--> doShift ( myWorkspaces !! 1)
+  --, className =? "mpv"		--> doShift ( myWorkspaces !! 7)
+  --, className =? "vlc"		--> doShift ( myWorkspaces !! 7)
+  --, className =? "Gimp"		--> doShift ( myWorkspaces !! 8)
+  --, className =? "Gimp"		--> doFloat
+  --, title =? "Oracle VM VirtualBox Manager"	--> doFloat
+  --, className =? "Oracle VM VirtualBox Manager"	--> doShift ( myWorkspaces !! 6)
+  --, (className =? "firefox" <&&> resource =? "Dialog")	--> doFloat -- Float Firefox Dialog
+  --] <+> namedScratchpadManageHook myScratchPads
 
 ------------------------------------------------------------------------
 -- LAYOUTS

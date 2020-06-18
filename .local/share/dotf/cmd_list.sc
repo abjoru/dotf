@@ -19,12 +19,19 @@ private def showUntracked(): Unit = {
   val tracked = Const.managedFiles()
   
   tracked.map(v => v/up).distinct.filterNot(_ == home).foreach { p =>
-    val files = ls! p |? (_.isDir == false)
-    val untracked = files.filterNot(f => tracked.contains(f))
-    
-    if (untracked.nonEmpty) {
-      Printer.info(s"\nUntracked files in $p")
-      untracked.foreach(println)
+    val (dx, fx) = (ls! p).partition(_.isDir)
+
+    val untrackedDirs = dx.filterNot(d => tracked.contains(d)).filterNot { d =>
+      tracked.find(_.toString.startsWith(d.toString)).isDefined
     }
+
+    val untrackedFiles = fx.filterNot(f => tracked.contains(f))
+
+    if (untrackedDirs.nonEmpty || untrackedFiles.nonEmpty)
+      Printer.info(s"\nUntracked items in $p")
+
+    untrackedDirs.foreach(println)
+    untrackedFiles.foreach(println)
   }
+
 }
