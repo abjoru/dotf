@@ -6,6 +6,9 @@
       name: libghc-xmonad-contrib-dev
     brew:
       ignore: true
+- picom:
+    brew:
+      ignore: true
 - xterm:
     brew:
       ignore: true
