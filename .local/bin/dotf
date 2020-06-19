@@ -29,6 +29,7 @@ displayUsageAndExit() {
   echo "  list [<action>] 	list managed files"
   echo "  update           	update managed files"
   echo "  upgrade           	upgrade managed packages"
+  echo "  homepage 		build/re-build homepage"
   echo "  * 			delegates to git commands"
   echo
   echo "Actions:"
@@ -105,6 +106,11 @@ runUpgrade() {
   exit
 }
 
+buildHomepage() {
+  echo "Not implemented!"
+  exit 1
+}
+
 # Verify that we have a JRE
 checkJava
 
@@ -125,5 +131,6 @@ case $1 in
   list) runList "$2" ;;
   update) runUpdate "$MODE" "$VERBOSE" ;;
   upgrade) runUpgrade "$MODE" "$VERBOSE" ;;
+  homepage) buildHomepage ;;
   *) dotfConfig $@ ;;
 esac

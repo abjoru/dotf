@@ -2,11 +2,15 @@ import ammonite.ops._
 import ammonite.ops.ImplicitWd._
 
 import $file.common, common._
+import $file.builder, builder._
 
 @main
 def main(mode: String = "install", verbose: Boolean = false): Unit = {
   val pkgs = filteredPkgs()
   val cust = Const.customInstallers()
+
+  // Regenerate homepage
+  Builder.genHomepage()
 
   // Custom installers
   mode match {
