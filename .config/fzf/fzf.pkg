@@ -1,5 +1,1 @@
 - fzf:
-    apt:
-      warn: 'Check that paths referenced in ~/.config/fzf/fzf.zsh matches target OS!'
-    pacman:
-      warn: 'Check that paths referenced in ~/.config/fzf/fzf.zsh matches target OS!'

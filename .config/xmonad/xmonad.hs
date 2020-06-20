@@ -36,7 +36,7 @@ import XMonad.Util.SpawnOnce
   -- Hooks
 import XMonad.Hooks.DynamicLog (dynamicLogWithPP, wrap, xmobarPP, xmobarColor, shorten, PP(..))
 import XMonad.Hooks.ManageDocks (avoidStruts, manageDocks, ToggleStruts(..))
-import XMonad.Hooks.ManageHelpers (isFullscreen, doFullFloat)
+import XMonad.Hooks.ManageHelpers (isFullscreen, isDialog, doFullFloat, doCenterFloat)
 import XMonad.Hooks.SetWMName
 import XMonad.Hooks.EwmhDesktops -- for some fullscreen events, also for xcomposite in obs.
 
@@ -360,6 +360,7 @@ myKeys =
   [ ("M-C-r", spawn "xmonad --recompile")		-- Recompiles xmonad
   , ("M-S-r", spawn "xmonad --restart")			-- Restarts xmonad
   , ("M-S-q", io exitSuccess)				-- Quits xmonad
+  , ("M1-S-q", io exitSuccess)				-- Quits xmonad
 
   -- Prompts
   , ("M-S-<Return>", shellPrompt dtXPConfig)		-- Shell prompt
@@ -373,7 +374,7 @@ myKeys =
   , ("M-S-<Delete>", sinkAll)				-- Push all floating windows back to tile
 
   -- Grid Select
-  , ("M-S-t", spawnSelected' myAppGrid) 		-- grid select favirite apps
+  --, ("M-S-t", spawnSelected' myAppGrid) 		-- grid select favirite apps
   , ("M-S-g", goToSelected $ myGridConfig myColorizer)	-- goto selected
   , ("M-S-b", bringSelected $ myGridConfig myColorizer)	-- bring selected
 
@@ -477,10 +478,10 @@ myKeys =
   , ("<Print>", spawn "scrotd 0")
   ] 
   -- Appending search engines to keybinding list
-  ++ [("M-s " ++ k, S.promptSearch dtXPConfig' f) | (k,f) <- searchList ]
-  ++ [("M-S-s " ++ k, S.selectSearch f) | (k,f) <- searchList ]
-  ++ [("M-p " ++ k, f dtXPConfig') | (k,f) <- promptList ]
-  ++ [("M-p " ++ k, f dtXPConfig' g) | (k,f,g) <- promptList' ]
+  -- ++ [("M-s " ++ k, S.promptSearch dtXPConfig' f) | (k,f) <- searchList ]
+  -- ++ [("M-S-s " ++ k, S.selectSearch f) | (k,f) <- searchList ]
+  -- ++ [("M-p " ++ k, f dtXPConfig') | (k,f) <- promptList ]
+  -- ++ [("M-p " ++ k, f dtXPConfig' g) | (k,f,g) <- promptList' ]
   -- Appending named scratchpads to keybinding list
     where nonNSP		= WSIs (return (\ws -> W.tag ws /= "nsp"))
   	  nonEmptyNonNSP	= WSIs (return (\ws -> isJust (W.stack ws) && W.tag ws /= "nsp"))
@@ -533,7 +534,7 @@ myManageHook = composeAll . concat $
 --    , [className =? c --> doShift (myWorkspaces !! 9) <+> viewShift (myWorkspaces !! 9)        | c <- my10Shifts]
   ]
   where
-    myCFloats = ["Arandr", "Gimp", "Galculator", "feh", "mpv", ]
+    myCFloats = ["Arandr", "Gimp", "Galculator", "feh", "mpv"]
     myTFloats = ["Downloads", "Save As..."]
     myRFloats = []
     myIFloats = ["desktop_window"]

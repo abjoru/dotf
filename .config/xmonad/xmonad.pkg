@@ -15,6 +15,8 @@
     brew:
       ignore: true
 - dmenu:
+    apt:
+      name: suckless-tools
     pacman:
       name: dmenu-manjaro
     brew:
