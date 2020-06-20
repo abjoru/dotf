@@ -28,7 +28,7 @@ displayUsageAndExit() {
   echo "Commands:"
   echo "  list [<action>] 	list managed files"
   echo "  update           	update managed files"
-  echo "  upgrade           	upgrade managed packages"
+  echo "  upgrade           	upgrade managed packages and settings"
   echo "  homepage 		build/re-build homepage"
   echo "  * 			delegates to git commands"
   echo
@@ -103,6 +103,23 @@ runUpdate() {
 
 runUpgrade() {
   amm ${SC_DIR}/cmd_upgrade.sc "$1" "$2"
+  #TODO don't execute on `dry` mode...
+  runOsInstall
+  exit
+}
+
+runOsInstall() {
+  # Run os installs if not already done..
+  if [ ! -d "${XDG_CACHE_HOME:-$HOME/.cache}/dotf/.locked" ]; then
+    if [[ "$OSTYPE" == "darwin"* ]]; then
+      bash ${XDG_DATA_HOME:-$HOME/.local/share}/dotf/os/osx-setup.sh
+    elif [[ "$OSTYPE" == "linux-gnu"* ]]; then
+      bash ${XDG_DATA_HOME:-$HOME/.local/share}/dotf/os/linux-setup.sh
+    fi
+
+    # Write update lock file to avoid running os installs again
+    touch ${XDG_CACHE_HOME:-$HOME/.cache}/dotf/.locked
+  fi
   exit
 }
 

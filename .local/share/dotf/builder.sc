@@ -52,47 +52,38 @@ object Builder {
     case _ => true
   }
 
-  def groups(): Seq[Group] = for {
+  private def groups(): Seq[Group] = for {
     grp <- getGroups(skelDir/"links.json").toOption.getOrElse(Seq.empty)
     if matchesHost(grp)
   } yield grp
 
-  def toHtmlBlocks(): String = groups.foldLeft("") {
-    case (acc, grp) =>
-      val links = grp.links.map(l => s"""<a class="bookmark" href="${l.link}" target="_blank">${l.name}</a>""")
-      val pre = s"""<div class="bookmark-set">\n<div class="bookmark-title">${grp.group}</div>\n<div class="bookmark-inner-container">"""
-      val post = "</div>\n</div>\n"
+  private def writeFile(path: os.Path, contents: String): Unit = {
+    val f = new File(path.toString)
 
-      acc ++ pre ++ links.mkString("\n", "\n", "\n") ++ post
+    if (!f.exists()) {
+      f.getParentFile().mkdirs()
+    } else f.delete()
+
+    val pw = new java.io.PrintWriter(f)
+    pw.write(contents)
+    pw.close()
   }
 
   def genHomepage(): Unit = {
     val header = readString(skelDir/"head.html")
     val footer = readString(skelDir/"tail.html")
-    val links = toHtmlBlocks()
 
-    val contents = header ++ "\n" ++ links ++ footer
+    val links = groups.foldLeft("") {
+      case (acc, grp) =>
+        val links = grp.links.map(l => s"""<a class="bookmark" href="${l.link}" target="_blank">${l.name}</a>""")
+        val pre = s"""<div class="bookmark-set">\n<div class="bookmark-title">${grp.group}</div>\n<div class="bookmark-inner-container">"""
+        val post = "</div>\n</div>\n"
 
-    val targetFile = new File((targetDir/"homepage.html").toString)
-    if (!targetFile.exists()) {
-      new File(targetDir.toString()).mkdirs()
-      targetFile.createNewFile()
-    } else {
-      targetFile.delete()
+        acc ++ pre ++ links.mkString("\n", "\n", "\n") ++ post
     }
 
-    val pw = new java.io.PrintWriter(targetFile)
-    pw.write(contents)
-    pw.close()
-
-    val cssFile = new File((targetDir/"homepage.css").toString)
-    if (!cssFile.exists()) {
-      cssFile.createNewFile()
-    } else cssFile.delete()
-
-    val cssContents = readString(skelDir/"homepage.css")
-    val cw = new java.io.PrintWriter(cssFile)
-    cw.write(cssContents)
-    cw.close()
+    writeFile(targetDir/"homepage.html", header ++ "\n" ++ links ++ footer)
+    writeFile(targetDir/"homepage.css", readString(skelDir/"homepage.css"))
   }
+
 }

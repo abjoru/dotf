@@ -1,13 +1,4 @@
 [{
-  "group": "News",
-  "links": [{
-    "name": "CNN",
-    "link": "http://www.cnn.com"
-  },{
-    "name": "IGN",
-    "link": "https://www.ign.com"
-  }]
-},{
   "group": "Home",
   "hostFilter": "^((?!fll).)*$",
   "links": [{
@@ -29,5 +20,44 @@
   },{
     "name": "Kibana (XBH)",
     "link": "https://search2.prolexic.com:5601/app/kibana#/dashboard/9254c3e0-0a33-11ea-a6f7-e179d67c84cd?_g=()&_a=(description:'',filters:!(('$state':(store:appState),meta:(alias:!n,disabled:!f,index:'xiphos-*',key:application.home,negate:!f,params:(query:xiphos_server_bottomhalf,type:phrase),type:phrase,value:xiphos_server_bottomhalf),query:(match:(application.home:(query:xiphos_server_bottomhalf,type:phrase))))),fullScreenMode:!f,options:(darkTheme:!t),panels:!((col:1,columns:!(location,host,message),id:'56e52250-36ad-11e9-97cf-d90f6f4254d4',panelIndex:3,row:5,size_x:12,size_y:5,sort:!('@timestamp',desc),type:search),(col:1,id:AWqSf95hStlmiGbHKQ0i,panelIndex:4,row:1,size_x:7,size_y:4,type:visualization),(col:8,id:AWqSgIA8StlmiGbHKQ3s,panelIndex:5,row:1,size_x:5,size_y:4,type:visualization)),query:(language:lucene,query:(query_string:(analyze_wildcard:!t,default_field:'*',query:'*'))),timeRestore:!f,title:'Xiphos%20Bottomhalf%20Logs',uiState:(P-5:(vis:(legendOpen:!f))),viewMode:view)"
+  }]
+},{
+  "group": "News",
+  "links": [{
+    "name": "CNN",
+    "link": "http://www.cnn.com"
+  },{
+    "name": "NPR",
+    "link": "http://www.npr.org"
+  }]
+},{
+  "group": "Tech",
+  "links": [{
+    "name": "Dotty",
+    "link": "https://dotty.epfl.ch/blog/index.html"
+  },{
+    "name": "GitHub",
+    "link": "https://github.com"
+  },{
+    "name": "CNET",
+    "link": "https://www.cnet.com/news/"
+  }]
+},{
+  "group": "Shopping",
+  "links": [{
+    "name": "Amazon",
+    "link": "https://www.amazon.com"
+  },{
+    "name": "NewEgg",
+    "link": "https://www.newegg.com"
+  }]
+},{
+  "group": "Entertainment",
+  "links": [{
+    "name": "YouTube",
+    "link": "https://www.youtube.com"
+  },{
+    "name": "IGN",
+    "link": "https://www.ign.com"
   }]
 }]

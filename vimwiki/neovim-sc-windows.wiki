@@ -1,9 +1,9 @@
 = Vim Window Management =
 
-- *:res +20* :: Increase height by 20 rows
-- *:res -20* :: Decrease height by 20 rows
-- *:vertical res +20* :: Increase width by 20 rows
-- *:vertical res -20* :: Decrease width by 20 rows
-- *ctrl + w _* :: Set max height of active buffer
-- *ctrl + w |* :: Set max width of active buffer
-- *ctrl + w =* :: Normalize sizing for all buffers
+- *:res +20* 		:: Increase height by 20 rows
+- *:res -20* 		:: Decrease height by 20 rows
+- *:vertical res +20* 	:: Increase width by 20 rows
+- *:vertical res -20* 	:: Decrease width by 20 rows
+- *ctrl + w _* 		:: Set max height of active buffer
+- *ctrl + w |* 		:: Set max width of active buffer
+- *ctrl + w =* 		:: Normalize sizing for all buffers

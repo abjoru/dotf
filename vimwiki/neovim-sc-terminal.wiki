@@ -1,5 +1,5 @@
 = Vim Terminal =
 
-- *:terminal* :: Open new terminal
-- *:term://zsh* :: Open new ZSH terminal
-- *ctrl + \ n* :: Enter normal mode in terminal buffer
+- *:terminal* 		:: Open new terminal
+- *:term://zsh* 	:: Open new ZSH terminal
+- *ctrl + \ n* 		:: Enter normal mode in terminal buffer

@@ -1,13 +1,13 @@
 = Vim Wiki =
 
-- *<\ ww>* :: Open default wiki index file
-- *<\ wt>* :: Open default wiki index file in a new tab
-- *<\ ws>* :: Select and open wiki index file
-- *<\ wd>* :: Delete wiki file you are in
-- *<\ wr>* :: Rename wiki file you are in
-- *<Enter>* :: Follow/Create wiki link
-- *<Shift-Enter>* :: Split and follow/create wiki link
-- *<Ctrl-Enter>* :: Vertical split and follow/create wiki link
-- *<Backspace>* :: Go back to parent (previous) wiki link
-- *<Tab>* :: Find next wiki link
-- *<Shift-Tab>* :: Find previous wiki link
+- *<\ ww>* 		:: Open default wiki index file
+- *<\ wt>* 		:: Open default wiki index file in a new tab
+- *<\ ws>* 		:: Select and open wiki index file
+- *<\ wd>* 		:: Delete wiki file you are in
+- *<\ wr>* 		:: Rename wiki file you are in
+- *<Enter>* 		:: Follow/Create wiki link
+- *<Shift-Enter>* 	:: Split and follow/create wiki link
+- *<Ctrl-Enter>* 	:: Vertical split and follow/create wiki link
+- *<Backspace>* 	:: Go back to parent (previous) wiki link
+- *<Tab>* 		:: Find next wiki link
+- *<Shift-Tab>* 	:: Find previous wiki link

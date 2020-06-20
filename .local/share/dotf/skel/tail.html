@@ -44,6 +44,10 @@
 	      document.getElementById("weather-icon").innerHTML = '<i class="fas fa-cloud-rain"></i>';
 	    } else if (desc === 'Clouds') {
 	      document.getElementById("weather-icon").innerHTML = '<i class="fas fa-cloud"></i>';
+	    } else if (desc === 'Thunderstorm') {
+	      document.getElementById("weather-icon").innerHTML = '<i class="fas fa-bolt"></i>';
+	    } else if (desc === 'Clear') {
+	      document.getElementById("weather-icon").innerHTML = '<i class="fas fa-sun"></i>';
 	    } else {
 	      document.getElementById("weather-icon").innerHTML = "[" + desc + "]";
 	    }

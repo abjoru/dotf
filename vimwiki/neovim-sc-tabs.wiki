@@ -1,5 +1,5 @@
 = Vim Tabs =
 
-- *:tabc* :: Close tab
-- *:tabe* :: Open tab
-- *:tabo* :: Close all other tabs
+- *:tabc* 	:: Close tab
+- *:tabe* 	:: Open tab
+- *:tabo* 	:: Close all other tabs
