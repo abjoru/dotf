@@ -10,9 +10,9 @@ if [ ! -x "$(which git)" ]; then
   if [[ "$OSTYPE" == "darwin"* ]]; then
     brew install git
   elif [[ "$OSTYPE" == "linux-gnu"* && -x "$(which apt)" ]]; then
-    sudo apt install git
+    sudo apt install -y git
   elif [[ "$OSTYPE" == "linux-gnu"* && -x "$(which pacman)" ]]; then
-    sudo pacman -S git
+    sudo pacman --noconfirm -S git
   fi
 fi
 
@@ -35,34 +35,20 @@ fi
 config checkout
 config config status.showUntrackedFiles no
 
-function installJava {
+# Ask for Java install..
+if [ ! -x "$(which java)" ]; then
+  echo "Missing Java runtime environment!"
+  echo
+  echo "Installing default JRE"
+
   if [[ "$OSTYPE" == "darwin"* ]]; then
     brew install openjdk
   elif [[ "$OSTYPE" == "linux-gnu"* && -x "$(which apt)" ]]; then
     sudo apt install -y default-jdk
   elif [[ "$OSTYPE" == "linux-gnu"* && -x "$(which pacman)" ]]; then
-    sudo pacman -S jre-openjdk
+    sudo pacman --noconfirm -S jre-openjdk
   fi
-}
-
-# Ask for Java install..
-if [ ! -x "$(which java)" ]; then
-  echo "Missing Java runtime environment!"
-  read -p "Do you want to install a default JRE (Y/n)? " ans
-  case ${ans:0:1} in
-    n|N)
-      echo "Please install a JRE before using 'dotf'!"
-      ;;
-    *)
-      installJava
-      ;;
-  esac
 fi
 
 # Set path so that we can use 'dotf'
-if [[ "$SHELL" == *"bash"* ]]; then
-  echo 'export PATH="$HOME/.local/bin:$PATH"' >> ~/.bashrc
-  source ~/.bashrc
-  echo "You should now be able to use 'dotf'..."
-fi
-exit
+source $HOME/.local/share/dotf/temp-exports.sh

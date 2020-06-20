@@ -1,4 +1,9 @@
+- zsh:
+    brew:
+      ignore: true
 - zsh-completions:
+    apt:
+      ignore: true
 - zsh-syntax-highlighting:
 - zsh-autosuggestions:
 - neofetch:
