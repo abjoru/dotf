@@ -3,10 +3,25 @@
   "hostFilter": "^((?!fll).)*$",
   "links": [{
     "name": "OpenMediaVault",
-    "link": "https://10.0.0.88/"
+    "link": "http://10.0.0.88/"
   },{
     "name": "Heimdall",
-    "link": "https://10.0.0.88:8002/"
+    "link": "http://10.0.0.88:8002/"
+  },{
+    "name": "SynologyRack",
+    "link": "http://10.0.0.101:5000"
+  },{
+    "name": "PlexInfo",
+    "link": "http://10.0.0.88:8181/home"
+  },{
+    "name": "Sonarr",
+    "link": "http://10.0.0.88:8989"
+  },{
+    "name": "NzbGet",
+    "link": "http://10.0.0.88:6789"
+  },{
+    "name": "Transmission",
+    "link": "http://10.0.0.88:9091/transmission/web/"
   }]
 },{
   "group": "Akamai",
