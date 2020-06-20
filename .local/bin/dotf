@@ -104,7 +104,9 @@ runUpdate() {
 runUpgrade() {
   amm ${SC_DIR}/cmd_upgrade.sc "$1" "$2"
   #TODO don't execute on `dry` mode...
-  runOsInstall
+  if [ "$1" == "install" ]; then
+    runOsInstall
+  fi
   exit
 }
 
