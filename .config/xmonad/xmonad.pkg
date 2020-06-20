@@ -1,4 +1,5 @@
 - xmonad:
+    postinstall: 'postinstall.sh'
     brew:
       ignore: true
 - xmonad-contrib:
