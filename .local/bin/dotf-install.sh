@@ -60,6 +60,8 @@ if [ ! -x "$(which java)" ]; then
 fi
 
 # Set path so that we can use 'dotf'
-export PATH=$HOME/.local/bin:$PATH
-echo "You should now be able to use 'dotf'..."
+if [[ "$SHELL" == *"bash"* ]]; then
+  echo 'export PATH="$HOME/.local/bin:$PATH"' >> ~/.bashrc
+  echo "You should now be able to use 'dotf'..."
+fi
 exit
