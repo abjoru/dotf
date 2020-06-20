@@ -48,13 +48,13 @@ function installJava {
 # Ask for Java install..
 if [ ! -x "$(which java)" ]; then
   echo "Missing Java runtime environment!"
-  read -p "Do you want to install a default JRE (y/N)? " ans
+  read -p "Do you want to install a default JRE (Y/n)? " ans
   case ${ans:0:1} in
-    y|Y)
-      installJava
+    n|N)
+      echo "Please install a JRE before using 'dotf'!"
       ;;
     *)
-      echo "Please install a JRE before using 'dotf'!"
+      installJava
       ;;
   esac
 fi
