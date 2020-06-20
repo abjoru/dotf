@@ -34,3 +34,32 @@ fi
 
 config checkout
 config config status.showUntrackedFiles no
+
+function installJava {
+  if [[ "$OSTYPE" == "darwin"* ]]; then
+    brew install openjdk
+  elif [[ "$OSTYPE" == "linux-gnu"* && -x "$(which apt)" ]]; then
+    sudo apt install default-jdk
+  elif [[ "$OSTYPE" == "linux-gnu"* && -x "$(which pacman)" ]]; then
+    sudo pacman -S jre-openjdk
+  fi
+}
+
+# Ask for Java install..
+if [ ! -x "$(which java)" ]; then
+  echo "Missing Java runtime environment!"
+  read -p "Do you want to install a default JRE (y/N)? " ans
+  case ${ans:0:1} in
+    y|Y)
+      installJava
+      ;;
+    *)
+      echo "Please install a JRE before using 'dotf'!"
+      ;;
+  esac
+fi
+
+# Set path so that we can use 'dotf'
+export PATH=$HOME/.local/bin:$PATH
+echo "You should now be able to use 'dotf'..."
+exit
