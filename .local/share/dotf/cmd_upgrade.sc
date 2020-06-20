@@ -6,6 +6,7 @@ import $file.builder, builder._
 
 @main
 def main(mode: String = "install", verbose: Boolean = false): Unit = {
+  val m = Mode(mode)
   val pkgs = filteredPkgs()
   val cust = Const.customInstallers()
 
@@ -13,114 +14,16 @@ def main(mode: String = "install", verbose: Boolean = false): Unit = {
   Builder.genHomepage()
 
   // Custom installers
-  mode match {
-    case "dry" => cust.foreach(c => println(s"bash ${c.toString}"))
-    case _ => cust.foreach(c => %("bash", c.toString))
-  }
+  OS.run(m, cust: _*)
 
   if (pkgs.size == 0) {
-    Printer.ok(">>> System is up to date!")
-  } else {
-    val (specials, batch) = pkgs.partition(_.isSpecial)
-
-    runPreInstall(mode, specials)
-    runPkgBatchInstall(mode, batch)
-    runPkgSpecialInstall(mode, specials)
-    runPostInstall(mode, specials)
-  }
-}
-
-private def runPreInstall(mode: String, pkgs: Seq[Pkg]): Unit = pkgs.foreach { pkg =>
-  val scripts = pkg.preInstallScripts
-
-  if (scripts.nonEmpty) {
-    mode match {
-      case "dry" => scripts.foreach(s => println(s"bash ${s.toString}"))
-      case _ => scripts.foreach(s => %("bash", s.toString))
-    }
-  }
-}
-
-private def runPostInstall(mode: String, pkgs: Seq[Pkg]): Unit = pkgs.foreach { pkg =>
-  val scripts = pkg.postInstallScripts
-
-  if (scripts.nonEmpty) {
-    mode match {
-      case "dry" => scripts.foreach(s => println(s"bash ${s.toString}"))
-      case _ => scripts.foreach(s => %("bash", s.toString))
-    }
-  }
-}
-
-private def runPkgBatchInstall(mode: String, pkgs: Seq[Pkg]): Unit = (mode, OS.pkgSystem) match {
-    case ("dry", Some(Homebrew)) if pkgs.nonEmpty =>
-      val (casks, normals) = pkgs.partition(_.isCask)
-      println("brew upgrade")
-      if (normals.nonEmpty) println(s"brew install ${normals.map(_.name).mkString(" ")}")
-      if (casks.nonEmpty) println(s"brew cask install ${casks.map(_.name).mkString(" ")}")
-    case ("install", Some(Homebrew)) if pkgs.nonEmpty =>
-      %("brew", "upgrade")
-      val (casks, normals) = pkgs.partition(_.isCask)
-      if (normals.nonEmpty) %("brew", "install", normals.map(_.name))
-      if (casks.nonEmpty) %("brew", "cask", "install", casks.map(_.name))
-
-    case ("dry", Some(Apt)) if pkgs.nonEmpty =>
-      println("sudo apt update")
-      println("sudo apt upgrade")
-      println(s"sudo apt install ${pkgs.map(_.name).mkString(" ")}")
-    case ("install", Some(Apt)) if pkgs.nonEmpty =>
-      %sudo("apt", "update")
-      %sudo("apt", "upgrade")
-      %sudo("apt", "install", pkgs.map(_.name))
-
-    case ("dry", Some(Pacman)) if pkgs.nonEmpty =>
-      println("sudo pacman -Syy")
-      println("sudo pacman -Su")
-      println(s"sudo pacman -S ${pkgs.map(_.name).mkString(" ")}")
-    case ("install", Some(Pacman)) if pkgs.nonEmpty =>
-      %sudo("pacman", "-Syy")
-      %sudo("pacman", "-Su")
-      %("sudo", "pacman", "-S", pkgs.map(_.name))
-    case (_, Some(_)) =>
-      Printer.ok("System is up to date!")
-    case _ =>
-      Printer.err("Unsupported!")
-}
-
-private def runPkgSpecialInstall(mode: String, pkgs: Seq[Pkg]): Unit = (mode, OS.pkgSystem) match {
-  case ("dry", Some(Homebrew)) if pkgs.nonEmpty =>
-    val (casks, normals) = pkgs.partition(_.isCask)
-    println("brew upgrade")
-    normals.foreach(n => println(s"brew install ${n.name}"))
-    casks.foreach(c => println(s"brew cask install ${c.name}"))
-  case ("install", Some(Homebrew)) if pkgs.nonEmpty =>
-    val (casks, normals) = pkgs.partition(_.isCask)
-    %("brew upgrade")
-    normals.foreach(n => %("brew", "install", n.name))
-    casks.foreach(c => %("brew", "cask", "install", c.name))
-
-  case ("dry", Some(Apt)) if pkgs.nonEmpty =>
-    println("sudo apt update")
-    println("sudo apt upgrade")
-    pkgs.foreach(p => println(s"sudo apt install ${p.name}"))
-  case ("install", Some(Apt)) if pkgs.nonEmpty =>
-    %sudo("apt", "update")
-    %sudo("apt", "upgrade")
-    pkgs.foreach(p => %sudo("apt", "install", p.name))
-
-  case ("dry", Some(Pacman)) if pkgs.nonEmpty =>
-    println("sudo pacman -Syy")
-    println("sudo pacman -Su")
-    pkgs.foreach(p => println(s"sudo pacman -S ${p.name}"))
-  case ("install", Some(Pacman)) if pkgs.nonEmpty =>
-    %sudo("pacman", "-Syy")
-    %sudo("pacman", "-Su")
-    pkgs.foreach(p => %sudo("pacman", "-S", p.name))
-
-  case (_, Some(_)) =>
     Printer.ok("System is up to date!")
-  case _ =>
-    Printer.err("Unsupported!")
+  } else {
+    OS.update(m)
+    OS.run(m, pkgs.flatMap(_.preInstallScripts): _*)
+    OS.install(m, pkgs: _*)
+    OS.run(m, pkgs.flatMap(_.postInstallScripts): _*)
+  }
 }
 
 private def filteredPkgs(): Seq[Pkg] = {

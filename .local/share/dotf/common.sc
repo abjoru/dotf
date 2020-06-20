@@ -54,7 +54,20 @@ case object Apt extends PkgSys("apt")
 case object Pacman extends PkgSys("pacman")
 case object Homebrew extends PkgSys("brew")
 
+object Mode extends Enumeration {
+  type M = Value
+  val Dry, Install = Value
+
+  def apply(s: String): M = s match {
+    case "dry" => Dry
+    case "install" => Install
+    case other => throw new Exception(s"Invalid mode: $other")
+  }
+}
+
 object OS {
+
+  private implicit val wd = home
 
   /** Find the target package system if supported. */
   lazy val pkgSystem: Option[PkgSys] = System.getProperty("os.name", "generic").toLowerCase match {
@@ -64,10 +77,68 @@ object OS {
     case _                                            => None
   }
 
-  private def which(bin: String): Boolean = {
-    implicit val wc = home
-    Try(%%("which", bin).exitCode == 0).isSuccess
+  def update(mode: Mode.M): Unit = (mode, pkgSystem) match {
+    case (Mode.Dry, Some(Homebrew)) => println("brew upgrade")
+    case (Mode.Install, Some(Homebrew)) => try %("brew", "upgrade") catch {
+      case _: Throwable => Printer.err("Non-zero exit code from: brew upgrade")
+    }
+
+    case (Mode.Dry, Some(Apt)) => println("sudo apt update\nsudo apt upgrade")
+    case (Mode.Install, Some(Apt)) => try {
+      %sudo("apt", "update")
+      %sudo("apt", "upgrade")
+    } catch { case _: Throwable => Printer.err("Non-zero exit code from: sudo apt update && sudo apt upgrade") }
+
+    case (Mode.Dry, Some(Pacman)) => println("sudo pacman -Syyu")
+    case (Mode.Install, Some(Pacman)) => try %sudo("pacman", "-Syyu") catch {
+      case _: Throwable => Printer.err("Non-zero exit code from: sudo pacman -Syyu")
+    }
+
+    case _ => Printer.warn("Unsupported package system!")
   }
+
+  def install(mode: Mode.M, pkgs: Pkg*): Unit = (mode, pkgSystem) match {
+    case (Mode.Dry, Some(Homebrew)) =>
+      val (casks, normals) = pkgs.partition(_.isCask)
+      if (normals.nonEmpty) println(s"brew install ${normals.map(_.name).mkString(" ")}")
+      if (casks.nonEmpty) println(s"brew cask install ${casks.map(_.name).mkString(" ")}")
+    case (Mode.Install, Some(Homebrew)) =>
+      val (casks, normals) = pkgs.partition(_.isCask)
+      if (normals.nonEmpty) try %("brew", "install", normals.map(_.name)) catch {
+        case _: Throwable => Printer.err(s"Non-zero exit code from: brew install ${normals.map(_.name)}")
+      }
+      if (casks.nonEmpty) try %("brew", "cask", "install", casks.map(_.name)) catch {
+        case _: Throwable => Printer.err(s"Non-zero exit code from: brew cask install ${casks.map(_.name)}")
+      }
+
+    case (Mode.Dry, Some(Apt)) =>
+      println(s"sudo apt install ${pkgs.map(_.name).mkString(" ")}")
+    case (Mode.Install, Some(Apt)) =>
+      try %sudo("apt", "install", pkgs.map(_.name)) catch {
+        case _: Throwable => Printer.err(s"Non-zero exit code from: sudo apt install ${pkgs.map(_.name)}")
+      }
+
+    case (Mode.Dry, Some(Pacman)) =>
+      println(s"sudo pacman -S ${pkgs.map(_.name).mkString(" ")}")
+    case (Mode.Install, Some(Pacman)) =>
+      try %sudo("pacman", "-S", pkgs.map(_.name)) catch {
+        case _: Throwable => Printer.err(s"Non-zero exit code from: sudo pacman -S ${pkgs.map(_.name)}")
+      }
+
+    case _ => Printer.warn("Unsupported package system!")
+  }
+
+  def run(mode: Mode.M, scripts: os.Path*): Unit = mode match {
+    case Mode.Dry => scripts.foreach(s => println(s"bash ${s.toString}"))
+    case Mode.Install => scripts.foreach { s =>
+      try %("bash", s.toString) catch {
+        case _: Throwable => Printer.err(s"Non-zero exit code from: bash ${s.toString}")
+      }
+    }
+  }
+
+  private def which(bin: String): Boolean = 
+    Try(%%("which", bin).exitCode == 0).isSuccess
 
 }
 
