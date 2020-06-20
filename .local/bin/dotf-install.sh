@@ -39,7 +39,7 @@ function installJava {
   if [[ "$OSTYPE" == "darwin"* ]]; then
     brew install openjdk
   elif [[ "$OSTYPE" == "linux-gnu"* && -x "$(which apt)" ]]; then
-    sudo apt install default-jdk
+    sudo apt install -y default-jdk
   elif [[ "$OSTYPE" == "linux-gnu"* && -x "$(which pacman)" ]]; then
     sudo pacman -S jre-openjdk
   fi
