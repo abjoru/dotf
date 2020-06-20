@@ -1,0 +1,32 @@
+- UbuntuMonoNerdFont:
+    apt:
+      ignore: true
+    brew:
+      name: font-ubuntumono-nerd-font
+      cask: true
+    pacman:
+      name: nerd-font-ubuntu-mono
+- TerminessNerdFont:
+    apt:
+      ignore: true
+    brew:
+      name: font-terminessttf-nerd-font
+      cask: true
+    pacman:
+      name: nerd-font-terminus
+- RobotoMonoNerdFont:
+    apt:
+      ignore: true
+    brew:
+      name: font-robotomono-nerd-font
+      cask: true
+    pacman:
+      name: nerd-font-roboto-mono
+- MononokiNerdFont:
+    apt:
+      ignore: true
+    brew:
+      name: font-mononoki-nerd-font
+      cask: true
+    pacman:
+      name: nerd-font-mononoki
