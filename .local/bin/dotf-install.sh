@@ -62,6 +62,7 @@ fi
 # Set path so that we can use 'dotf'
 if [[ "$SHELL" == *"bash"* ]]; then
   echo 'export PATH="$HOME/.local/bin:$PATH"' >> ~/.bashrc
+  source ~/.bashrc
   echo "You should now be able to use 'dotf'..."
 fi
 exit
