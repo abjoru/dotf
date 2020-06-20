@@ -5,6 +5,17 @@
 # Based on the article 'The best way to store your dotfiles: A bare Git repository':
 # https://www.atlassian.com/git/tutorials/dotfiles
 
+# Grab GIT if we need to..
+if [ ! -x "$(which git)" ]; then
+  if [[ "$OSTYPE" == "darwin"* ]]; then
+    brew install git
+  elif [[ "$OSTYPE" == "linux-gnu"* && -x "$(which apt)" ]]; then
+    sudo apt install git
+  elif [[ "$OSTYPE" == "linux-gnu"* && -x "$(which pacman)" ]]; then
+    sudo pacman -S git
+  fi
+fi
+
 git clone --bare https://github.com/abjoru/dotf.git $HOME/.dotf
 
 function config {
