@@ -25,3 +25,8 @@
 - nitrogen:
     brew:
       ignore: true
+- conky:
+    apt:
+      name: conky-all
+    brew:
+      ignore: true
