@@ -125,14 +125,14 @@ object OS {
     case (Mode.Install, Some(Pacman)) =>
       val (aur, normals) = pkgs.partition(_.isAur)
       try {
-	if (normals.nonEmpty) %sudo("pacman", "-S", normals.map(_.name)) 
+	if (normals.nonEmpty) %sudo("pacman", "--noconfirm", "-S", normals.map(_.name)) 
       } catch {
         case _: Throwable => Printer.err(s"Non-zero exit code from: sudo pacman -S ${normals.map(_.name)}")
       }
       try {
         if (aur.nonEmpty) {
           %("bash", (home/".local"/"share"/"dotf"/"os"/"aur.sh").toString)
-          %("yes", "|", "yay", "-S", aur.map(_.name))
+          %("yay", "--noconfirm", "-S", aur.map(_.name))
         }
       } catch { 
         case _: Throwable => Printer.err(s"Non-zero exit code from AUR install or yay -S ${aur.map(_.name)}") 
