@@ -437,6 +437,7 @@ myKeys =
 
   -- Open My Preffered Terminal.
   , ("M-<Return>", spawn myTerminal)
+  , ("M1-<Return>", spawn myTerminal)
 
   -- Dmenu Scripts (Alt+Ctrl+Key)
   --, ("M-S-<Return>", spawn "dmenu_run")
