@@ -1,0 +1,24 @@
+config_version: 2
+settings:
+  aliases:
+    global:
+      q: quit
+      w: session-save
+      wq: quit --save
+  bindings.commands:
+    global:
+      normal:
+        xb: config-cycle statusbar.hide
+        xt: config-cycle tabs.show always switching
+        xx: config-cycle statusbar.hide ;; config-cycle tabs.show always switching
+  downloads.location.directory:
+    global: ~/Downloads
+  statusbar.hide:
+    global: false
+  tabs.show:
+    global: always
+  url.searchengines:
+    global:
+      DEFAULT: https://duckduckgo.com/?q={}
+      aw: https://wiki.archlinux.org/?search={}
+      yt: https://www.youtube.com/results?search_query={}
