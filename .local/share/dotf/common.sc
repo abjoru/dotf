@@ -121,7 +121,7 @@ object OS {
     case (Mode.Dry, Some(Pacman)) =>
       val (aur, normals) = pkgs.partition(_.isAur)
       if (normals.nonEmpty) println(s"sudo pacman -S ${normals.map(_.name).mkString(" ")}")
-      if (aur.nonEmpty) println(s"sudo yay -S ${aur.map(_.name).mkString(" ")}")
+      if (aur.nonEmpty) println(s"yay -S ${aur.map(_.name).mkString(" ")}")
     case (Mode.Install, Some(Pacman)) =>
       val (aur, normals) = pkgs.partition(_.isAur)
       try {
@@ -132,7 +132,7 @@ object OS {
       try {
         if (aur.nonEmpty) {
           %("bash", (home/".local"/"share"/"dotf"/"os"/"aur.sh").toString)
-          %("yay", "-S", aur.map(_.name))
+          %("yes", "|", "yay", "-S", aur.map(_.name))
         }
       } catch { 
         case _: Throwable => Printer.err(s"Non-zero exit code from AUR install or yay -S ${aur.map(_.name)}") 
