@@ -5,6 +5,17 @@
   * [[neovim-sc|NeoVim Cheat-sheets]]: NeoVim cheat sheets for various commands
   * [[fzf-sc|FZF Cheat-sheets]]: FZF fuzzy finder cheat-sheet
 
+== Git Stuff ==
+
+## Cherry Pickin'
+
+- From branch named 'a'
+- To branch named 'b'
+- git checkout a && git log --short
+- [grab commit id that you want to cherry-pick]
+- git checkout b
+- git cherry-pick <id>
+
 == Work Stuff ==
 
   * [[aka-prod|Akamai Production Notes]]: Akamai production debugging notes
