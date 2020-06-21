@@ -6,6 +6,7 @@
       cask: true
     pacman:
       name: nerd-font-ubuntu-mono
+      aur: true
 - TerminessNerdFont:
     apt:
       ignore: true
@@ -14,6 +15,7 @@
       cask: true
     pacman:
       name: nerd-font-terminus
+      aur: true
 - RobotoMonoNerdFont:
     apt:
       ignore: true
@@ -22,6 +24,7 @@
       cask: true
     pacman:
       name: nerd-font-roboto-mono
+      aur: true
 - MononokiNerdFont:
     apt:
       ignore: true
@@ -30,3 +33,4 @@
       cask: true
     pacman:
       name: nerd-font-mononoki
+      aur: true

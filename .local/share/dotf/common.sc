@@ -119,10 +119,19 @@ object OS {
       }
 
     case (Mode.Dry, Some(Pacman)) =>
-      println(s"sudo pacman -S ${pkgs.map(_.name).mkString(" ")}")
+      val (aur, normals) = pkgs.partition(_.isAur)
+      if (normals.nonEmpty) println(s"sudo pacman -S ${normals.map(_.name).mkString(" ")}")
+      if (aur.nonEmpty) println(s"sudo yay -S ${aur.map(_.name).mkString(" ")}")
     case (Mode.Install, Some(Pacman)) =>
-      try %sudo("pacman", "-S", pkgs.map(_.name)) catch {
-        case _: Throwable => Printer.err(s"Non-zero exit code from: sudo pacman -S ${pkgs.map(_.name)}")
+      val (aur, normals) = pkgs.partition(_.isAur)
+      try %sudo("pacman", "-S", normals.map(_.name)) catch {
+        case _: Throwable => Printer.err(s"Non-zero exit code from: sudo pacman -S ${normals.map(_.name)}")
+      }
+      try {
+        %("bash", (home/".local"/"share"/"os"/"aur.sh").toString)
+        %sudo("yay", "-S", aur.map(_.name))
+      } catch { 
+        case _: Throwable => Printer.err(s"Non-zero exit code from AUR install or yay -S ${aur.map(_.name)}") 
       }
 
     case _ => Printer.warn("Unsupported package system!")
@@ -168,6 +177,8 @@ final case class Pkg(path: os.Path, data: JsonObject) {
 
   /** Tests if this pkg is in Homebrew cask. */
   def isCask: Boolean = field[Boolean]("cask").getOrElse(false)
+
+  def isAur: Boolean = field[Boolean]("aur").getOrElse(false)
 
   /** Tests if this pkg requires special instructions and cannot be batched. */
   def isSpecial: Boolean = preInstallScripts.nonEmpty || postInstallScripts.nonEmpty
