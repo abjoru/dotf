@@ -5,7 +5,7 @@
       name: font-ubuntumono-nerd-font
       cask: true
     pacman:
-      name: nerd-font-ubuntu-mono
+      name: nerd-fonts-ubuntu-mono
       aur: true
 - TerminessNerdFont:
     apt:
@@ -14,7 +14,7 @@
       name: font-terminessttf-nerd-font
       cask: true
     pacman:
-      name: nerd-font-terminus
+      name: nerd-fonts-terminus
       aur: true
 - RobotoMonoNerdFont:
     apt:
@@ -23,7 +23,7 @@
       name: font-robotomono-nerd-font
       cask: true
     pacman:
-      name: nerd-font-roboto-mono
+      name: nerd-fonts-roboto-mono
       aur: true
 - MononokiNerdFont:
     apt:
@@ -32,5 +32,5 @@
       name: font-mononoki-nerd-font
       cask: true
     pacman:
-      name: nerd-font-mononoki
+      name: nerd-fonts-mononoki
       aur: true
