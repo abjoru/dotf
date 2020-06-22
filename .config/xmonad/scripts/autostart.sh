@@ -30,3 +30,6 @@ picom --config $HOME/.config/xmonad/scripts/picom.conf &
 
 # starting user applications at boot
 nitrogen --restore &
+
+# System tray
+trayer --edge top --align right --widthtype request --padding 6 --SetDockType true --SetPartialStrut true --expand true --monitor 1 --transparent true --alpha 0 --tint 0x292d3e --height 18 &

@@ -201,33 +201,33 @@ myStartupHook = do
 ------------------------------------------------------------------------
 -- GRID SELECT
 ------------------------------------------------------------------------
-myColorizer :: Window -> Bool -> X (String, String)
-myColorizer = colorRangeFromClassName
+-- myColorizer :: Window -> Bool -> X (String, String)
+-- myColorizer = colorRangeFromClassName
   --(0x31,0x2e,0x39) -- lowest inactive bg 	RGB: (49, 46, 57) 	GRUV: #1d2021 (29, 32, 33)
-  (0x1d,0x20,0x21)
+  -- (0x1d,0x20,0x21)
   --(0x31,0x2e,0x39) -- highest inactive bg 	RGB: (49, 46, 57) 	GRUV: #282828 (40, 40, 40)
-  (0x28,0x28,0x28)
+  -- (0x28,0x28,0x28)
   --(0x61,0x57,0x72) -- active bg 		RGB: (97, 87, 114)      GRUV: #665c54 (102, 92, 84)
-  (0x66,0x5c,0x54)
+  -- (0x66,0x5c,0x54)
   --(0xc0,0xa7,0x9a) -- inactive fg 		RGB: (192, 167, 154) 	GRUV: #a89984 (168, 153, 132)
-  (0xa8,0x99,0x84)
+  -- (0xa8,0x99,0x84)
   --(0xff,0xff,0xff) -- active fg 		RGB: (255, 255, 255) 	GRUV: #fbf1c7 (251, 241, 199)
-  (0xfb,0xf1,0xc7)
+  -- (0xfb,0xf1,0xc7)
 
 -- gridSelect menu layout
-myGridConfig :: p -> GSConfig Window
-myGridConfig colorizer = (buildDefaultGSConfig myColorizer)
-  { gs_cellheight = 40
-  , gs_cellwidth = 250
-  , gs_cellpadding = 6
-  , gs_originFractX = 0.5
-  , gs_originFractY = 0.5
-  , gs_font = myFont
-  }
+-- myGridConfig :: p -> GSConfig Window
+-- myGridConfig colorizer = (buildDefaultGSConfig myColorizer)
+  -- { gs_cellheight = 40
+  -- , gs_cellwidth = 250
+  -- , gs_cellpadding = 6
+  -- , gs_originFractX = 0.5
+  -- , gs_originFractY = 0.5
+  -- , gs_font = myFont
+  -- }
 
-spawnSelected' :: [(String, String)] -> X ()
-spawnSelected' lst = gridselect conf lst >>= flip whenJust spawn
-  where conf = def
+-- spawnSelected' :: [(String, String)] -> X ()
+-- spawnSelected' lst = gridselect conf lst >>= flip whenJust spawn
+  -- where conf = def
 
 ------------------------------------------------------------------------
 -- XPROMPT KEYMAP (emacs-like bindings for now..)
@@ -375,8 +375,8 @@ myKeys =
 
   -- Grid Select
   --, ("M-S-t", spawnSelected' myAppGrid) 		-- grid select favirite apps
-  , ("M-S-g", goToSelected $ myGridConfig myColorizer)	-- goto selected
-  , ("M-S-b", bringSelected $ myGridConfig myColorizer)	-- bring selected
+  -- , ("M-S-g", goToSelected $ myGridConfig myColorizer)	-- goto selected
+  -- , ("M-S-b", bringSelected $ myGridConfig myColorizer)	-- bring selected
 
   -- Window navigation
   , ("M-m", windows W.focusMaster)			-- Move focus to the master window
