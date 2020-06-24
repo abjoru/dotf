@@ -4,7 +4,7 @@
       ignore: true
 - xmonad-contrib:
     apt:
-      name: libghc-xmonad-contrib-dev
+      name: 'libghc-xmonad-contrib-dev'
     brew:
       ignore: true
 - picom:
@@ -17,9 +17,9 @@
       ignore: true
 - dmenu:
     apt:
-      name: suckless-tools
+      name: 'suckless-tools'
     pacman:
-      name: dmenu
+      name: 'dmenu'
     brew:
       ignore: true
 - nitrogen:
@@ -27,6 +27,16 @@
       ignore: true
 - conky:
     apt:
-      name: conky-all
+      name: 'conky-all'
     brew:
       ignore: true
+- network-manager-applet:
+    brew:
+      ignore: true
+    apt:
+      name: 'budgie-network-manager-applet'
+- volumeicon:
+    brew:
+      ignore: true
+    apt:
+      name: 'volumeicon-alsa'

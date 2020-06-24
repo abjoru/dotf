@@ -1,3 +1,6 @@
 - xmobar:
     brew:
       ignore: true
+- trayer:
+    brew:
+      ignore: true
