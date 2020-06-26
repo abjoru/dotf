@@ -14,7 +14,7 @@ else
 fi
   
 if [ $DIFF -gt 0 ]; then
-  echo " CyberPunk 2077 in $DIFF days"
+  echo " CyberPunk 2077: ${DIFF}D"
 else
   echo " CyberPunk 2077 released!"
 fi

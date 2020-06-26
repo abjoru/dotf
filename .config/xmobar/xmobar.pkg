@@ -4,3 +4,6 @@
 - trayer:
     brew:
       ignore: true
+- alsa-utils:
+    brew:
+      ignore: true
