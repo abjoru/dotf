@@ -37,8 +37,12 @@ private def filteredPkgs(): Seq[Pkg] = {
       val installed = %%("brew", "list").out.lines.foldLeft(Seq.empty[String]) {
         case (acc, line) => acc ++ line.split("\\s+")
       }
+      val casks = %%("brew", "cask", "list").out.lines.foldLeft(Seq.empty[String]) {
+        case (acc, line) => acc ++ line.split("\\s+")
+      }
 
-      pkgs.filterNot(p => installed.contains(p.name))
+      val all = installed ++ casks
+      pkgs.filterNot(p => all.contains(p.name))
 
     case Some(Apt) =>
       val installed = %%("apt", "list", "--installed").out.lines.foldLeft(Seq.empty[String]) {
