@@ -22,7 +22,7 @@ function run {
 xsetroot -cursor_name left_ptr &
 
 # start conky for shortcut hints
-(conky -c $HOME/.config/xmonad/scripts/system-overview) &
+#(conky -c $HOME/.config/xmonad/scripts/system-overview) &
 
 # starting utility applications at boot 
 #run nm-applet &
@@ -31,8 +31,8 @@ picom --config $HOME/.config/xmonad/scripts/picom.conf &
 # starting user applications at boot
 nitrogen --restore &
 
-# Whatever this is
-nm-applet &
+# Network Monitor
+#nm-applet &
 
 # Volume
 volumeicon &

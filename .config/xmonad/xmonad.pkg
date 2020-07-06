@@ -19,7 +19,7 @@
     apt:
       name: 'suckless-tools'
     pacman:
-      name: 'dmenu'
+      name: 'dmenu-manjaro'
     brew:
       ignore: true
 - nitrogen:

@@ -20,9 +20,9 @@ settings:
   downloads.location.directory:
     global: ~/Downloads
   statusbar.hide:
-    global: false
+    global: true
   tabs.show:
-    global: switching
+    global: always
   url.searchengines:
     global:
       DEFAULT: https://duckduckgo.com/?q={}

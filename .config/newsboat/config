@@ -4,6 +4,7 @@ max-items 50
 
 # external browser
 #browser "open %u"
+browser "qutebrowser %u"
 #download-path "~/Downloads/%n"
 #save-path "~/Downloads"
 cleanup-on-quit yes

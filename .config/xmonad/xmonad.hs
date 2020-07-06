@@ -166,8 +166,16 @@ myModMask = mod4Mask
 
 -- sets default terminal
 myTerminal :: [Char]
---myTerminal = "alacritty" 
-myTerminal = "termonad"
+myTerminal = "alacritty" 
+--myTerminal = "termonad"
+
+-- sets default browser for tree select
+myBrowser :: String
+myBrowser = myTerminal ++ " -e lynx "
+
+-- sets default editor for tree select
+myEditor :: String
+myEditor = myTerminal ++ " -e nvim "
 
 -- sets border width for windows
 myBorderWidth :: Dimension
@@ -201,33 +209,62 @@ myStartupHook = do
 ------------------------------------------------------------------------
 -- GRID SELECT
 ------------------------------------------------------------------------
--- myColorizer :: Window -> Bool -> X (String, String)
--- myColorizer = colorRangeFromClassName
+myColorizer :: Window -> Bool -> X (String, String)
+myColorizer = colorRangeFromClassName
   --(0x31,0x2e,0x39) -- lowest inactive bg 	RGB: (49, 46, 57) 	GRUV: #1d2021 (29, 32, 33)
-  -- (0x1d,0x20,0x21)
+  (0x1d,0x20,0x21)
   --(0x31,0x2e,0x39) -- highest inactive bg 	RGB: (49, 46, 57) 	GRUV: #282828 (40, 40, 40)
-  -- (0x28,0x28,0x28)
+  (0x28,0x28,0x28)
   --(0x61,0x57,0x72) -- active bg 		RGB: (97, 87, 114)      GRUV: #665c54 (102, 92, 84)
-  -- (0x66,0x5c,0x54)
+  (0x66,0x5c,0x54)
   --(0xc0,0xa7,0x9a) -- inactive fg 		RGB: (192, 167, 154) 	GRUV: #a89984 (168, 153, 132)
-  -- (0xa8,0x99,0x84)
+  (0xa8,0x99,0x84)
   --(0xff,0xff,0xff) -- active fg 		RGB: (255, 255, 255) 	GRUV: #fbf1c7 (251, 241, 199)
-  -- (0xfb,0xf1,0xc7)
+  (0xfb,0xf1,0xc7)
 
 -- gridSelect menu layout
--- myGridConfig :: p -> GSConfig Window
--- myGridConfig colorizer = (buildDefaultGSConfig myColorizer)
-  -- { gs_cellheight = 40
-  -- , gs_cellwidth = 250
-  -- , gs_cellpadding = 6
-  -- , gs_originFractX = 0.5
-  -- , gs_originFractY = 0.5
-  -- , gs_font = myFont
-  -- }
+myGridConfig :: p -> GSConfig Window
+myGridConfig colorizer = (buildDefaultGSConfig myColorizer)
+  { gs_cellheight = 40
+  , gs_cellwidth = 250
+  , gs_cellpadding = 6
+  , gs_originFractX = 0.5
+  , gs_originFractY = 0.5
+  , gs_font = myFont
+  }
 
--- spawnSelected' :: [(String, String)] -> X ()
--- spawnSelected' lst = gridselect conf lst >>= flip whenJust spawn
-  -- where conf = def
+spawnSelected' :: [(String, String)] -> X ()
+spawnSelected' lst = gridselect conf lst >>= flip whenJust spawn
+  where conf = def
+
+-- The lists below are actually 3-tuples for use with gridSelect and treeSelect.
+-- TreeSelect uses all three values in the 3-tuples but GridSelect only needs first
+-- two values in each list
+myApplications :: [(String, String, String)]
+myApplications = [ ("Firefox", "firefox", "The famous open source web browser")
+		 , ("PCManFM", "pcmanfm", "Lightweight graphical file manager")
+		 , ("ThinkOrSwim", "thinkorswim", "TD Ameritrade platform")
+		 , ("Steam", "steam", "Proprietary gaming platform")
+		 , ("QuteBrowser", "qutebrowser", "Simple VIM-like web browser")
+		 ]
+
+myConfigs :: [(String, String, String)]
+myConfigs = [ ("xmonad.hs", myEditor ++ "/home/abjoru/.config/xmonad/xmonad.hs", "xmonad config")
+	    , ("xmobarrc0", myEditor ++ "/home/abjoru/.config/xmobar/xmobarrc0", "xmobar config for screen 0")
+	    , ("xmobarrc1", myEditor ++ "/home/abjoru/.config/xmobar/xmobarrc1", "xmobar config for screen 1")
+	    , ("xmobarrc2", myEditor ++ "/home/abjoru/.config/xmobar/xmobarrc2", "xmobar config for screen 2")
+	    , ("xmobarrc3", myEditor ++ "/home/abjoru/.config/xmobar/xmobarrc3", "xmobar config for screen 3")
+	    , ("zshrc", myEditor ++ "/home/abjoru/.config/zsh/config.zsh", "zsh config")
+	    , ("nvim-init", myEditor ++ "/home/abjoru/.config/nvim/init.vim", "NeoVim main config file")
+	    ]
+
+myAppGrid :: [(String, String)]
+myAppGrid = [ (a,b) | (a,b,c) <- xs]
+  where xs = myApplications
+
+myConfigGrid :: [(String, String)]
+myConfigGrid = [ (a,b) | (a,b,c) <- xs]
+  where xs = myConfigs
 
 ------------------------------------------------------------------------
 -- XPROMPT KEYMAP (emacs-like bindings for now..)
@@ -289,18 +326,12 @@ dtXPConfig = def
   , historySize		= 256
   , historyFilter	= id
   , defaultText		= []
-  , autoComplete	= Just 100000 -- set Just 100000 for .1 sec
+  -- , autoComplete	= Just 100000 -- set Just 100000 for .1 sec
   , showCompletionOnTab	= False
   , searchPredicate	= isPrefixOf
   , alwaysHighlight	= True
   , maxComplRows	= Nothing -- set to Just 5 for 5 rows
   }
-
--- The same config minus the autocomplete flag which is annoying on
--- certain Xprompts, like the search engine prompts.
-dtXPConfig' :: XPConfig
-dtXPConfig' = dtXPConfig
-  { autoComplete = Nothing }
 
 -- A list of all of the standard Xmonad prompts
 promptList :: [(String, XPConfig -> X ())]
@@ -360,7 +391,6 @@ myKeys =
   [ ("M-C-r", spawn "xmonad --recompile")		-- Recompiles xmonad
   , ("M-S-r", spawn "xmonad --restart")			-- Restarts xmonad
   , ("M-S-q", io exitSuccess)				-- Quits xmonad
-  , ("M1-S-q", io exitSuccess)				-- Quits xmonad
 
   -- Prompts
   , ("M-S-<Return>", shellPrompt dtXPConfig)		-- Shell prompt
@@ -374,9 +404,10 @@ myKeys =
   , ("M-S-<Delete>", sinkAll)				-- Push all floating windows back to tile
 
   -- Grid Select
-  --, ("M-S-t", spawnSelected' myAppGrid) 		-- grid select favirite apps
-  -- , ("M-S-g", goToSelected $ myGridConfig myColorizer)	-- goto selected
-  -- , ("M-S-b", bringSelected $ myGridConfig myColorizer)	-- bring selected
+  , ("C-g a", spawnSelected' myAppGrid) 		-- grid select favourite apps
+  , ("C-g c", spawnSelected' myConfigGrid) 		-- grid select useful config files
+  , ("C-g t", goToSelected $ myGridConfig myColorizer)	-- goto selected
+  , ("C-g b", bringSelected $ myGridConfig myColorizer)	-- bring selected
 
   -- Window navigation
   , ("M-m", windows W.focusMaster)			-- Move focus to the master window
@@ -441,7 +472,7 @@ myKeys =
 
   -- Dmenu Scripts (Alt+Ctrl+Key)
   --, ("M-S-<Return>", spawn "dmenu_run")
-  , ("M1-C-e", spawn "/home/abjoru/.config/dmenu/dmenu-edit-configs.sh")
+  --, ("M1-C-e", spawn "/home/abjoru/.config/dmenu/dmenu-edit-configs.sh")
   --, ("M1-C-h", spawn "./.dmenu/dmenu-hugo.sh")
   --, ("M1-C-m", spawn "./.dmenu/dmenu-sysmon.sh")
   --, ("M1-C-s", spawn "./.dmenu/dmenu-surfraw.sh")
@@ -479,9 +510,8 @@ myKeys =
   , ("<Print>", spawn "scrotd 0")
   ] 
   -- Appending search engines to keybinding list
-  -- ++ [("M-s " ++ k, S.promptSearch dtXPConfig' f) | (k,f) <- searchList ]
-  -- ++ [("M-S-s " ++ k, S.selectSearch f) | (k,f) <- searchList ]
-  -- ++ [("M-p " ++ k, f dtXPConfig') | (k,f) <- promptList ]
+  ++ [("M-s " ++ k, S.promptSearch dtXPConfig f) | (k,f) <- searchList ]
+  ++ [("M-p " ++ k, f dtXPConfig) | (k,f) <- promptList ]
   -- ++ [("M-p " ++ k, f dtXPConfig' g) | (k,f,g) <- promptList' ]
   -- Appending named scratchpads to keybinding list
     where nonNSP		= WSIs (return (\ws -> W.tag ws /= "nsp"))
@@ -638,10 +668,11 @@ myScratchPads = [ NS "terminal" spawnTerm findTerm manageTerm
 main :: IO ()
 main = do
 	-- Launching three instances of xmobar on their monitors.
-	xmproc <- spawnPipe "xmobar -x 0 /home/abjoru/.config/xmobar/xmobarrc0"
-	--xmproc0 <- spawnPipe "xmobar -x 0 /home/abjoru/.config/xmobar/xmobarrc0"
-	--xmproc1 <- spawnPipe "xmobar -x 1 /home/abjoru/.config/xmobar/xmobarrc1"
-	--xmproc2 <- spawnPipe "xmobar -x 2 /home/abjoru/.config/xmobar/xmobarrc2"
+	-- xmproc <- spawnPipe "xmobar -x 0 /home/abjoru/.config/xmobar/xmobarrc0"
+	xmproc0 <- spawnPipe "xmobar -x 0 /home/abjoru/.config/xmobar/xmobarrc0"
+	xmproc1 <- spawnPipe "xmobar -x 1 /home/abjoru/.config/xmobar/xmobarrc1"
+	xmproc2 <- spawnPipe "xmobar -x 2 /home/abjoru/.config/xmobar/xmobarrc2"
+	xmproc3 <- spawnPipe "xmobar -x 3 /home/abjoru/.config/xmobar/xmobarrc3"
 	
 	-- xmonad stuff
 	xmonad $ ewmh desktopConfig
@@ -655,7 +686,7 @@ main = do
 		, normalBorderColor	= myNormColor
 		, focusedBorderColor	= myFocusColor
 		, logHook = dynamicLogWithPP xmobarPP
-			{ ppOutput = \x -> hPutStrLn xmproc x -- \x -> hPutStrLn xmproc0 x >> hPutStrLn xmproc1 x >> hPutStrLn xmproc2 x
+			{ ppOutput = \x -> hPutStrLn xmproc0 x >> hPutStrLn xmproc1 x >> hPutStrLn xmproc2 x >> hPutStrLn xmproc3 x
 			, ppCurrent = xmobarColor gruvGreen0 "" . wrap "[" "]"	-- Current workspace in xmobar
 			, ppVisible = xmobarColor gruvGreen1 ""			-- Visible but not current workspace
 			, ppHidden = xmobarColor gruvBlue0 "" . wrap "*" ""	-- Hidden workspaces in xmobar
