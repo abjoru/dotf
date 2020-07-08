@@ -58,6 +58,15 @@
     "link": "https://www.cnet.com/news/"
   }]
 },{
+  "group": "3D Print",
+  "links": [{
+    "name": "Thingiverse",
+    "link": "http://www.thingiverse.com"
+  },{
+    "name": "Cults3d",
+    "link": "http://cults3d.com"
+  }]
+},{
   "group": "Shopping",
   "links": [{
     "name": "Amazon",

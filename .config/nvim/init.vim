@@ -30,6 +30,7 @@ set autoread
 set smartindent
 set encoding=UTF-8
 set number
+set expandtab
 
 autocmd TermOpen * setlocal nonumber
 

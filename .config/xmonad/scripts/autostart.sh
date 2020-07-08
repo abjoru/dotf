@@ -25,11 +25,15 @@ xsetroot -cursor_name left_ptr &
 #(conky -c $HOME/.config/xmonad/scripts/system-overview) &
 
 # starting utility applications at boot 
-#run nm-applet &
 picom --config $HOME/.config/xmonad/scripts/picom.conf &
+
+# Polybar
+$HOME/.config/polybar/launch.sh &
 
 # starting user applications at boot
 nitrogen --restore &
+synology-drive &
+megasync &
 
 # Network Monitor
 #nm-applet &
@@ -38,4 +42,6 @@ nitrogen --restore &
 volumeicon &
 
 # System tray
-trayer --edge top --align right --widthtype request --padding 6 --SetDockType true --SetPartialStrut true --expand true --monitor 1 --transparent true --alpha 0 --tint 0x292d3e --height 18 &
+#trayer --edge top --align right --widthtype request --padding 6 --SetDockType true --SetPartialStrut true --expand true --monitor 1 --transparent true --alpha 0 --tint 0x292d3e --height 18 &
+
+
