@@ -11,8 +11,8 @@ while pgrep -u $UID -x polybar >/dev/null; do sleep 1; done
 #done
 
 polybar --reload m1 &
-#polybar --reload m2 &
-#polybar --reload m3 &
-#polybar --reload m4 &
+polybar --reload m2 &
+polybar --reload m3 &
+polybar --reload m4 &
 
 echo "Bars launched..."

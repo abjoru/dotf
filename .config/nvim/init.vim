@@ -29,8 +29,10 @@ set autoindent
 set autoread
 set smartindent
 set encoding=UTF-8
-set number
 set expandtab
+set number relativenumber 	" Display line numbers
+set t_Co=256 			" Set if term supports 256 colors.
+set noshowmode 			" Mode is shown in status line, so no need for another
 
 autocmd TermOpen * setlocal nonumber
 

@@ -1,3 +1,15 @@
+[colors]
+background = #282828
+foreground = #ebdbb2
+gruv-red = #cc241d
+gruv-green = #98971a
+gruv-yellow = #d79921
+gruv-blue = #458588
+gruv-purple = #b16286
+gruv-aqua = #689d6a
+gruv-gray = #a89984
+gruv-orange = #d65d0e
+
 [global/wm]
 margin-top = 0
 margin-bottom = 0
@@ -9,8 +21,8 @@ throttle-input-for = 30
 screenchange-reload = true
 
 ; Define fallback values (format)
-format-foreground = #282828
-format-background = #ebdbb2
+format-foreground = ${colors.foreground}
+format-background = ${colors.background}
 format-underline = 
 format-overline = 
 format-spacing = 
@@ -18,33 +30,32 @@ format-padding =
 format-margin =
 format-offset =
 
-[colors]
-background = #282828
-foreground = #ebdbb2
-
-[bar/m1]
-monitor = DP-7
+[bar/base]
 width = 100%
 height = 34
-
 background = ${colors.background}
 foreground = ${colors.foreground}
-
 line-size = 12
-
 spacing = 2
 padding-right = 2
 module-margin = 2
 separator = " | "
-
 font-0 = "Mononoki Nerd Font:size=10;2"
 font-1 = "Mononoki Nerd Font:size=16;3"
 font-2 = "Font Awesome 5 Free:style=Regular:pixelsize=8;1"
 font-3 = "Font Awesome 5 Free:style=Solid:pixelsize=8;1"
 font-4 = "Font Awesome 5 Brands:pixelsize=8;1"
 
-modules-left = xmonad
-modules-right = cyberpunk arch-aur-updates date
+##################
+# Blueberry Bars #
+##################
+
+[bar/m1]
+inherit = bar/base
+monitor = DP-7
+
+modules-left = powermenu xmonad
+modules-right = cyberpunk networkspeedup networkspeeddown arch-aur-updates date
 
 tray-position = right
 tray-detached = false
@@ -52,101 +63,54 @@ tray-maxsize = 16
 tray-background = ${colors.background}
 
 [bar/m2]
+inherit = bar/base
 monitor = DP-5
-width = 100%
-height = 34
-
-background = #00000000
-foreground = #ccffffff
-
-;line-color = ${bar/bottom.background}
-line-size = 16
-
-spacing = 2
-padding-right = 5
-module-margin = 4
-
-font-0 = NotoSans-Regular:size=8;-1
-font-1 = MaterialIcons:size=10;0
-font-2 = Termsynu:size=8:antialias=false;-2
-font-3 = FontAwesome:size=10;0
-
-;modules-left = powermenu mpd
+modules-left = powermenu
 modules-right = cpu memory
 
 [bar/m3]
+inherit = bar/base
 monitor = DP-1
-width = 100%
-height = 34
-
-background = #00000000
-foreground = #ccffffff
-
-;line-color = ${bar/bottom.background}
-line-size = 16
-
-spacing = 2
-padding-right = 5
-module-margin = 4
-
-font-0 = NotoSans-Regular:size=8;-1
-font-1 = MaterialIcons:size=10;0
-font-2 = Termsynu:size=8:antialias=false;-2
-font-3 = FontAwesome:size=10;0
-
-;modules-left = powermenu mpd
-modules-right = cpu memory
+modules-left = powermenu
+;modules-right = cpu memory
 
 [bar/m4]
+inherit = bar/base
 monitor = DP-3
-width = 100%
-height = 34
+modules-left = powermenu
+;modules-right = cpu memory
 
-background = #00000000
-foreground = #ccffffff
-
-;line-color = ${bar/bottom.background}
-line-size = 16
-
-spacing = 2
-padding-right = 5
-module-margin = 4
-
-font-0 = NotoSans-Regular:size=8;-1
-font-1 = MaterialIcons:size=10;0
-font-2 = Termsynu:size=8:antialias=false;-2
-font-3 = FontAwesome:size=10;0
-
-;modules-left = powermenu mpd
-modules-right = cpu memory
+######################
+# Module Definitions #
+######################
 
 [module/arch-aur-updates]
 type = custom/script
 exec = ~/.config/polybar/scripts/check-all-updates.sh
 interval = 1000
 label = Updates: %output%
-format-foreground = #d3869b
+format-foreground = ${colors.gruv-purple}
 format-background = ${colors.background}
 format-prefix = "  "
-format-prefix-foreground = #d3869b
+format-prefix-foreground = ${colors.gruv-purple}
 
 [module/cyberpunk]
 type = custom/script
 exec = ~/.config/polybar/scripts/cyberpunk.sh
 interval = 1000
-format-foreground = #fabd2f
+format-foreground = ${colors.gruv-yellow}
 format-background = ${colors.background}
 format-prefix = "  "
-format-prefix-foreground = #fabd2f
+format-prefix-foreground = ${colors.gruv-yellow}
 format-prefix-background = ${colors.background}
 
 [module/xmonad]
 type = custom/script
 exec = xmonad-log
 tail = true
-format-prefix = "  "
-format-prefix-foreground = #ffffff
-format-prefix-background = ${colors.background}
+;format-prefix = "  "
+;format-prefix-foreground = #ffffff
+;format-prefix-background = ${colors.background}
 format-background = ${colors.background}
 format-foreground = ${colors.foreground}
 
@@ -158,28 +122,28 @@ label = CPU
 
 ramp-coreload-0 = ▁
 ramp-coreload-0-font = 2
-ramp-coreload-0-foreground = #aaff77
+ramp-coreload-0-foreground = ${colors.gruv-green}
 ramp-coreload-1 = ▂
 ramp-coreload-1-font = 2
-ramp-coreload-1-foreground = #aaff77
+ramp-coreload-1-foreground = ${colors.gruv-green}
 ramp-coreload-2 = ▃
 ramp-coreload-2-font = 2
-ramp-coreload-2-foreground = #aaff77
+ramp-coreload-2-foreground = ${colors.gruv-green}
 ramp-coreload-3 = ▄
 ramp-coreload-3-font = 2
-ramp-coreload-3-foreground = #aaff77
+ramp-coreload-3-foreground = ${colors.gruv-green}
 ramp-coreload-4 = ▅
 ramp-coreload-4-font = 2
-ramp-coreload-4-foreground = #fba922
+ramp-coreload-4-foreground = ${colors.gruv-yellow}
 ramp-coreload-5 = ▆
 ramp-coreload-5-font = 2
-ramp-coreload-5-foreground = #fba922
+ramp-coreload-5-foreground = ${colors.gruv-yellow}
 ramp-coreload-6 = ▇
 ramp-coreload-6-font = 2
-ramp-coreload-6-foreground = #ff5555
+ramp-coreload-6-foreground = ${colors.gruv-red}
 ramp-coreload-7 = █
 ramp-coreload-7-font = 2
-ramp-coreload-7-foreground = #ff5555
+ramp-coreload-7-foreground = ${colors.gruv-red}
 
 [module/date]
 type = internal/date
@@ -189,8 +153,8 @@ date-alt = " %a %b %d, %Y"
 time = %l:%M%p
 time-alt = %l:%M%p
 format-prefix = " "
-format-prefix-foreground = #8ec07c
-format-foreground = #8ec07c
+format-prefix-foreground = ${colors.gruv-blue}
+format-foreground = ${colors.gruv-blue}
 format-background = ${colors.background}
 label = "%date% %time%"
 
@@ -200,10 +164,10 @@ format = <label> <bar-used>
 label = RAM
 
 bar-used-width = 30
-bar-used-foreground-0 = #aaff77
-bar-used-foreground-1 = #aaff77
-bar-used-foreground-2 = #fba922
-bar-used-foreground-3 = #ff5555
+bar-used-foreground-0 = ${colors.gruv-green}
+bar-used-foreground-1 = ${colors.gruv-green}
+bar-used-foreground-2 = ${colors.gruv-yellow}
+bar-used-foreground-3 = ${colors.gruv-red}
 bar-used-indicator = |
 bar-used-indicator-font = 6
 bar-used-indicator-foreground = #ff
@@ -213,91 +177,38 @@ bar-used-empty = ─
 bar-used-empty-font = 6
 bar-used-empty-foreground = #444444
 
-[module/mpd]
-type = internal/mpd
-format-online = <icon-prev> <icon-stop> <toggle> <icon-next>  <icon-repeat> <icon-random>  <bar-progress> <label-time>  <label-song>
-
-icon-play = 
-icon-pause = 
-icon-stop = 
-icon-prev = 
-icon-next = 
-icon-random = 
-icon-repeat = 
-
-toggle-on-foreground =
-toggle-off-foreground = #55
-
-bar-progress-width = 45
-bar-progress-format = %{A4:mpdseek+2: A5:mpdseek-2:}%fill%%indicator%%empty%%{A A}
-bar-progress-indicator = |
-bar-progress-indicator-foreground = #ff
-bar-progress-indicator-font = 3
-bar-progress-fill = ─
-bar-progress-fill-foreground = #bb
-bar-progress-fill-font = 3
-bar-progress-empty = ─
-bar-progress-empty-font = 3
-bar-progress-empty-foreground = #44
-
-[module/wired-network]
+[module/networkspeedup]
 type = internal/network
 interface = enp38s0
-interval = 3.0
+label-connected = "%upspeed:7%"
+format-connected = <label-connected>
+format-connected-prefix = " "
+format-connected-prefix-foreground = ${colors.gruv-yellow}
+format-connected-foreground = ${colors.gruv-yellow}
+format-connected-background = ${colors.background}
 
-label-connected =    %{T3}%local_ip%%{T-}
-label-disconnected-foreground = #66
-
-[module/volume]
-type = internal/pulseaudio
-speaker-mixer = Speaker
-headphone-mixer = Headphone
-headphone-id = 9
-
-format-volume = <ramp-volume> <label-volume>
-label-muted =   muted
-label-muted-foreground = #66
-
-ramp-volume-0 = 
-ramp-volume-1 = 
-ramp-volume-2 = 
-ramp-volume-3 = 
+[module/networkspeeddown]
+type = internal/network
+interface = enp38s0
+label-connected = "%downspeed:7%"
+format-connected = <label-connected>
+format-connected-prefix = "  "
+format-connected-prefix-foreground = ${colors.gruv-yellow}
+format-connected-foreground = ${colors.gruv-yellow}
+format-connected-background = ${colors.background}
 
 [module/powermenu]
 type = custom/menu
-
 format-padding = 5
 
-label-open = 
-label-close = 
+label-open = 
+label-close = 
 
-menu-0-0 = Terminate WM
+menu-0-0 = Recompile
 menu-0-0-foreground = #fba922
-menu-0-0-exec = bspc quit -1
-menu-0-1 = Reboot
+menu-0-0-exec = xmonad --recompile
+menu-0-1 = Restart
 menu-0-1-foreground = #fba922
-menu-0-1-exec = menu_open-1
-menu-0-2 = Power off
-menu-0-2-foreground = #fba922
-menu-0-2-exec = menu_open-2
-
-menu-1-0 = Cancel
-menu-1-0-foreground = #fba922
-menu-1-0-exec = menu_open-0
-menu-1-1 = Reboot
-menu-1-1-foreground = #fba922
-menu-1-1-exec = sudo reboot
-
-menu-2-0 = Power off
-menu-2-0-foreground = #fba922
-menu-2-0-exec = sudo poweroff
-menu-2-1 = Cancel
-menu-2-1-foreground = #fba922
-menu-2-1-exec = menu_open-0
-
-[module/clock]
-type = internal/date
-interval = 2
-date = %%{F#999}%Y-%m-%d%%{F-}  %%{F#fff}%H:%M%%{F-}
+menu-0-1-exec = xmonad --restart
 
 ; vim:ft=dosini
