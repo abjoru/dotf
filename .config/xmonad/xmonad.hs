@@ -226,16 +226,11 @@ myStartupHook = do
 ------------------------------------------------------------------------
 myColorizer :: Window -> Bool -> X (String, String)
 myColorizer = colorRangeFromClassName
-  --(0x31,0x2e,0x39) -- lowest inactive bg 	RGB: (49, 46, 57) 	GRUV: #1d2021 (29, 32, 33)
-  (0x1d,0x20,0x21)
-  --(0x31,0x2e,0x39) -- highest inactive bg 	RGB: (49, 46, 57) 	GRUV: #282828 (40, 40, 40)
-  (0x28,0x28,0x28)
-  --(0x61,0x57,0x72) -- active bg 		RGB: (97, 87, 114)      GRUV: #665c54 (102, 92, 84)
-  (0x66,0x5c,0x54)
-  --(0xc0,0xa7,0x9a) -- inactive fg 		RGB: (192, 167, 154) 	GRUV: #a89984 (168, 153, 132)
-  (0xa8,0x99,0x84)
-  --(0xff,0xff,0xff) -- active fg 		RGB: (255, 255, 255) 	GRUV: #fbf1c7 (251, 241, 199)
-  (0xfb,0xf1,0xc7)
+  (0x1d,0x20,0x21) -- #1d2021
+  (0x28,0x28,0x28) -- #282828
+  (0x66,0x5c,0x54) -- #665c54
+  (0xa8,0x99,0x84) -- #a89984
+  (0xfb,0xf1,0xc7) -- #fbf1c7
 
 -- gridSelect menu layout
 myGridConfig :: p -> GSConfig Window
@@ -262,16 +257,18 @@ myApplications = [ ("Firefox", "firefox", "The famous open source web browser")
                  , ("Steam", "steam", "Proprietary gaming platform")
                  , ("QuteBrowser", "qutebrowser", "Simple VIM-like web browser")
                  , ("PrusaSlicer", "slicer", "Prusa 3d printer slicer software")
+                 , ("VirtualBox", "virtualbox", "Virtualization software")
                  ]
 
 myConfigs :: [(String, String, String)]
-myConfigs = [ ("xmonad.hs", myEditor ++ "/home/abjoru/.config/xmonad/xmonad.hs", "xmonad config")
-            , ("xmobarrc0", myEditor ++ "/home/abjoru/.config/xmobar/xmobarrc0", "xmobar config for screen 0")
-            , ("xmobarrc1", myEditor ++ "/home/abjoru/.config/xmobar/xmobarrc1", "xmobar config for screen 1")
-            , ("xmobarrc2", myEditor ++ "/home/abjoru/.config/xmobar/xmobarrc2", "xmobar config for screen 2")
-            , ("xmobarrc3", myEditor ++ "/home/abjoru/.config/xmobar/xmobarrc3", "xmobar config for screen 3")
+myConfigs = [ ("xmonad", myEditor ++ "/home/abjoru/.config/xmonad/xmonad.hs", "xmonad config")
+            -- , ("xmobarrc0", myEditor ++ "/home/abjoru/.config/xmobar/xmobarrc0", "xmobar config for screen 0")
+            -- , ("xmobarrc1", myEditor ++ "/home/abjoru/.config/xmobar/xmobarrc1", "xmobar config for screen 1")
+            -- , ("xmobarrc2", myEditor ++ "/home/abjoru/.config/xmobar/xmobarrc2", "xmobar config for screen 2")
+            -- , ("xmobarrc3", myEditor ++ "/home/abjoru/.config/xmobar/xmobarrc3", "xmobar config for screen 3")
+            , ("polybar", myEditor ++ "/home/abjoru/.config/polybar/config", "Polybar config file")
             , ("zshrc", myEditor ++ "/home/abjoru/.config/zsh/config.zsh", "zsh config")
-            , ("nvim-init", myEditor ++ "/home/abjoru/.config/nvim/init.vim", "NeoVim main config file")
+            , ("nvim", myEditor ++ "/home/abjoru/.config/nvim/init.vim", "NeoVim main config file")
             ]
 
 myAppGrid :: [(String, String)]
@@ -283,52 +280,10 @@ myConfigGrid = [ (a,b) | (a,b,c) <- xs]
   where xs = myConfigs
 
 ------------------------------------------------------------------------
--- XPROMPT KEYMAP (emacs-like bindings for now..)
-------------------------------------------------------------------------
-dtXPKeymap :: M.Map (KeyMask,KeySym) (XP ())
-dtXPKeymap = M.fromList $
-  map (first $ (,) controlMask)         -- control + <key>
-  [ (xK_z, killBefore)                  -- kill line backwards
-  , (xK_k, killAfter)                   -- kill line forwards
-  , (xK_a, startOfLine)                 -- move to the beginning of the line
-  , (xK_e, endOfLine)                   -- move to the end of the line
-  , (xK_m, deleteString Next)           -- delete a character forward
-  , (xK_b, moveCursor Prev)             -- move cursor forward
-  , (xK_f, moveCursor Next)             -- move cursor backward
-  , (xK_BackSpace, killWord Prev)       -- kill the previous word
-  , (xK_y, pasteString)                 -- paste a string
-  , (xK_g, quit)                        -- quit out of prompt
-  , (xK_bracketleft, quit)
-  ]
-  ++
-  map (first $ (,) altMask)             -- meta key + <key>
-  [ (xK_BackSpace, killWord Prev)       -- kill the prev word
-  , (xK_f, moveWord Next)               -- move a word forward
-  , (xK_b, moveWord Prev)               -- move a word backward
-  , (xK_d, killWord Next)               -- kill the next word
-  , (xK_n, moveHistory W.focusUp')      -- move up thru history
-  , (xK_p, moveHistory W.focusDown')    -- move down thru history
-  ]
-  ++
-  map (first $ (,) 0) -- <key>
-  [ (xK_Return, setSuccess True >> setDone True)
-  , (xK_KP_Enter, setSuccess True >> setDone True)
-  , (xK_BackSpace, deleteString Prev)
-  , (xK_Delete, deleteString Prev)
-  , (xK_Left, moveCursor Prev)
-  , (xK_Right, moveCursor Next)
-  , (xK_Home, startOfLine)
-  , (xK_End, endOfLine)
-  , (xK_Down, moveHistory W.focusUp')
-  , (xK_Up, moveHistory W.focusDown')
-  , (xK_Escape, quit)
-  ]
-
-------------------------------------------------------------------------
 -- XPROMPT SETTINGS
 ------------------------------------------------------------------------
-dtXPConfig :: XPConfig
-dtXPConfig = def
+myXPConfig :: XPConfig
+myXPConfig = def
   { font                = "xft:Mononoki Nerd Font:size=9"
   , bgColor             = gruvBG0
   , fgColor             = gruvFG0
@@ -336,7 +291,7 @@ dtXPConfig = def
   , fgHLight            = "#00000"
   , borderColor         = gruvBG3
   , promptBorderWidth   = 0
-  , promptKeymap        = dtXPKeymap
+  , promptKeymap        = defaultXPKeymap
   , position            = Top
   , height              = 20
   , historySize         = 256
@@ -409,7 +364,7 @@ myKeys =
   , ("M-S-q", io exitSuccess)                           -- Quits xmonad
 
   -- Prompts
-  , ("M-S-<Return>", shellPrompt dtXPConfig)            -- Shell prompt
+  , ("M-S-<Return>", shellPrompt myXPConfig)            -- Shell prompt
 
   -- Windows
   , ("M-S-c", kill1)                                    -- Kill the currently focused client
@@ -486,14 +441,6 @@ myKeys =
   , ("M-<Return>", spawn myTerminal)
   , ("M1-<Return>", spawn myTerminal)
 
-  -- Dmenu Scripts (Alt+Ctrl+Key)
-  --, ("M-S-<Return>", spawn "dmenu_run")
-  --, ("M1-C-e", spawn "/home/abjoru/.config/dmenu/dmenu-edit-configs.sh")
-  --, ("M1-C-h", spawn "./.dmenu/dmenu-hugo.sh")
-  --, ("M1-C-m", spawn "./.dmenu/dmenu-sysmon.sh")
-  --, ("M1-C-s", spawn "./.dmenu/dmenu-surfraw.sh")
-  --, ("M1-C-/", spawn "./.dmenu/dmenu-scrot.sh")
-
   -- My Applications (Super+Alt+Key)
   , ("M-M1-a", spawn (myTerminal ++ " -e ncpamixer"))
   , ("M-M1-b", spawn ("surf www.youtube.com"))
@@ -526,9 +473,8 @@ myKeys =
   , ("<Print>", spawn "scrotd 0")
   ] 
   -- Appending search engines to keybinding list
-  ++ [("M-s " ++ k, S.promptSearch dtXPConfig f) | (k,f) <- searchList ]
-  ++ [("M-p " ++ k, f dtXPConfig) | (k,f) <- promptList ]
-  -- ++ [("M-p " ++ k, f dtXPConfig' g) | (k,f,g) <- promptList' ]
+  ++ [("M-s " ++ k, S.promptSearch myXPConfig f) | (k,f) <- searchList ]
+  ++ [("M-p " ++ k, f myXPConfig) | (k,f) <- promptList ]
   -- Appending named scratchpads to keybinding list
     where nonNSP                = WSIs (return (\ws -> W.tag ws /= "nsp"))
           nonEmptyNonNSP        = WSIs (return (\ws -> isJust (W.stack ws) && W.tag ws /= "nsp"))
@@ -547,12 +493,6 @@ xmobarEscape = concatMap doubleLts
 
 myWorkspaces :: [String]
 myWorkspaces = ["dev", "www", "sys", "doc", "vbox", "chat", "mus", "vid", "gfx"]
---myWorkspaces = clickable . (map xmobarEscape)
-               -- $ ["dev", "www", "sys", "doc", "vbox", "chat", "mus", "vid", "gfx"]
-  --where
-    --clickable l = [ "<action=xdotool key super+" ++ show (n) ++ ">" ++ ws ++ "</action>" |
-                  --(i,ws) <- zip [1..9] l,
-                  --let n = i ]
 
 ------------------------------------------------------------------------
 -- MANAGEHOOKS
@@ -570,37 +510,20 @@ myManageHook = composeAll . concat $
   , [title =? t --> doFloat | t <- myTFloats]
   , [resource =? r --> doFloat | r <- myRFloats]
   , [resource =? i --> doIgnore | i <- myIFloats]
---    , [className =? c --> doShift (myWorkspaces !! 0) <+> viewShift (myWorkspaces !! 0)        | c <- my1Shifts]
---    , [className =? c --> doShift (myWorkspaces !! 1) <+> viewShift (myWorkspaces !! 1)        | c <- my2Shifts]
---    , [className =? c --> doShift (myWorkspaces !! 2) <+> viewShift (myWorkspaces !! 2)        | c <- my3Shifts]
---    , [className =? c --> doShift (myWorkspaces !! 3) <+> viewShift (myWorkspaces !! 3)        | c <- my4Shifts]
---    , [className =? c --> doShift (myWorkspaces !! 4) <+> viewShift (myWorkspaces !! 4)        | c <- my5Shifts]
---    , [className =? c --> doShift (myWorkspaces !! 5) <+> viewShift (myWorkspaces !! 5)        | c <- my6Shifts]
---    , [className =? c --> doShift (myWorkspaces !! 6) <+> viewShift (myWorkspaces !! 6)        | c <- my7Shifts]
---    , [className =? c --> doShift (myWorkspaces !! 7) <+> viewShift (myWorkspaces !! 7)        | c <- my8Shifts]
---    , [className =? c --> doShift (myWorkspaces !! 8) <+> viewShift (myWorkspaces !! 8)        | c <- my9Shifts]
---    , [className =? c --> doShift (myWorkspaces !! 9) <+> viewShift (myWorkspaces !! 9)        | c <- my10Shifts]
+  , [className =? c --> doShift (myWorkspaces !! 0) | c <- myC0Shifts]
+  , [className =? c --> doShift (myWorkspaces !! 1) | c <- myC1Shifts]
+  , [title =? t --> doShift (myWorkspaces !! 0) | t <- myT0Shifts]
+  , [title =? t --> doShift (myWorkspaces !! 1) | t <- myT1Shifts]
   ]
   where
-    myCFloats = ["Arandr", "Gimp", "Galculator", "feh", "mpv"]
-    myTFloats = ["Downloads", "Save As..."]
-    myRFloats = []
-    myIFloats = ["desktop_window"]
-  -- using 'doShift ( myWorkspaces !! 7)' sends program to workspace 8!
-  -- I'm doing it this way because otherwise I would have to write out
-  -- the full name of my clickable workspaces, which would look like:
-  -- doShift "<action xdotool super+8>gfx</action>"
-  --[ className =? "obs"		--> doShift ( myWorkspaces !! 7)
-  --, title =? "firefox"		--> doShift ( myWorkspaces !! 1)
-  --, title =? "qutebrowser"	--> doShift ( myWorkspaces !! 1)
-  --, className =? "mpv"		--> doShift ( myWorkspaces !! 7)
-  --, className =? "vlc"		--> doShift ( myWorkspaces !! 7)
-  --, className =? "Gimp"		--> doShift ( myWorkspaces !! 8)
-  --, className =? "Gimp"		--> doFloat
-  --, title =? "Oracle VM VirtualBox Manager"	--> doFloat
-  --, className =? "Oracle VM VirtualBox Manager"	--> doShift ( myWorkspaces !! 6)
-  --, (className =? "firefox" <&&> resource =? "Dialog")	--> doFloat -- Float Firefox Dialog
-  --] <+> namedScratchpadManageHook myScratchPads
+    myCFloats  = ["Arandr", "Gimp", "Galculator", "feh", "mpv"]
+    myTFloats  = ["Downloads", "Save As...", "Oracle VM VirtualBox Manager"]
+    myRFloats  = []
+    myIFloats  = ["desktop_window"]
+    myC0Shifts = ["Oracle VM VirtualBox Manager"]
+    myC1Shifts = []
+    myT0Shifts = []
+    myT1Shifts = ["firefox"]
 
 ------------------------------------------------------------------------
 -- LOGHOOK
@@ -610,7 +533,7 @@ myManageHook = composeAll . concat $
 myLogHook :: D.Client -> PP
 myLogHook dbus = def
   { ppOutput = dbusOutput dbus
-  , ppCurrent = wrap ("%{F" ++ gruvGreen0 ++ "} ") "%{F-}"
+  , ppCurrent = wrap ("%{F" ++ gruvGreen0 ++ "} [") "]%{F-}"
   , ppVisible = wrap ("%{F" ++ gruvGreen1 ++ "} ") "%{F-}"
   , ppUrgent  = wrap ("%{F" ++ gruvOrange0 ++ "} ") "%{F-}"
   , ppHidden  = wrap ("%{F" ++ gruvBlue0 ++ "} ") "%{F-}"
@@ -760,35 +683,3 @@ defaults = def
   , borderWidth 	= myBorderWidth
   , startupHook 	= myStartupHook
   } `additionalKeysP` myKeys
-
-	-- Launching three instances of xmobar on their monitors.
-	-- xmproc <- spawnPipe "xmobar -x 0 /home/abjoru/.config/xmobar/xmobarrc0"
-	-- xmproc0 <- spawnPipe "xmobar -x 0 /home/abjoru/.config/xmobar/xmobarrc2"
-	-- xmproc1 <- spawnPipe "xmobar -x 1 /home/abjoru/.config/xmobar/xmobarrc3"
-	-- xmproc2 <- spawnPipe "xmobar -x 2 /home/abjoru/.config/xmobar/xmobarrc1"
-	-- xmproc3 <- spawnPipe "xmobar -x 3 /home/abjoru/.config/xmobar/xmobarrc0"
-	
-	-- xmonad stuff
-	-- xmonad $ ewmh desktopConfig
-		-- { manageHook = ( isFullscreen --> doFullFloat ) <+> myManageHook <+> manageHook desktopConfig <+> manageDocks
-		-- , modMask 		= myModMask
-		-- , terminal		= myTerminal
-		-- , startupHook		= myStartupHook
-		-- , layoutHook		= myLayoutHook
-		-- , workspaces		= myWorkspaces
-		-- , borderWidth		= myBorderWidth
-		-- , normalBorderColor	= myNormColor
-		-- , focusedBorderColor	= myFocusColor
-		-- , logHook = dynamicLogWithPP xmobarPP
-			-- { ppOutput = \x -> hPutStrLn xmproc0 x >> hPutStrLn xmproc1 x >> hPutStrLn xmproc2 x >> hPutStrLn xmproc3 x
-			-- , ppCurrent = xmobarColor gruvGreen0 "" . wrap "[" "]"	-- Current workspace in xmobar
-			-- , ppVisible = xmobarColor gruvGreen1 ""			-- Visible but not current workspace
-			-- , ppHidden = xmobarColor gruvBlue0 "" . wrap "*" ""	-- Hidden workspaces in xmobar
-			-- , ppHiddenNoWindows = xmobarColor gruvRed0 ""		-- Hidden workspaces (no windows)
-			-- , ppTitle = xmobarColor gruvGray0 "" . shorten 60	-- Title of active window in xmobar
-			-- , ppSep = "<fc=#666666> | </fc>"			-- Separators in xmobar
-			-- , ppUrgent = xmobarColor gruvOrange0 "" . wrap "!" "!"	-- Urgent workspace
-			-- , ppExtras = [windowCount]				-- # of windows in current workspace
-			-- , ppOrder = \(ws:l:t:ex) -> [ws,l]++ex++[t]
-			-- }
-		-- } `additionalKeysP` myKeys

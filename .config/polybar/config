@@ -65,19 +65,20 @@ tray-background = ${colors.background}
 [bar/m2]
 inherit = bar/base
 monitor = DP-5
-modules-left = powermenu
+modules-left = powermenu xmonad
 modules-right = cpu memory
 
 [bar/m3]
 inherit = bar/base
 monitor = DP-1
-modules-left = powermenu
+modules-left = powermenu xmonad
+modules-center = weather
 ;modules-right = cpu memory
 
 [bar/m4]
 inherit = bar/base
 monitor = DP-3
-modules-left = powermenu
+modules-left = powermenu xmonad
 ;modules-right = cpu memory
 
 ######################
@@ -94,6 +95,8 @@ format-background = ${colors.background}
 format-prefix = "  "
 format-prefix-foreground = ${colors.gruv-purple}
 
+########################################################
+
 [module/cyberpunk]
 type = custom/script
 exec = ~/.config/polybar/scripts/cyberpunk.sh
@@ -104,15 +107,16 @@ format-prefix = "  "
 format-prefix-foreground = ${colors.gruv-yellow}
 format-prefix-background = ${colors.background}
 
+########################################################
+
 [module/xmonad]
 type = custom/script
 exec = xmonad-log
 tail = true
-;format-prefix = "  "
-;format-prefix-foreground = #ffffff
-;format-prefix-background = ${colors.background}
 format-background = ${colors.background}
 format-foreground = ${colors.foreground}
+
+########################################################
 
 [module/cpu]
 type = internal/cpu
@@ -145,6 +149,8 @@ ramp-coreload-7 = █
 ramp-coreload-7-font = 2
 ramp-coreload-7-foreground = ${colors.gruv-red}
 
+########################################################
+
 [module/date]
 type = internal/date
 interval = 5
@@ -152,30 +158,25 @@ date = " %a %b %d, %Y"
 date-alt = " %a %b %d, %Y"
 time = %l:%M%p
 time-alt = %l:%M%p
-format-prefix = " "
+format-prefix = "  "
 format-prefix-foreground = ${colors.gruv-blue}
 format-foreground = ${colors.gruv-blue}
 format-background = ${colors.background}
 label = "%date% %time%"
 
+########################################################
+
 [module/memory]
 type = internal/memory
-format = <label> <bar-used>
-label = RAM
+interval = 1
+label = %percentage_used%%
+format = Mem <label>
+format-prefix = " "
+format-prefix-foreground = ${colors.gruv-red}
+format-foreground = ${colors.gruv-red}
+format-background = ${colors.background}
 
-bar-used-width = 30
-bar-used-foreground-0 = ${colors.gruv-green}
-bar-used-foreground-1 = ${colors.gruv-green}
-bar-used-foreground-2 = ${colors.gruv-yellow}
-bar-used-foreground-3 = ${colors.gruv-red}
-bar-used-indicator = |
-bar-used-indicator-font = 6
-bar-used-indicator-foreground = #ff
-bar-used-fill = ─
-bar-used-fill-font = 6
-bar-used-empty = ─
-bar-used-empty-font = 6
-bar-used-empty-foreground = #444444
+########################################################
 
 [module/networkspeedup]
 type = internal/network
@@ -187,6 +188,8 @@ format-connected-prefix-foreground = ${colors.gruv-yellow}
 format-connected-foreground = ${colors.gruv-yellow}
 format-connected-background = ${colors.background}
 
+########################################################
+
 [module/networkspeeddown]
 type = internal/network
 interface = enp38s0
@@ -197,18 +200,32 @@ format-connected-prefix-foreground = ${colors.gruv-yellow}
 format-connected-foreground = ${colors.gruv-yellow}
 format-connected-background = ${colors.background}
 
+########################################################
+
 [module/powermenu]
 type = custom/menu
 format-padding = 5
 
 label-open = 
 label-close = 
+label-separator = |
 
 menu-0-0 = Recompile
-menu-0-0-foreground = #fba922
+menu-0-0-foreground = ${colors.gruv-orange}
 menu-0-0-exec = xmonad --recompile
 menu-0-1 = Restart
-menu-0-1-foreground = #fba922
+menu-0-1-foreground = ${colors.gruv-orange}
 menu-0-1-exec = xmonad --restart
+
+########################################################
+
+[module/weather]
+type = custom/script
+interval = 10
+format = <label>
+format-foreground = ${colors.gruv-blue}
+format-background = ${colors.background}
+exec = python -u ~/.config/polybar/scripts/weather.py
+tail = true
 
 ; vim:ft=dosini
