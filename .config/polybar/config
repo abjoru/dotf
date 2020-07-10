@@ -47,6 +47,7 @@ inherit = bar/base
 monitor = DP-7
 
 modules-left = powermenu xmonad
+modules-center = weather
 modules-right = cyberpunk gmail networkspeedup networkspeeddown arch-aur-updates usb date
 
 tray-position = right
@@ -164,7 +165,7 @@ type = internal/memory
 interval = 1
 label = %percentage_used%%
 format = Mem <label>
-format-prefix = " "
+format-prefix = "  "
 format-prefix-foreground = ${theme.red}
 format-foreground = ${theme.red}
 format-background = ${theme.background}
@@ -197,7 +198,7 @@ format-connected-background = ${theme.background}
 
 [module/powermenu]
 type = custom/menu
-format-padding = 5
+format-padding = 2
 
 label-open = 
 label-close = 
@@ -252,5 +253,27 @@ exec = ~/.config/polybar/scripts/system-usb-udev.sh
 tail = true
 click-left = ~/.config/polybar/scripts/system-usb-udev.sh --mount &
 click-right = ~/.config/polybar/scripts/system-usb-udev.sh --unmount &
+
+########################################################
+
+[module/mdp]
+type = internal/mdp
+format-online = "<label-song>  <bar-progress>"
+icon-prev = 
+icon-stop = 
+icon-play = 
+icon-pause = 
+icon-next = 
+label-song-maxlen = 40
+label-song-ellipsis = true
+bar-progress-width = 10
+bar-progress-indicator = 
+bar-progress-fill = 
+bar-progress-empty = 
+bar-progress-fill-foreground = #ff0
+bar-progress-fill-background = ${colors.background}
+bar-progress-indicator-foreground = ${colors.foreground}
+format-online-foreground = ${colors.foreground}
+format-online-background = ${colors.background}
 
 ; vim:ft=dosini

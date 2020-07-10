@@ -256,16 +256,14 @@ myApplications = [ ("Firefox", "firefox", "The famous open source web browser")
                  , ("ThinkOrSwim", "thinkorswim", "TD Ameritrade platform")
                  , ("Steam", "steam", "Proprietary gaming platform")
                  , ("QuteBrowser", "qutebrowser", "Simple VIM-like web browser")
-                 , ("PrusaSlicer", "slicer", "Prusa 3d printer slicer software")
+                 , ("PrusaSlicer", "prusa-slicer", "Prusa 3d printer slicer software")
                  , ("VirtualBox", "virtualbox", "Virtualization software")
+                 , ("Blender", "blender", "Blender 3D Software")
+                 , ("Geary", "geary", "Geary Email Client")
                  ]
 
 myConfigs :: [(String, String, String)]
 myConfigs = [ ("xmonad", myEditor ++ "/home/abjoru/.config/xmonad/xmonad.hs", "xmonad config")
-            -- , ("xmobarrc0", myEditor ++ "/home/abjoru/.config/xmobar/xmobarrc0", "xmobar config for screen 0")
-            -- , ("xmobarrc1", myEditor ++ "/home/abjoru/.config/xmobar/xmobarrc1", "xmobar config for screen 1")
-            -- , ("xmobarrc2", myEditor ++ "/home/abjoru/.config/xmobar/xmobarrc2", "xmobar config for screen 2")
-            -- , ("xmobarrc3", myEditor ++ "/home/abjoru/.config/xmobar/xmobarrc3", "xmobar config for screen 3")
             , ("polybar", myEditor ++ "/home/abjoru/.config/polybar/config", "Polybar config file")
             , ("zshrc", myEditor ++ "/home/abjoru/.config/zsh/config.zsh", "zsh config")
             , ("nvim", myEditor ++ "/home/abjoru/.config/nvim/init.vim", "NeoVim main config file")
@@ -297,9 +295,7 @@ myXPConfig = def
   , historySize         = 256
   , historyFilter       = id
   , defaultText         = []
-  -- , autoComplete	= Just 100000 -- set Just 100000 for .1 sec
   , showCompletionOnTab = False
-  --, searchPredicate     = isPrefixOf
   , alwaysHighlight     = True
   , maxComplRows        = Nothing -- set to Just 5 for 5 rows
   }
@@ -410,11 +406,6 @@ myKeys =
   , ("M-<Tab>", sendMessage NextLayout)                                 -- Switch to next layout
   , ("M-S-<Space>", sendMessage ToggleStruts)                           -- Toggles struts
   , ("M-S-n", sendMessage $ MT.Toggle NOBORDERS)                        -- Toggles noborder
-  --, ("M-S-=", sendMessage (Toggle NBFULL) >> sendMessage ToggleStruts)  -- Toggles noborder/full
-  --, ("M-S-f", sendMessage (T.Toggle "float"))
-  --, ("M-S-x", sendMessage $ Toggle REFLECTX)
-  --, ("M-S-y", sendMessage $ Toggle REFLECTY)
-  --, ("M-S-m", sendMessage $ Toggle MIRROR)
   , ("M-<KP_Multiply>", sendMessage (IncMasterN 1))     -- Increase number of clients in the master pane
   , ("M-<KP_Divide>", sendMessage (IncMasterN (-1)))    -- Decrease number of clients in the master pane
   , ("M-S-<KP_Multiply", increaseLimit)                 -- Increase number of windows that can be shown
@@ -424,8 +415,6 @@ myKeys =
   , ("M-l", sendMessage Expand)
   , ("M-C-j", sendMessage MirrorShrink)
   , ("M-C-k", sendMessage MirrorExpand)
-  --, ("M-S-;", sendMessage zoomReset)
-  --, ("M-;", sendMessage ZoomFullToggle)
 
   -- Workspaces
   , ("M-.", nextScreen)                                                 -- Switch focus to next monitor
@@ -535,7 +524,7 @@ myLogHook dbus = def
   { ppOutput = dbusOutput dbus
   , ppCurrent = wrap ("%{F" ++ gruvGreen0 ++ "} [") "]%{F-}"
   , ppVisible = wrap ("%{F" ++ gruvGreen1 ++ "} ") "%{F-}"
-  , ppUrgent  = wrap ("%{F" ++ gruvOrange0 ++ "} ") "%{F-}"
+  , ppUrgent  = wrap ("%{F" ++ gruvOrange0 ++ "} !") "%{F-}"
   , ppHidden  = wrap ("%{F" ++ gruvBlue0 ++ "} ") "%{F-}"
   , ppTitle   = wrap ("%{F" ++ gruvGray0 ++ "} ") "%{F-}"
   , ppSep     = " | "
@@ -598,20 +587,20 @@ tabs            = renamed [Replace "tabs"]
                   -- add spacing between window and tabs which looks bad
                   $ tabbed shrinkText myTabConfig
                   where myTabConfig = def { fontName            = "xft:Mononoki Nerd Font:regular:pixelsize=11"
-                                          , activeColor         = "#292d3e"
-                                          , inactiveColor       = "#3e445e"
-                                          , activeBorderColor   = "#292d3e"
-                                          , inactiveBorderColor = "#292d3e"
-                                          , activeTextColor     = "#ffffff"
-                                          , inactiveTextColor   = "#d0d0d0"
+                                          , activeColor         = gruvBlue0
+                                          , inactiveColor       = gruvBG3
+                                          , activeBorderColor   = gruvBlue0
+                                          , inactiveBorderColor = gruvBlue0
+                                          , activeTextColor     = gruvFG0
+                                          , inactiveTextColor   = gruvGray0
                                           }
 
 myShowWNameTheme :: SWNConfig
 myShowWNameTheme = def
   { swn_font 	= "xft:Sans:bold:size=60"
   , swn_fade 	= 1.0
-  , swn_bgcolor = "#000000"
-  , swn_color 	= "#FFFFFF"
+  , swn_bgcolor = gruvBG0 
+  , swn_color 	= gruvFG0 
   }
 
 myLayoutHook = avoidStruts $ mouseResize $ windowArrange $ T.toggleLayouts floats $

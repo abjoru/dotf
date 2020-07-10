@@ -25,13 +25,13 @@ try:
     if REQ.status_code == 200:
         CURRENT = REQ.json()["weather"][0]["description"].capitalize()
         TEMP = int(float(REQ.json()["main"]["temp"]))
-        ICON = REQ.json()["weather"][0]["main"].capitalize()
+        ICON = REQ.json()["weather"][0]["main"]
 
-        if ICON == "RAIN": print(" {}, {} °{}".format(CURRENT, TEMP, UNIT_KEY))
-        else if ICON == "CLOUDS": println(" {}, {} °{}".format(CURRENT, TEMP, UNIT_KEY))
-        else if ICON == "CLEAR": println(" {}, {} °{}".format(CURRENT, TEMP, UNIT_KEY))
-        else if ICON == "THUNDERSTORM": println(" {}, {} °{}".format(CURRENT, TEMP, UNIT_KEY))
-        else: println("{} {}, {} °{}".format(ICON, CURRENT, TEMP, UNIT_KEY)) 
+        if ICON == "Rain": print("  {}, {} °{}".format(CURRENT, TEMP, UNIT_KEY))
+        elif ICON == "Clouds": print("  {}, {} °{}".format(CURRENT, TEMP, UNIT_KEY))
+        elif ICON == "Clear": print("  {}, {} °{}".format(CURRENT, TEMP, UNIT_KEY))
+        elif ICON == "Thunderstorm": print("  {}, {} °{}".format(CURRENT, TEMP, UNIT_KEY))
+        else: print("{} {}, {} °{}".format(ICON, CURRENT, TEMP, UNIT_KEY)) 
     else:
         print("Error: BAD HTTP STATUS CODE " + str(REQ.status_code))
 except (ValueError, IOError):

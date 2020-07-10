@@ -17,10 +17,15 @@ settings:
         xb: config-cycle statusbar.hide
         xt: config-cycle tabs.show always switching
         xx: config-cycle statusbar.hide ;; config-cycle tabs.show always switching
+        zl: spawn --userscript qute-pass
+        zpl: spawn --userscript qute-pass --password-only
+        zul: spawn --userscript qute-pass --username-only
+  content.notifications:
+    https://www.youtube.com: true
   downloads.location.directory:
     global: ~/Downloads
-  statusbar.hide:
-    global: true
+  statusbar.show:
+    global: never
   tabs.show:
     global: always
   url.searchengines:

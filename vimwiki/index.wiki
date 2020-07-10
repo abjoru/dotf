@@ -4,6 +4,7 @@
 
   * [[neovim-sc|NeoVim Cheat-sheets]]: NeoVim cheat sheets for various commands
   * [[fzf-sc|FZF Cheat-sheets]]: FZF fuzzy finder cheat-sheet
+  * [[qbrowser-sc|QuteBrowser]]: QuteBrowser cheat sheet
 
 == Git Stuff ==
 
