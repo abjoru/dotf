@@ -47,7 +47,7 @@ inherit = bar/base
 monitor = DP-7
 
 modules-left = powermenu xmonad
-modules-right = cyberpunk gmail networkspeedup networkspeeddown arch-aur-updates date
+modules-right = cyberpunk gmail networkspeedup networkspeeddown arch-aur-updates usb date
 
 tray-position = right
 tray-detached = false
@@ -243,5 +243,14 @@ type = custom/script
 exec = ~/.config/polybar/scripts/polystock.py --biggestloser --biggestgainer --mostactive --customticker AKAM
 tail = true
 label = %output%
+
+########################################################
+
+[module/usb]
+type = custom/script
+exec = ~/.config/polybar/scripts/system-usb-udev.sh
+tail = true
+click-left = ~/.config/polybar/scripts/system-usb-udev.sh --mount &
+click-right = ~/.config/polybar/scripts/system-usb-udev.sh --unmount &
 
 ; vim:ft=dosini
