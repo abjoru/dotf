@@ -114,15 +114,15 @@ object OS {
     case (Mode.Dry, Some(Apt)) =>
       val (snaps, apt) = pkgs.partition(_.isSnap)
       if (apt.nonEmpty) println(s"sudo apt install ${apt.map(_.name).mkString(" ")}")
-      snaps.foreach(s => println(s"sudo snap install ${s.name} --${s.snapChannel}")
+      snaps.foreach(s => println(s"sudo snap install ${s.name} ${s.snapChannel.mkString(" ")}"))
     case (Mode.Install, Some(Apt)) =>
       val (snaps, apt) = pkgs.partition(_.isSnap)
       if (apt.nonEmpty) try %sudo("apt", "install", apt.map(_.name)) catch {
         case _: Throwable => Printer.err(s"Non-zero exit code from: sudo apt install ${apt.map(_.name)}")
       }
       snaps.foreach { s =>
-        try %sudo("snap", "install", s.name, s"--${s.snapChannel}") catch {
-          case _: Throwable => Printer.err(s"Non-zero exit code from: sudo snap install ${s.name} --${s.snapChannel}")
+        try %sudo("snap", "install", s.name, s.snapChannel) catch {
+          case _: Throwable => Printer.err(s"Non-zero exit code from: sudo snap install ${s.name} ${s.snapChannel.mkString(" ")}")
         }
       }
 
@@ -192,9 +192,9 @@ final case class Pkg(path: os.Path, data: JsonObject) {
 
   def isAur: Boolean = field[Boolean]("aur").getOrElse(false)
 
-  def isSnap: Boolean = field[String]("snap").map(_.nonEmpty).getOrElse(false)
+  def isSnap: Boolean = snapChannel.nonEmpty
 
-  def snapChannel: Option[String] = field[String]("snap").getOrElse(false)
+  def snapChannel: Option[String] = field[String]("snap").map(_.split(" ").toList).getOrElse(List.empty)
 
   /** Tests if this pkg requires special instructions and cannot be batched. */
   def isSpecial: Boolean = preInstallScripts.nonEmpty || postInstallScripts.nonEmpty

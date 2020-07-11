@@ -33,6 +33,7 @@ if [[ ! -d "$HOME/.dotf" ]]; then
     echo "Checked out config."
   else
     echo "Backing up pre-existing dot files."
+    # TODO this won't work if the target path does not exist. i.e. existing xdg dirs
     config checkout 2>&1 | egrep "\s+\." | awk {'print $1'} | xargs -I{} mv {} .config-backup/{}
   fi
 
