@@ -24,6 +24,6 @@ $HOME/.config/polybar/launch.sh &
 nitrogen --restore &
 
 # sys-tray apps
-synology-drive &
-megasync &
 volumeicon &
+[[ "$(command -v megasync)" ]] && megasync &
+[[ "$(command -v synology-drive)" ]] && synology-drive &

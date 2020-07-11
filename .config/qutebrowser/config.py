@@ -10,7 +10,7 @@ c.aliases = {
 }
 
 c.downloads.location.directory = '~/Downloads'
-c.statusbar.hide = True
+c.statusbar.show = 'in-mode'
 c.tabs.show = 'multiple'
 c.confirm_quit = ['downloads']
 
@@ -23,8 +23,11 @@ c.url.searchengines = {
 
 c.url.start_pages = '~/.cache/dotf/homepage.html'
 
-config.bind('xb', 'config-cycle statusbar.hide')
+config.bind('xb', 'config-cycle statusbar.show always in-mode')
 config.bind('xt', 'config-cycle tabs.show multiple switching')
-config.bind('xx', 'config-cycle statusbar.hide ;; config-cycle tabs.show multiple switching')
+config.bind('xx', 'config-cycle statusbar.show always in-mode ;; config-cycle tabs.show multiple switching')
+config.bind('zl', 'spawn --userscript qute-pass')
+config.bind('zpl', 'spawn --userscript qute-pass --password-only')
+config.bind('zul', 'spawn --userscript qute-pass --username-only')
 
 config.load_autoconfig()

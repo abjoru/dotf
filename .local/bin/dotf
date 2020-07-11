@@ -46,7 +46,7 @@ dotfConfig() {
 }
 
 checkJava() {
-  if [ ! -x "$(which java)" ]; then
+  if [ ! -x "$(command -v java)" ]; then
     echo "ERROR: missing java runtime!"
     echo 
     echo "Please install a Java runtime environment before running this program"
@@ -56,7 +56,7 @@ checkJava() {
 
 initAmmonite() {
   # Check for curl
-  if [ ! -x "$(which curl)" ]; then
+  if [ ! -x "$(command -v curl)" ]; then
     if [[ "$OSTYPE" == "darwin"* ]]; then
       brew install curl
     elif [[ "$OSTYPE" == "linux-gnu"* && -x "$(which apt)" ]]; then
@@ -74,7 +74,7 @@ initAmmonite() {
   fi
 
   # Check for Ammonite
-  if [ ! -x "$(which amm)" ]; then
+  if [ ! -x "$(command -v amm)" ]; then
     curl -L "${AMM_URL}" > $HOME/.local/bin/amm && chmod +x $HOME/.local/bin/amm
   fi
 }

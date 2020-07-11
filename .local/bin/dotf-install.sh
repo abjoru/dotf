@@ -6,12 +6,15 @@
 # https://www.atlassian.com/git/tutorials/dotfiles
 
 # Grab GIT if we need to..
-if [ ! -x "$(which git)" ]; then
+
+
+
+if [ ! -x "$(command -v git)" ]; then
   if [[ "$OSTYPE" == "darwin"* ]]; then
     brew install git
-  elif [[ "$OSTYPE" == "linux-gnu"* && -x "$(which apt)" ]]; then
+  elif [[ "$OSTYPE" == "linux-gnu"* && -x "$(command -v apt)" ]]; then
     sudo apt install -y git
-  elif [[ "$OSTYPE" == "linux-gnu"* && -x "$(which pacman)" ]]; then
+  elif [[ "$OSTYPE" == "linux-gnu"* && -x "$(command -v pacman)" ]]; then
     sudo pacman --noconfirm -S git
   fi
 fi
@@ -38,7 +41,7 @@ if [[ ! -d "$HOME/.dotf" ]]; then
 fi
 
 # Ask for Java install..
-if [ ! -x "$(which java)" ]; then
+if [ ! -x "$(command -v java)" ]; then
   echo "Missing Java runtime environment!"
   echo
   echo "Installing default JRE"
