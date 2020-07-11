@@ -1,9 +1,13 @@
 - polybar:
     brew:
       ignore: true
+    apt:
+      snap: 'edge --devmode'
 - python-pip:
     brew:
       ignore: true
+    apt:
+      name: 'python3-pip'
 - jq:
     brew:
       ignore: true

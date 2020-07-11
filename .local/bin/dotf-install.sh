@@ -59,8 +59,6 @@ fi
 #source $HOME/.local/share/dotf/temp-exports.sh
 if [[ "$SHELL" == *"bash"* ]]; then
   echo 'export PATH="$HOME/.local/bin:$PATH"' >> $HOME/.bashrc
-  # Tip from Charles:
-  exec bash
   echo
   echo "Restart your shell to gain access to the 'dotf' command!"
   echo "- Run 'dotf -d upgrade' to see what will be installed prior to an actual upgrade."
