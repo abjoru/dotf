@@ -194,7 +194,7 @@ final case class Pkg(path: os.Path, data: JsonObject) {
 
   def isSnap: Boolean = snapChannel.nonEmpty
 
-  def snapChannel: Option[String] = field[String]("snap").map(_.split(" ").toList).getOrElse(List.empty)
+  def snapChannel: List[String] = field[String]("snap").map(_.split(" ").toList).getOrElse(List.empty)
 
   /** Tests if this pkg requires special instructions and cannot be batched. */
   def isSpecial: Boolean = preInstallScripts.nonEmpty || postInstallScripts.nonEmpty
