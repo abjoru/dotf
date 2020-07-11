@@ -14,9 +14,10 @@ settings:
   bindings.commands:
     global:
       normal:
-        xb: config-cycle statusbar.hide
+        xb: config-cycle statusbar.show always in-mode
         xt: config-cycle tabs.show always switching
-        xx: config-cycle statusbar.hide ;; config-cycle tabs.show always switching
+        xx: config-cycle statusbar.show always in-mode ;; config-cycle tabs.show always
+          switching
         zl: spawn --userscript qute-pass
         zpl: spawn --userscript qute-pass --password-only
         zul: spawn --userscript qute-pass --username-only
@@ -25,12 +26,12 @@ settings:
   downloads.location.directory:
     global: ~/Downloads
   statusbar.show:
-    global: never
+    global: in-mode
   tabs.show:
-    global: always
+    global: switching
   url.searchengines:
     global:
-      DEFAULT: https://duckduckgo.com/?q={}
+      DEFAULT: https://www.google.com/search?hl=en&q={}
       aw: https://wiki.archlinux.org/?search={}
       yt: https://www.youtube.com/results?search_query={}
   url.start_pages:

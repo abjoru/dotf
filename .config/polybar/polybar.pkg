@@ -1,6 +1,9 @@
 - polybar:
     brew:
       ignore: true
+- python-pip:
+    brew:
+      ignore: true
 - jq:
     brew:
       ignore: true

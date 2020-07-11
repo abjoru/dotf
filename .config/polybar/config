@@ -48,7 +48,7 @@ monitor = DP-7
 
 modules-left = powermenu xmonad
 modules-center = weather
-modules-right = cyberpunk gmail networkspeedup networkspeeddown arch-aur-updates usb date
+modules-right = networkspeedup networkspeeddown cyberpunk gmail arch-aur-updates usb date
 
 tray-position = right
 tray-detached = false
@@ -95,10 +95,10 @@ format-prefix-foreground = ${theme.purple}
 type = custom/script
 exec = ~/.config/polybar/scripts/cyberpunk.sh
 interval = 1000
-format-foreground = ${theme.yellow}
+format-foreground = ${theme.red}
 format-background = ${theme.background}
 format-prefix = "  "
-format-prefix-foreground = ${theme.yellow}
+format-prefix-foreground = ${theme.red}
 format-prefix-background = ${theme.background}
 
 ########################################################
@@ -226,10 +226,10 @@ label-font=6
 
 [module/gmail]
 type = custom/script
-exec = ~/.config/polybar/scripts/polybar-gmail-master/launch.py --prefix '✉' --color '${theme.green}' --nosound
+exec = ~/.config/polybar/scripts/polybar-gmail-master/launch.py --color '#98971a' --nosound
 tail = true
-;TODO switch this to open email client!
-click-left = xdg-open https://mail.google.com
+;click-left = xdg-open https://mail.google.com
+click-left = geary
 
 ########################################################
 
