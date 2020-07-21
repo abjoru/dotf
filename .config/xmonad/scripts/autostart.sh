@@ -9,21 +9,26 @@ function run {
 }
 
 # cursor active at boot
-xsetroot -cursor_name left_ptr &
+#xsetroot -cursor_name left_ptr &
+
+# starting user applications at boot
+#nitrogen --restore &
 
 # start conky for shortcut hints
 #(conky -c $HOME/.config/xmonad/scripts/system-overview) &
 
 # starting utility applications at boot 
-picom --config $HOME/.config/xmonad/scripts/picom.conf &
+run picom --config $HOME/.config/xmonad/scripts/picom.conf
 
 # Polybar
-$HOME/.config/polybar/launch.sh &
+#source $HOME/.config/polybar/launch.sh
 
-# starting user applications at boot
-nitrogen --restore &
+# Trayer
+#run trayer --edge top --align right --widthtype request --padding 6 --SetDockType true --SetPartialStrut true --expand true --monitor 1 --transparent true --alpha 0 --tint 0x292d3e --height 22
 
 # sys-tray apps
-volumeicon &
-[[ "$(command -v megasync)" ]] && megasync &
-[[ "$(command -v synology-drive)" ]] && synology-drive &
+#sleep 1
+#run streamdeck
+#run megasync
+#run volumeicon
+#run synology-drive

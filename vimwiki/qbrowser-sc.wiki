@@ -1,0 +1,7 @@
+= QuteBrowser =
+
+## Custom bindings
+
+* _zl_ : insert user/pass for domain
+* _zul_ : insert user info for domain
+* _zpl_ : insert password info for domain

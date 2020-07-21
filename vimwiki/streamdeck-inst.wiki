@@ -1,0 +1,39 @@
+## StreamDeck Arch Installation
+
+### Install Dependencies
+
+```sh
+sudo pacman -S hidapi systemd-libs libusb
+sudo groupadd plugdev
+usermod -aG plugdev `whoami`
+```
+
+### Add rules
+
+```sh
+sudo nvim /etc/udev/rules.d/99-streamdeck.rules
+```
+
+Add the following contents to the file:
+
+```sh
+SUBSYSTEM=="usb", ATTRS{idVendor}=="0fd9", ATTRS{idProduct}=="0060", MODE:="666", GROUP="plugdev"
+SUBSYSTEM=="usb", ATTRS{idVendor}=="0fd9", ATTRS{idProduct}=="0063", MODE:="666", GROUP="plugdev"
+SUBSYSTEM=="usb", ATTRS{idVendor}=="0fd9", ATTRS{idProduct}=="006c", MODE:="666", GROUP="plugdev"
+SUBSYSTEM=="usb", ATTRS{idVendor}=="0fd9", ATTRS{idProduct}=="006d", MODE:="666", GROUP="plugdev"
+```
+
+Reload rules:
+
+```sh
+sudo udevadm control --reload-rules
+```
+
+*Make sure to unplug and replug your device before continuing!*
+
+### Installing StreamDeck UI
+
+```sh
+pip3 install --user streamdeck_ui
+streamdeck
+```

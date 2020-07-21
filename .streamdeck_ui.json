@@ -1,0 +1,132 @@
+{
+    "streamdeck_ui_version": 1,
+    "state": {
+        "AL41I2C01411": {
+            "buttons": {
+                "0": {
+                    "0": {
+                        "write": "",
+                        "icon": "/home/abjoru/Pictures/streamdeck/icons8-netflix-48.png",
+                        "command": "qutebrowser https://netflix.com",
+                        "text": ""
+                    },
+                    "1": {
+                        "command": "qutebrowser https://github.com/abjoru",
+                        "write": "",
+                        "icon": "/home/abjoru/Pictures/streamdeck/pngwave.png"
+                    },
+                    "2": {
+                        "command": "qutebrowser http://10.0.0.88:8989",
+                        "write": "",
+                        "icon": "/home/abjoru/Pictures/streamdeck/ef4553fe96f04a298ec502279731579698e96a9b.png"
+                    },
+                    "3": {
+                        "command": "geary",
+                        "write": "",
+                        "icon": "/home/abjoru/Pictures/streamdeck/icons8-email-open-64.png"
+                    },
+                    "4": {},
+                    "5": {
+                        "command": "qutebrowser https://youtube.com",
+                        "write": "",
+                        "icon": "/home/abjoru/Pictures/streamdeck/icons8-youtube-64.png"
+                    },
+                    "6": {
+                        "write": "",
+                        "icon": "/home/abjoru/Pictures/streamdeck/blender.png",
+                        "command": "blender"
+                    },
+                    "7": {
+                        "command": "thinkorswim",
+                        "write": "",
+                        "icon": "/home/abjoru/Pictures/streamdeck/thinkorswim2.png"
+                    },
+                    "8": {
+                        "write": "",
+                        "switch_page": 0,
+                        "text": "",
+                        "command": "prusa-slicer",
+                        "icon": "/home/abjoru/Pictures/streamdeck/prusa-slicer.png"
+                    },
+                    "9": {},
+                    "10": {},
+                    "11": {},
+                    "12": {},
+                    "13": {},
+                    "14": {
+                        "command": "",
+                        "write": "",
+                        "icon": "",
+                        "text": "Next",
+                        "switch_page": 1
+                    }
+                },
+                "1": {
+                    "0": {
+                        "write": ""
+                    },
+                    "1": {},
+                    "2": {},
+                    "3": {},
+                    "4": {},
+                    "5": {},
+                    "6": {},
+                    "7": {},
+                    "8": {},
+                    "9": {},
+                    "10": {},
+                    "11": {},
+                    "12": {},
+                    "13": {},
+                    "14": {}
+                }
+            },
+            "brightness": 99,
+            "page": 0
+        },
+        "": {
+            "buttons": {
+                "0": {
+                    "0": {
+                        "write": ""
+                    },
+                    "1": {},
+                    "2": {},
+                    "3": {},
+                    "4": {},
+                    "5": {},
+                    "6": {},
+                    "7": {},
+                    "8": {},
+                    "9": {},
+                    "10": {},
+                    "11": {},
+                    "12": {},
+                    "13": {},
+                    "14": {}
+                },
+                "1": {
+                    "0": {
+                        "write": ""
+                    },
+                    "1": {},
+                    "2": {},
+                    "3": {},
+                    "4": {},
+                    "5": {},
+                    "6": {},
+                    "7": {},
+                    "8": {},
+                    "9": {},
+                    "10": {},
+                    "11": {},
+                    "12": {},
+                    "13": {},
+                    "14": {}
+                }
+            },
+            "brightness": 99,
+            "page": 0
+        }
+    }
+}

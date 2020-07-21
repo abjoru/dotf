@@ -50,10 +50,6 @@ modules-left = powermenu xmonad
 modules-center = weather
 modules-right = networkspeedup networkspeeddown cyberpunk gmail arch-aur-updates usb date
 
-tray-position = right
-tray-detached = false
-tray-maxsize = 16
-tray-background = ${theme.background}
 
 [bar/m2]
 inherit = bar/base
@@ -62,17 +58,22 @@ modules-left = powermenu xmonad
 modules-center = stocks
 modules-right = cpu memory
 
+tray-position = right
+tray-detached = false
+tray-maxsize = 16
+tray-background = ${theme.background}
+
 [bar/m3]
 inherit = bar/base
 monitor = DP-1
-modules-left = powermenu xmonad
+modules-left = haskell-logo xmonad
 modules-center = weather
 ;modules-right = cpu memory
 
 [bar/m4]
 inherit = bar/base
 monitor = DP-3
-modules-left = powermenu xmonad
+modules-left = haskell-logo xmonad
 ;modules-right = cpu memory
 
 ######################
@@ -210,6 +211,14 @@ menu-0-0-exec = xmonad --recompile
 menu-0-1 = Restart
 menu-0-1-foreground = ${theme.orange}
 menu-0-1-exec = xmonad --restart
+
+########################################################
+
+[module/haskell-logo]
+type = custom/text
+content = "  "
+content-foreground = ${theme.orange}
+content-background = ${theme.background}
 
 ########################################################
 

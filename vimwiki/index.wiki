@@ -20,3 +20,7 @@
 == Work Stuff ==
 
   * [[aka-prod|Akamai Production Notes]]: Akamai production debugging notes
+
+== Install Notes ==
+
+  * [[streamdeck-inst|StreamDeck UI]]: Stream Deck Python UI
