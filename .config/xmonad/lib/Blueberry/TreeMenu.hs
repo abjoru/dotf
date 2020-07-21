@@ -27,19 +27,6 @@ nodeAccessories = Node (TS.TSNode "+ Accessories" "Accessory applications" (retu
   , Node (TS.TSNode "VirtualBox" "Oracle's virtualization program" (spawn "virtualbox")) []
   ]
 
--- TODO: Make this read from filesystem (i.e. games folder)
-nodeGames :: Tree (TS.TSNode (X ()))
-nodeGames = Node (TS.TSNode "+ Games" "fun and games" (return ()))
-  [ Node (TS.TSNode "Steam" "The Steam gaming platform" (spawn "steam")) []
-  , Node (TS.TSNode "Holiday Island" "RenPy Game" (spawn "~/Games/HolidayIsland-0.2.1.0-pc/HolidayIsland.sh")) []
-  , Node (TS.TSNode "Broken Dreamers" "RenPy Game" (spawn "~/Games/BrokenDreamers-0.7.0-pc/BrokenDreamers.sh")) []
-  , Node (TS.TSNode "Bad Memories" "RenPy Game" (spawn "~/Games/Bad-Memories-0.5.2-pc/Bad-Memories.sh")) []
-  , Node (TS.TSNode "Treasure of Nardia" "RenPy Game" (spawn "~/Games/Treasure-of-Nardia-v42072/launcher.sh")) []
-  , Node (TS.TSNode "False Hero" "RenPy Game" (spawn "~/Games/FalseHero-False_Hero_v0.25_RAW_BETA-pc/FalseHero.sh")) []
-  , Node (TS.TSNode "Time for You" "RenPy Game" (spawn "~/Games/TIME_FOR_YOU(0.10.0)-0.10.0-pc/TIME_FOR_YOU(0.10.0).sh")) []
-  , Node (TS.TSNode "What a Legend" "RenPy Game" (spawn "~/Games/What-a-Legend-0.2-pc/What-a-Legend.sh")) []
-  ]
-
 nodeGraphics :: Tree (TS.TSNode (X ()))
 nodeGraphics = Node (TS.TSNode "+ Graphics" "graphics programs" (return ()))
   [ Node (TS.TSNode "Gimp" "GNU image manipulation program" (spawn "gimp")) []
@@ -269,7 +256,6 @@ nodeXmonad = Node (TS.TSNode "+ XMonad" "window manager commands" (return ()))
 treeSelectAction :: TS.TSConfig (X ()) -> X ()
 treeSelectAction a = TS.treeselectAction a
   [ nodeAccessories
-  , nodeGames
   , nodeGraphics
   , nodeInternet
   , nodeMultimedia
