@@ -102,9 +102,9 @@ myLogHook = fadeInactiveLogHook fadeAmount
 main :: IO ()
 main = do
   xmproc0 <- spawnPipe "xmobar -x 0 /home/abjoru/.config/xmobar/xmobarrc0"
-  xmproc1 <- spawnPipe "xmobar -x 1 /home/abjoru/.config/xmobar/xmobarrc1"
-  xmproc2 <- spawnPipe "xmobar -x 2 /home/abjoru/.config/xmobar/xmobarrc2"
-  xmproc3 <- spawnPipe "xmobar -x 3 /home/abjoru/.config/xmobar/xmobarrc3"
+  --xmproc1 <- spawnPipe "xmobar -x 1 /home/abjoru/.config/xmobar/xmobarrc1"
+  --xmproc2 <- spawnPipe "xmobar -x 2 /home/abjoru/.config/xmobar/xmobarrc2"
+  --xmproc3 <- spawnPipe "xmobar -x 3 /home/abjoru/.config/xmobar/xmobarrc3"
   xmonad $ ewmh $ def
     { manageHook         = ( isFullscreen --> doFullFloat ) <+> myManageHook <+> manageDocks
     , handleEventHook 	 = serverModeEventHookCmd
@@ -120,7 +120,7 @@ main = do
     , normalBorderColor  = myNormColor
     , focusedBorderColor = myFocusColor
     , logHook            = workspaceHistoryHook <+> myLogHook <+> dynamicLogWithPP xmobarPP
-                            { ppOutput = \x -> hPutStrLn xmproc0 x >> hPutStrLn xmproc1 x >> hPutStrLn xmproc2 x >> hPutStrLn xmproc3 x
+                            { ppOutput = \x -> hPutStrLn xmproc0 x -- >> hPutStrLn xmproc1 x >> hPutStrLn xmproc2 x >> hPutStrLn xmproc3 x
                             , ppCurrent = xmobarColor pGreen0 "" . wrap "[" "]" -- Current workspace in xmobar
                             , ppVisible = xmobarColor pGreen1 ""                -- Visible but not current workspace
                             , ppHidden = xmobarColor pBlue0 "" . wrap "*" ""   -- Hidden workspaces in xmobar
