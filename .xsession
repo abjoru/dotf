@@ -33,7 +33,7 @@ nitrogen --restore &
 run volumeicon
 run synology-drive
 run megasync
-run streamdeck
+#run streamdeck # moved to xmonad autostart
 run telegram-desktop
 
 # Exec WM

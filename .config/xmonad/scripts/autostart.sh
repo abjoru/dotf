@@ -27,8 +27,8 @@ run picom --config $HOME/.config/xmonad/scripts/picom.conf
 #run trayer --edge top --align right --widthtype request --padding 6 --SetDockType true --SetPartialStrut true --expand true --monitor 1 --transparent true --alpha 0 --tint 0x292d3e --height 22
 
 # sys-tray apps
-#sleep 1
-#run streamdeck
+sleep 1
+run streamdeck
 #run megasync
 #run volumeicon
 #run synology-drive

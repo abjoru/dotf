@@ -16,7 +16,7 @@ Config { font    = "xft:Mononoki Nerd Font:pixelsize=12:antialias=true:hinting=t
                       -- Time and date
                       Run Date "\xf133 %b %d %Y (%H:%M)" "date" 50
 		      -- Get CyberPunk 2077 release countdown
-		    , Run Com "/home/abjoru/.config/xmobar/cyberpunk.sh" [] "cpunk" 36000
+		    , Run Com "/home/abjoru/.config/xmobar/scripts/cyberpunk.sh" [] "cpunk" 36000
                       -- Runs a standard shell command 'uname -r' to get kernel version
                     , Run Com "uname" ["-r"] "" 36000
                       -- Prints out the left side items such as workspaces, layout, etc.
