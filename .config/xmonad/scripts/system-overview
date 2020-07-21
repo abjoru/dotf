@@ -120,7 +120,7 @@ ${else}${cpu cpu0}${endif}${endif}%${alignr}${freq_g}${color}
 ${color1}${alignc}S H O R T C U T    K E Y S${color}
 ${color1}${hr}${color}
 ${color1}[S]+[Shift]+Enter${alignr}${color2}Launch Menu${color}
-${color1}[S]+g+a${alignr}${color2}Grid Menu${color}
+${color1}[Ctrl]+g+a${alignr}${color2}Grid Menu${color}
 ${color1}[Ctrl]+t+t${alignr}${color2}Tree Menu${color}
 ${color1}${hr}${color}
 ${color1}[S]+Enter${alignr}${color2}Terminal${color}
