@@ -1,7 +1,5 @@
 import com.scalapenos.sbt.prompt._
 import sbt._
-import complete.Parser
-import complete.DefaultParsers._
 
 import java.io.File
 
@@ -14,15 +12,13 @@ cleanIvy2 := {
   val log = streams.value.log
   val orgName = Keys.organization.value
   val moduleName = Keys.moduleName.value
-  val ivyHome = Option(System.getProperty("sbt.ivy.home"))
+  val ivyHome = Option(System.getProperty("sbt.ivy.home")).map(new File(_))
+  val localDir = ivyHome.map(new File(_, "local"))
+  val cacheDir = ivyHome.map(new File(_, "cache"))
 
   val files = for {
-    base <- ivyHome
-    baseDir = new File(base)
-    localPath = new File(baseDir, "local")
-    cachePath = new File(baseDir, "cache")
-    localFiles = (localPath ** ("*" + orgName + "*") ** ("*" + moduleName + "*")).get
-    cacheFiles = (cachePath ** ("*" + orgName + "*") ** ("*" + moduleName + "*")).get
+    localFiles <- localDir.map(d => (d ** ("*" + orgName + "*") ** ("*" + moduleName + "*")).get)
+    cacheFiles <- cacheDir.map(d => (d ** ("*" + orgName + "*") ** ("*" + moduleName + "*")).get)
   } yield localFiles ++ cacheFiles
 
   files match {
