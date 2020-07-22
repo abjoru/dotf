@@ -1,6 +1,7 @@
 module Blueberry.TreeMenu where
 
 import Blueberry.Variables
+import Blueberry.Utils
 
 import Data.Tree
 import System.Exit (exitSuccess)
@@ -253,22 +254,33 @@ nodeXmonad = Node (TS.TSNode "+ XMonad" "window manager commands" (return ()))
   , Node (TS.TSNode "Quit" "Restart XMonad" (io exitSuccess)) []
   ]
 
+nodeSeparator :: Tree (TS.TSNode (X ()))
+nodeSeparator = Node (TS.TSNode "------------------------" "" (spawn "xdotool key Escape")) []
+
+ioNodeGames :: IO (Tree (TS.TSNode (X ())))
+ioNodeGames = do
+  games <- listGames myGamesFolder
+  let ch = map (\(a,b) -> Node (TS.TSNode a "" (spawn b)) []) games
+  return $ Node (TS.TSNode "+ Games" "Local Games" (return ())) ch
+
 treeSelectAction :: TS.TSConfig (X ()) -> X ()
-treeSelectAction a = TS.treeselectAction a
-  [ nodeAccessories
-  , nodeGraphics
-  , nodeInternet
-  , nodeMultimedia
-  , nodeOffice
-  , nodeProgramming
-  , nodeSystem
-  , Node (TS.TSNode "------------------------" "" (spawn "xdotool key Escape")) []
-  , nodeBookmarks
-  , nodeConfigs
-  , nodeScreenshot
-  , Node (TS.TSNode "------------------------" "" (spawn "xdotool key Escape")) []
-  , nodeXmonad
-  ]
+treeSelectAction a = do
+  nodeGames <- io ioNodeGames
+  TS.treeselectAction a [ nodeAccessories
+                        , nodeGames
+                        , nodeGraphics
+                        , nodeInternet
+                        , nodeMultimedia
+                        , nodeOffice
+                        , nodeProgramming
+                        , nodeSystem
+                        , nodeSeparator
+                        , nodeBookmarks
+                        , nodeConfigs
+                        , nodeScreenshot
+                        , nodeSeparator
+                        , nodeXmonad
+                        ]
 
 -- Configuration options for treeSelect
 tsDefaultConfig :: TS.TSConfig a

@@ -39,6 +39,9 @@ myNormColor = pBG0
 myFocusColor :: [Char]
 myFocusColor = pFG1
 
+myGamesFolder :: [Char]
+myGamesFolder = "/home/abjoru/Games"
+
 -- setting this for use in xprompts
 altMask :: KeyMask
 altMask = mod1Mask

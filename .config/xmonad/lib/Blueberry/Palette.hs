@@ -81,3 +81,6 @@ pOrange0 = "#d65d0e"
 
 pOrange1 :: [Char]
 pOrange1 = "#fe8019"
+
+toPixel :: [Char] -> [Char]
+toPixel xs = "0xff" ++ tail xs
