@@ -56,6 +56,9 @@
   },{
     "name": "CNET",
     "link": "https://www.cnet.com/news/"
+  },{
+    "name": "Learn you a Haskell",
+    "link": "http://learnyouahaskell.com/chapters"
   }]
 },{
   "group": "3D Print",
