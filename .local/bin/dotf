@@ -29,6 +29,7 @@ displayUsageAndExit() {
   echo "  list [<action>] 	list managed files"
   echo "  update           	update managed files"
   echo "  upgrade           	upgrade managed packages and settings"
+  echo "  sync <branch>         sync current branch with some other branch using no fastforward and no commit"
   echo "  homepage 		build/re-build homepage"
   echo "  * 			delegates to git commands"
   echo
@@ -110,6 +111,16 @@ runUpgrade() {
   exit
 }
 
+runSync() {
+  # TODO verify that source/target branch is not the same!
+  if [ "$1" == "dry" ]; then
+    echo "dotf merge --no-ff --no-commit $2"
+  else
+    dotfConfig merge --no-ff --no-commit "$2"
+  fi
+  exit
+}
+
 runOsInstall() {
   # Run os installs if not already done..
   if [ ! -d "${XDG_CACHE_HOME:-$HOME/.cache}/dotf/.locked" ]; then
@@ -150,6 +161,7 @@ case $1 in
   list) runList "$2" ;;
   update) runUpdate "$MODE" "$VERBOSE" ;;
   upgrade) runUpgrade "$MODE" "$VERBOSE" ;;
+  sync) runSync "$MODE" "$2" ;;
   homepage) buildHomepage ;;
   *) dotfConfig $@ ;;
 esac
