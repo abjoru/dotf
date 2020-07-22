@@ -8,6 +8,34 @@
 
 == Git Stuff ==
 
+## Dotf sync
+
+Start sync process (i.e. sync'ing blueberry branch with master) with:
+```sh
+$ dotf sync master
+$ dotf status
+# On branch blueberry
+# Changes to be committed:
+#
+#       modified:   file1
+#       modified:   file2
+#       modified:   file3
+# Unmerged paths:
+#   (use "git add/rm <file>..." as appropriate to mark resolution)
+#
+#       both modified:      file4
+#
+```
+
+To view changes that was automatically merged:
+```sh
+$ dotf diff --cached file1
+...
+$ dotf checkout HEAD file1      # to keep the original file
+$ dotf checkout master file1    # to replace with master copy
+```
+Otherwise, modify the merged file and stage for commit. This also applies to any conflicts.
+
 ## Cherry Pickin'
 
 - From branch named 'a'

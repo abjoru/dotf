@@ -121,7 +121,6 @@ myKeys =
 
   -- Open My Preffered Terminal.
   , ("M-<Return>", spawn myTerminal)
-  , ("M1-<Return>", spawn myTerminal)
 
   -- My Applications (Super+Alt+Key)
   , ("M-M1-a", spawn (myTerminal ++ " -e ncpamixer"))
