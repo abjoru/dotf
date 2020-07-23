@@ -57,15 +57,15 @@ if [ ! -x "$(command -v java)" ]; then
 fi
 
 # Ask for git global configs if not set
-if [ -z "$(git config --global get user.name)" ]; then
+if [ -z "$(git config --global --get user.name)" ]; then
   echo
   read -p "[GIT] What is your full name: " username
-  git config --global set user.name "$username"
+  git config --global user.name "$username"
 fi
-if [ -z "$(git config --global get user.email)" ]; then
+if [ -z "$(git config --global --get user.email)" ]; then
   echo
   read -p "[GIT] What is your email: " useremail
-  git config --global set user.email "$useremail"
+  git config --global user.email "$useremail"
 fi
 
 # Set path so that we can use 'dotf'
