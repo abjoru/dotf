@@ -17,6 +17,16 @@ if [ ! -x "$(command -v git)" ]; then
   elif [[ "$OSTYPE" == "linux-gnu"* && -x "$(command -v pacman)" ]]; then
     sudo pacman --noconfirm -S git
   fi
+
+  # Configure git globals
+  echo 
+  echo "Let's configure some GIT globals.."
+  echo 
+  read -p "Set git user.name: " username
+  read -p "Set git user.email: " useremail
+
+  git config --global user.name "$username"
+  git config --global user.email "$useremail"
 fi
 
 function config {
