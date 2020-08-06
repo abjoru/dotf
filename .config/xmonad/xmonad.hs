@@ -1,9 +1,4 @@
--- The xmonad configuration
-
-------------------------------------------------------------------------
--- IMPORTS
-------------------------------------------------------------------------
-
+  -- Blueberry modules
 import Blueberry.Palette
 import Blueberry.Variables
 import Blueberry.Prompts
@@ -41,20 +36,11 @@ import XMonad.Util.SpawnOnce
 myStartupHook :: X ()
 myStartupHook = do
   spawnOnce "$HOME/.config/xmonad/scripts/autostart.sh"
-  setWMName "LG3D"
+  setWMName "XBlueberry"
 
 ------------------------------------------------------------------------
 -- WORKSPACES
 ------------------------------------------------------------------------
--- My workspaces are clickable meaning that the mouse can be used to 
--- switch workspaces. This requires xdotool.
-
-xmobarEscape :: [Char] -> [Char]
-xmobarEscape = concatMap doubleLts
-  where
-    doubleLts '<' = "<<"
-    doubleLts x   = [x]
-
 myWorkspaces :: [String]
 myWorkspaces = ["dev", "www", "sys", "doc", "vbox", "chat", "mus", "vid", "gfx"]
 
@@ -66,7 +52,6 @@ myWorkspaces = ["dev", "www", "sys", "doc", "vbox", "chat", "mus", "vid", "gfx"]
 -- Forcing programs to a certain workspace with a doShift requires xdotool
 -- if you are using clickable workspaces. You need the className or title
 -- of the program. Use xprop to get this info.
-
 myManageHook :: XMonad.Query (Data.Monoid.Endo WindowSet)
 myManageHook = composeAll . concat $
   [ [isDialog --> doCenterFloat]
@@ -93,8 +78,7 @@ myManageHook = composeAll . concat $
 -- LOGHOOK
 ------------------------------------------------------------------------
 myLogHook :: X ()
-myLogHook = fadeInactiveLogHook fadeAmount
-  where fadeAmount = 0.9
+myLogHook = fadeInactiveLogHook 0.9
 
 ------------------------------------------------------------------------
 -- MAIN

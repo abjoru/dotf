@@ -53,6 +53,7 @@ nodeGraphics = Node (TS.TSNode "+ Graphics" "graphics programs" (return ()))
 nodeInternet :: Tree (TS.TSNode (X ()))
 nodeInternet = Node (TS.TSNode "+ Internet" "internet and web programs" (return ())) 
   [ Node (TS.TSNode "QuteBrowser" "Minimal web browser" (spawn "qutebrowser")) []
+  , Node (TS.TSNode "Brave" "The privacy browser" (spawn "brave")) []
   , Node (TS.TSNode "Discord" "Chat and video chat platform" (spawn "discord")) []
   , Node (TS.TSNode "FileZilla" "An FTP client" (spawn "filezilla")) []
   , Node (TS.TSNode "Firefox" "Open source web browser" (spawn "firefox")) []
@@ -62,6 +63,7 @@ nodeInternet = Node (TS.TSNode "+ Internet" "internet and web programs" (return 
 nodeMultimedia :: Tree (TS.TSNode (X ()))
 nodeMultimedia = Node (TS.TSNode "+ Multimedia" "sound and video applications" (return ()))
   [ Node (TS.TSNode "Alsa Mixer" "Alsa volume control utility" (spawn (myTerminal ++ " -e alsamixer"))) []
+  , Node (TS.TSNode "Plex" "Plex Media Player" (spawn "plexmediaplayer")) []
   , Node (TS.TSNode "Audacity" "Graphical audio editing program" (spawn "audacity")) []
   , Node (TS.TSNode "Deadbeef" "Lightweight music player" (spawn "deadbeef")) []
   , Node (TS.TSNode "EMMS" "Emacs multimedia player" (spawn "xxx")) []

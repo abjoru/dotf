@@ -22,7 +22,7 @@ sanitizeName ('-':xs)   = ' ' : sanitizeName xs
 sanitizeName ('_':xs)   = ' ' : sanitizeName xs
 sanitizeName ('"':xs)   = sanitizeName xs
 sanitizeName (x:xs)     = x : sanitizeName xs
-sanitizeName ""         = ""
+sanitizeName []         = ""
 
 -- Attempt to extract game launcher script from contents
 maybeLauncher :: [FilePath] -> Maybe FilePath
@@ -35,19 +35,26 @@ mkEntry a Nothing = Nothing
 
 -- Convert game folder into a pair (name, launcher)
 processGame :: FilePath -> IO (Maybe (String, FilePath))
-processGame p = do
-  contents <- listAbsDir p
-  let a = maybeLauncher contents
-      b = mkEntry p a
-  return b
+processGame p = mkEntry p <$> maybeLauncher <$> listAbsDir p
 
--- List games in the given directory
+-- List games in the given directory if it exists
+-- TODO filter out subfolders only
 listGames :: FilePath -> IO [(String, FilePath)]
 listGames p = do
-  files <- listAbsDir p
-  maybeGames <- sequence $ map processGame files
-  return $ catMaybes maybeGames
+  exists <- doesDirectoryExist p
+  if exists
+    then do
+      files <- listSubDirs p
+      maybeGames <- sequence $ map processGame files
+      return $ catMaybes maybeGames
+    else return []
 
 -- List directory contents as absolute paths
 listAbsDir :: FilePath -> IO [FilePath]
 listAbsDir d = listDirectory d >>= mapM (canonicalizePath . (d </>))
+
+-- List all sub-directories in some parent dir
+listSubDirs :: FilePath -> IO [FilePath]
+listSubDirs d = do
+  cx <- listAbsDir d
+  filterM (doesDirectoryExist . (d </>)) cx

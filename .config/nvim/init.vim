@@ -47,7 +47,6 @@ set splitbelow
 set splitright
 
 " Column Limits
-" highlight ColorColumn ctermbg=DarkGray
 highlight ColorColumn ctermbg=Black
 set colorcolumn=121
 
@@ -56,6 +55,7 @@ au BufRead,BufNewFile *.sbt set filetype=scala
 
 autocmd FileType json syntax match Comment +\/\/.\+$+
 
+" Plugin Configuration
 source ~/.config/nvim/nerdtree.vim
 source ~/.config/nvim/airline.vim
 source ~/.config/nvim/coc-metals.vim
