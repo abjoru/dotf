@@ -6,9 +6,6 @@
 # https://www.atlassian.com/git/tutorials/dotfiles
 
 # Grab GIT if we need to..
-
-
-
 if [ ! -x "$(command -v git)" ]; then
   if [[ "$OSTYPE" == "darwin"* ]]; then
     brew install git
@@ -18,10 +15,6 @@ if [ ! -x "$(command -v git)" ]; then
     sudo pacman --noconfirm -S git
   fi
 fi
-
-function config {
-  $(which git) --git-dir=$HOME/.dotf/ --work-tree=$HOME $@
-}
 
 # Ask for git global username if not set
 if [ -z "$(git config --global --get user.name)" ]; then
@@ -37,6 +30,11 @@ if [ -z "$(git config --global --get user.email)" ]; then
   git config --global user.email "$useremail"
 fi
 
+function config {
+  $(which git) --git-dir=$HOME/.dotf/ --work-tree=$HOME $@
+}
+
+# Clone dotfiles
 if [[ ! -d "$HOME/.dotf" ]]; then
   git clone --bare https://github.com/abjoru/dotf.git $HOME/.dotf
 
