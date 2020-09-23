@@ -3,6 +3,7 @@
 == Cheat-Sheets ==
 
   * [[neovim-sc|NeoVim Cheat-sheets]]: NeoVim cheat sheets for various commands
+  * [[metals-sc|Metals Cheat-sheets]]: Scala Metals cheat sheets
   * [[fzf-sc|FZF Cheat-sheets]]: FZF fuzzy finder cheat-sheet
   * [[qbrowser-sc|QuteBrowser]]: QuteBrowser cheat sheet
 

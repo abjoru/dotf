@@ -1,0 +1,9 @@
+= Scala Metals Cheat Sheets =
+
+- *<Shift+k>*           :: Type Definition (either doHover or show documentation in preview window)
+- *<gd>*                :: Goto definition
+- *<gy>*                :: Goto type definition
+- *<gi>*                :: Goto implementation
+- *<gr>*                :: Goto reference
+- *<\ rn>*              :: Rename current word
+- *<\ qf>*              :: Quick fix
