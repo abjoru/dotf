@@ -34,7 +34,7 @@ run volumeicon
 run synology-drive
 run megasync
 #run streamdeck # moved to xmonad autostart
-run telegram-desktop
+#run telegram-desktop
 
 # Exec WM
 exec xmonad
