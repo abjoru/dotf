@@ -6,9 +6,6 @@
 # https://www.atlassian.com/git/tutorials/dotfiles
 
 # Grab GIT if we need to..
-
-
-
 if [ ! -x "$(command -v git)" ]; then
   if [[ "$OSTYPE" == "darwin"* ]]; then
     brew install git
@@ -19,10 +16,25 @@ if [ ! -x "$(command -v git)" ]; then
   fi
 fi
 
+# Ask for git global username if not set
+if [ -z "$(git config --global --get user.name)" ]; then
+  echo
+  read -p "[GIT] What is your full name: " username
+  git config --global user.name "$username"
+fi
+
+# Ask for git global email if not set
+if [ -z "$(git config --global --get user.email)" ]; then
+  echo
+  read -p "[GIT] What is your email: " useremail
+  git config --global user.email "$useremail"
+fi
+
 function config {
   $(which git) --git-dir=$HOME/.dotf/ --work-tree=$HOME $@
 }
 
+# Clone dotfiles
 if [[ ! -d "$HOME/.dotf" ]]; then
   git clone --bare https://github.com/abjoru/dotf.git $HOME/.dotf
 
@@ -55,6 +67,8 @@ if [ ! -x "$(command -v java)" ]; then
     sudo pacman --noconfirm -S jre-openjdk
   fi
 fi
+
+
 
 # Set path so that we can use 'dotf'
 #source $HOME/.local/share/dotf/temp-exports.sh
