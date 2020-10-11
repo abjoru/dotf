@@ -4,7 +4,6 @@ set nocompatible
 
 " Configuration for vim-plug
 call plug#begin('~/.cache/nvim/plugged')
-Plug 'derekwyatt/vim-scala'
 Plug 'neoclide/coc.nvim', {'branch': 'release'}
 Plug 'scrooloose/nerdtree'
 Plug 'preservim/nerdcommenter'
@@ -82,7 +81,7 @@ vnoremap <leader>P "+P
 
 " Fuzzy search
 set wildmenu
-set wildignore+=*/tmp/*,*.so,*.swp,*.zip,*.class,*/target/*,*/target,*/out
+set wildignore+=*/tmp/*,*.so,*.swp,*.zip,*.class,*.hi,*.o,*/target/*,*/target,*/out
 
 " --column: Show column number
 " --line-number: Show line number

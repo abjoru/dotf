@@ -78,7 +78,7 @@ myManageHook = composeAll . concat $
 -- LOGHOOK
 ------------------------------------------------------------------------
 myLogHook :: X ()
-myLogHook = fadeInactiveLogHook 0.95
+myLogHook = fadeInactiveLogHook 1 --0.95
 
 ------------------------------------------------------------------------
 -- MAIN
