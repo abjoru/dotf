@@ -1,5 +1,8 @@
 # Personal Wiki
 
+  * Open vim-wiki with <leader>+ww
+  * Goto topic with <enter> on top of topic
+
 == Cheat-Sheets ==
 
   * [[neovim-sc|NeoVim Cheat-sheets]]: NeoVim cheat sheets for various commands

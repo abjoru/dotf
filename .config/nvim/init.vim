@@ -4,7 +4,6 @@ set nocompatible
 
 " Configuration for vim-plug
 call plug#begin('~/.cache/nvim/plugged')
-Plug 'derekwyatt/vim-scala'
 Plug 'neoclide/coc.nvim', {'branch': 'release'}
 Plug 'scrooloose/nerdtree'
 Plug 'preservim/nerdcommenter'
@@ -98,6 +97,9 @@ command! -bang -nargs=* Find
   \ call fzf#run(fzf#wrap({'source': 'rg --files --hidden --glob "!{.git/*}"', 'down': '40%', 'options': '--expect=ctrl-t,ctrl-x,ctrl-v --multi --reverse'}))
 
 nnoremap <silent> <leader>o :Find<CR>
+nnoremap <silent> <leader>b :Buffers<CR>
+nnoremap <silent> <leader>l :BLines<CR>
+nnoremap <silent> <F1> :Helptags<CR>
 
 command! -bang -nargs=* Rg
   \ call fzf#vim#grep(
