@@ -10,6 +10,13 @@
   * [[fzf-sc|FZF Cheat-sheets]]: FZF fuzzy finder cheat-sheet
   * [[qbrowser-sc|QuteBrowser]]: QuteBrowser cheat sheet
 
+== Todos ==
+
+  * Add *vim-leader-guide* plugin/config
+  * Add *startify* plugin/config
+  * Make terminal toggeable (i.e <F3> toggles show/hide)
+  * Add full *fzf* functionality to *zsh*
+
 == Git Stuff ==
 
 ## Dotf sync
