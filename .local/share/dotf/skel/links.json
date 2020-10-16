@@ -2,6 +2,9 @@
   "group": "Home",
   "hostFilter": "^((?!fll).)*$",
   "links": [{
+    "name": "Unifi Controller",
+    "link": "http://unifi.ui.com"
+  },{
     "name": "OpenMediaVault",
     "link": "http://10.0.0.88/"
   },{
@@ -74,6 +77,9 @@
   },{
     "name": "Cults3d",
     "link": "http://cults3d.com"
+  },{
+    "name": "RenderHub",
+    "link": "http://renderhub.com"
   }]
 },{
   "group": "Shopping",

@@ -46,7 +46,6 @@ set splitbelow
 set splitright
 
 " Column Limits
-" highlight ColorColumn ctermbg=DarkGray
 highlight ColorColumn ctermbg=Black
 set colorcolumn=121
 
@@ -55,6 +54,7 @@ au BufRead,BufNewFile *.sbt set filetype=scala
 
 autocmd FileType json syntax match Comment +\/\/.\+$+
 
+" Plugin Configuration
 source ~/.config/nvim/nerdtree.vim
 source ~/.config/nvim/airline.vim
 source ~/.config/nvim/coc-metals.vim
@@ -81,7 +81,7 @@ vnoremap <leader>P "+P
 
 " Fuzzy search
 set wildmenu
-set wildignore+=*/tmp/*,*.so,*.swp,*.zip,*.class,*/target/*,*/target,*/out
+set wildignore+=*/tmp/*,*.so,*.swp,*.zip,*.class,*.hi,*.o,*/target/*,*/target,*/out
 
 " --column: Show column number
 " --line-number: Show line number

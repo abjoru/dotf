@@ -2,6 +2,7 @@
 # https://github.com/halfo/lambda-mod-zsh-theme
 autoload -U colors && colors
 
+local VIMODE="%{$fg_bold[green]%}--INSERT--"
 local LAMBDA="%(?,%{$fg_bold[green]%}λ,%{$fg_bold[red]%}λ)"
 if [[ "$USER" == "root" ]]; then USERCOLOR="red"; else USERCOLOR="yellow"; fi
 
@@ -24,10 +25,19 @@ function check_git_prompt_info() {
 
 function get_right_prompt() {
   if git rev-parse --git-dir > /dev/null 2>&1; then
-    echo -n "$(git_prompt_short_sha)%{$reset_color%}"
+    echo -n "$(git_prompt_short_sha) $VIMODE%{$reset_color%}"
   else
-    echo -n "%{$reset_color%}"
+    echo -n "$VIMODE%{$reset_color%}"
   fi
+}
+
+function zle-keymap-select() {
+  case $KEYMAP in
+    vicmd)      VIMODE="%{$fg_bold[yellow]%}--NORMAL--";;
+    viins|main) VIMODE="%{$fg_bold[green]%}--INSERT--";;
+    *)          VIMODE="%{$fg_bold[green]%}--INSERT--";;
+  esac
+  zle reset-prompt
 }
 
 PROMPT='
@@ -59,3 +69,6 @@ ZSH_THEME_GIT_PROMPT_AHEAD=" %{$fg_bold[white]%}^"
 # Format for git_prompt_long_sha() and git_prompt_short_sha()
 ZSH_THEME_GIT_PROMPT_SHA_BEFORE=" %{$fg_bold[white]%}[%{$fg_bold[blue]%}"
 ZSH_THEME_GIT_PROMPT_SHA_AFTER="%{$fg_bold[white]%}]"
+
+# Not sure we need these
+zle -N zle-keymap-select

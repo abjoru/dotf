@@ -37,59 +37,59 @@ mySpacing :: Integer -> l a -> XMonad.Layout.LayoutModifier.ModifiedLayout Spaci
 mySpacing i = spacingRaw False (Border i i i i) True (Border i i i i) True
 mySpacing' i = spacingRaw True (Border i i i i) True (Border i i i i) True
 
-tall            = renamed [Replace "tall"]
-                  $ limitWindows 12
-                  $ mySpacing 6
-                  $ ResizableTall 1 (3/100) (1/2) []
+tall     = renamed [Replace "tall"]
+           $ limitWindows 12
+           $ mySpacing 6
+           $ ResizableTall 1 (3/100) (1/2) []
 
-magnify         = renamed [Replace "magnify"]
-                  $ magnifier
-                  $ limitWindows 12
-                  $ mySpacing 6
-                  $ ResizableTall 1 (3/100) (1/2) []
+magnify  = renamed [Replace "magnify"]
+           $ magnifier
+           $ limitWindows 12
+           $ mySpacing 6
+           $ ResizableTall 1 (3/100) (1/2) []
 
-monocle         = renamed [Replace "monocle"]
-                  $ limitWindows 20
-                  $ Full
+monocle  = renamed [Replace "monocle"]
+           $ limitWindows 20
+           $ Full
 
-floats          = renamed [Replace "floats"]
-                  $ limitWindows 20
-                  $ simplestFloat
+floats   = renamed [Replace "floats"]
+           $ limitWindows 20
+           $ simplestFloat
 
-grid            = renamed [Replace "grid"]
-                  $ limitWindows 12
-                  $ mySpacing 6
-                  $ mkToggle (single MIRROR)
-                  $ Grid (16/10)
+grid     = renamed [Replace "grid"]
+           $ limitWindows 12
+           $ mySpacing 6
+           $ mkToggle (single MIRROR)
+           $ Grid (16/10)
 
-spirals         = renamed [Replace "spirals"]
-                  $ mySpacing' 6
-                  $ spiral (6/7)
+spirals  = renamed [Replace "spirals"]
+           $ mySpacing' 6
+           $ spiral (6/7)
 
-threeCol        = renamed [Replace "threeCol"]
-                  $ limitWindows 7
-                  $ mySpacing' 4
-                  $ ThreeCol 1 (3/100) (1/2)
+threeCol = renamed [Replace "threeCol"]
+           $ limitWindows 7
+           $ mySpacing' 4
+           $ ThreeCol 1 (3/100) (1/2)
 
-threeRow        = renamed [Replace "threeRow"]
-                  $ limitWindows 7
-                  $ mySpacing' 4
-                  -- Mirror takes a layout and rotates it by 90 degrees.
-                  -- So we are applying Mirror to the ThreeCol layout.
-                  $ Mirror
-                  $ ThreeCol 1 (3/100) (1/2)
-tabs            = renamed [Replace "tabs"]
-                  -- I cannot add spacing to this layout because it will
-                  -- add spacing between window and tabs which looks bad
-                  $ tabbed shrinkText myTabConfig
-                  where myTabConfig = def { fontName            = "xft:Mononoki Nerd Font:regular:pixelsize=11"
-                                          , activeColor         = pBlue0
-                                          , inactiveColor       = pBG3
-                                          , activeBorderColor   = pBlue0
-                                          , inactiveBorderColor = pBlue0
-                                          , activeTextColor     = pFG0
-                                          , inactiveTextColor   = pGray0
-                                          }
+threeRow = renamed [Replace "threeRow"]
+           $ limitWindows 7
+           $ mySpacing' 4
+           -- Mirror takes a layout and rotates it by 90 degrees.
+           -- So we are applying Mirror to the ThreeCol layout.
+           $ Mirror
+           $ ThreeCol 1 (3/100) (1/2)
+tabs     = renamed [Replace "tabs"]
+           -- I cannot add spacing to this layout because it will
+           -- add spacing between window and tabs which looks bad
+           $ tabbed shrinkText myTabConfig
+           where myTabConfig = def { fontName            = "xft:Mononoki Nerd Font:regular:pixelsize=11"
+                                   , activeColor         = pBlue0
+                                   , inactiveColor       = pBG3
+                                   , activeBorderColor   = pBlue0
+                                   , inactiveBorderColor = pBlue0
+                                   , activeTextColor     = pFG0
+                                   , inactiveTextColor   = pGray0
+                                   }
 
 -- Theme for showWName which prints current workspace when you change workspaces.
 myShowWNameTheme :: SWNConfig

@@ -6,7 +6,9 @@ c.aliases = {
     'w': 'session-save',
     'wq': 'quit --save',
     'x': 'quit',
-    'h': 'help'
+    'h': 'help',
+    'r': 'reload',
+    'h': 'home'
 }
 
 c.downloads.location.directory = '~/Downloads'

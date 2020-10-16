@@ -72,18 +72,18 @@ object Builder {
   def genHomepage(): Unit = {
     val header = readString(skelDir/"head.html")
     val footer = readString(skelDir/"tail.html")
-
-    val links = groups.foldLeft("") {
-      case (acc, grp) =>
-        val links = grp.links.map(l => s"""<a class="bookmark" href="${l.link}" target="_blank">${l.name}</a>""")
-        val pre = s"""<div class="bookmark-set">\n<div class="bookmark-title">${grp.group}</div>\n<div class="bookmark-inner-container">"""
-        val post = "</div>\n</div>\n"
-
-        acc ++ pre ++ links.mkString("\n", "\n", "\n") ++ post
-    }
+    val links = groups.foldLeft("")(genLinks)
 
     writeFile(targetDir/"homepage.html", header ++ "\n" ++ links ++ footer)
     writeFile(targetDir/"homepage.css", readString(skelDir/"homepage.css"))
+  }
+
+  private def genLinks(s: String, g: Group): String = {
+    val links = g.links.map(l => s"""<a class="bookmark" href="${l.link}" target="_blank">${l.name}</a>""")
+    val pre = s"""<div class="bookmark-set">\n<div class="bookmark-title">${g.group}</div>\n<div class="bookmark-inner-container">"""
+    val post = "</div>\n</div>\n"
+
+    s ++ pre ++ links.mkString("\n", "\n", "\n") ++ post
   }
 
 }

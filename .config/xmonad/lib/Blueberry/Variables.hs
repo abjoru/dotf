@@ -85,7 +85,7 @@ searchList = [ ("a", searchArchwiki)
 -- two values in each list
 myApplications :: [(String, String, String)]
 myApplications = [ ("QuteBrowser", "qutebrowser", "Simple VIM-like web browser")
-                 , ("Firefox", "firefox", "The famous open source web browser")
+                 , ("Brave", "brave", "The privacy centered brave web browser")
                  , ("PCManFM", "pcmanfm", "Lightweight graphical file manager")
                  , ("ThinkOrSwim", "thinkorswim", "TD Ameritrade platform")
                  , ("Steam", "steam", "Proprietary gaming platform")
@@ -94,6 +94,7 @@ myApplications = [ ("QuteBrowser", "qutebrowser", "Simple VIM-like web browser")
                  , ("Blender", "blender", "Blender 3D Software")
                  , ("Geary", "geary", "Geary Email Client")
                  , ("Gitter", "gitter", "Gitter Desktop Client")
+                 , ("Plex", "plexmediaplayer", "Plex Media Player")
                  ]
 
 myConfigs :: [(String, String, String)]
@@ -104,9 +105,7 @@ myConfigs = [ ("xmonad", myEditor ++ "/home/abjoru/.config/xmonad/xmonad.hs", "x
             ]
 
 myAppGrid :: [(String, String)]
-myAppGrid = [ (a,b) | (a,b,c) <- xs]
-  where xs = myApplications
+myAppGrid = [ (a,b) | (a,b,_) <- myApplications]
 
 myConfigGrid :: [(String, String)]
-myConfigGrid = [ (a,b) | (a,b,c) <- xs]
-  where xs = myConfigs
+myConfigGrid = [ (a,b) | (a,b,_) <- myConfigs]

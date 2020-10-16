@@ -3,7 +3,6 @@
 	"codeLens.enable": true,
 	"diagnostic.errorSign": "✘",
 	"diagnostic.warningSign": "⚠ ",
-
 	"metals.serverVersion": "0.9.4",
 	"metals.statusBarEnabled": true,
 	"metals.sbtScript": "sbt"
