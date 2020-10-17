@@ -1,107 +1,83 @@
-" ~/.vimrc
+" -*- mode: vimrc -*-
+"vim: ft=vim
 
-set nocompatible
+function! Layers()
+" Configuration Layers declaration.
+" Add layers with `Layer '+layername'` and add individual packages
+" with `ExtraPlugin 'githubUser/Repo'`.
 
-" Configuration for vim-plug
-call plug#begin('~/.cache/nvim/plugged')
-Plug 'neoclide/coc.nvim', {'branch': 'release'}
-Plug 'scrooloose/nerdtree'
-Plug 'preservim/nerdcommenter'
-Plug 'Xuyuanp/nerdtree-git-plugin'
-Plug 'tiagofumo/vim-nerdtree-syntax-highlight'
-Plug 'vim-airline/vim-airline'
-Plug 'vim-airline/vim-airline-themes'
-Plug 'ctrlpvim/ctrlp.vim'
-Plug 'samoshkin/vim-mergetool'
-Plug 'mariappan/dragvisuals.vim'
-Plug 'morhetz/gruvbox'
-Plug 'ryanoasis/vim-devicons'
-Plug 'junegunn/fzf', { 'do': { -> fzf#install() } }
-Plug 'junegunn/fzf.vim'
-Plug 'vimwiki/vimwiki'
-Plug 'chrisbra/colorizer'
-call plug#end()
+  Layer '+core/behavior'
+  Layer '+core/sensible'
+  Layer '+completion/coc'
+  Layer '+completion/snippets'
+  Layer '+checkers/ale' " Or '+checkers/neomake'
+  Layer '+checkers/quickfix'
+  Layer '+nav/buffers'
+  Layer '+nav/comments'
+  Layer '+nav/files'
+  Layer '+nav/fuzzy' " Or '+nav/fzf'
+  Layer '+nav/navigation'
+  Layer '+nav/quit'
+  Layer '+nav/start-screen'
+  Layer '+nav/text'
+  Layer '+nav/tmux'
+  Layer '+nav/windows'
+  Layer '+scm/git'
+  Layer '+specs/testing'
+  Layer '+tools/language-server'
+  Layer '+tools/multicursor'
+  Layer '+tools/terminal'
+  Layer '+ui/airline'
+  Layer '+ui/toggles'
 
-" General
-set shiftwidth=2
-set autoindent
-set autoread
-set smartindent
-set encoding=UTF-8
-set expandtab
-set number relativenumber 	" Display line numbers
-set t_Co=256 			" Set if term supports 256 colors.
-set noshowmode 			" Mode is shown in status line, so no need for another
+  " Language layers.
+  "Layer '+lang/elm'
+  "Layer '+lang/haskell'
+  "Layer '+lang/rust'
+  "Layer '+lang/go'
+  "Layer '+lang/fsharp'
+  "Layer '+lang/java'
+  "Layer '+lang/javascript'
+  "Layer '+lang/purescript'
+  "Layer '+lang/python'
+  "Layer '+lang/ruby'
+  "Layer '+lang/php'
+  Layer '+lang/vim'
 
-autocmd TermOpen * setlocal nonumber
+  " Additional plugins.
+  ExtraPlugin 'morhetz/gruvbox'
+endfunction
 
-colorscheme gruvbox
-let $NVIM_TUI_ENABLE_TRUE_COLOR=1
+function! UserInit()
+" This block is called at the very startup of Spaceneovim initialization
+" before layers configuration.
 
-" Path additions
-set path+=**
+  " General
+  set t_Co=256 " Set if term supports 256 colors.
 
-" Window management
-set splitbelow
-set splitright
+  " Use own forked layers repo
+  let g:dotspaceneovim_layers_repository = 'https://github.com/abjoru/spaceneovim-layers.git'
 
-" Column Limits
-highlight ColorColumn ctermbg=Black
-set colorcolumn=121
+  " Set language server backend to coc.nvim.
+  let g:spLspBackend = 'coc-lsp'
+  " Show type/doc information when leaving cursor on an item. Also accessible
+  " via `SPC l i`.
+  let g:spCocHoverInfo = 1
+  " Set Haskell backend to LSP.
+  let g:spHaskellBackend = 'lsp'
 
-" Configuration for vim-scala
-au BufRead,BufNewFile *.sbt set filetype=scala
+endfunction
 
-autocmd FileType json syntax match Comment +\/\/.\+$+
+function! UserConfig()
+" This block is called after Spaceneovim layers are configured.
 
-" Plugin Configuration
-source ~/.config/nvim/nerdtree.vim
-source ~/.config/nvim/airline.vim
-source ~/.config/nvim/coc-metals.vim
-source ~/.config/nvim/mergetool.vim
-source ~/.config/nvim/dvisuals.vim
-source ~/.config/nvim/vim-notes.vim
-source ~/.config/nvim/colorizer.vim
+  "SetThemeWithBg 'dark', 'gruvbox', 'base16'
+  SetThemeWithBg 'dark', 'gruvbox', 'gruvbox'
+endfunction
 
-" Better window resizing
-map <silent> <A-h> <C-w><
-map <silent> <A-j> <C-w>-
-map <silent> <A-k> <C-w>+
-map <silent> <A-l> <C-w>>
-
-" Clipboard management
-vnoremap  <leader>y  "+y
-nnoremap  <leader>Y  "+yg_
-nnoremap  <leader>y  "+y
-
-nnoremap <leader>p "+p
-nnoremap <leader>P "+P
-vnoremap <leader>p "+p
-vnoremap <leader>P "+P
-
-" Fuzzy search
-set wildmenu
-set wildignore+=*/tmp/*,*.so,*.swp,*.zip,*.class,*.hi,*.o,*/target/*,*/target,*/out
-
-" --column: Show column number
-" --line-number: Show line number
-" --no-heading: Do not show file headings in results
-" --fixed-strings: Search term as a literal string
-" --ignore-case: Case insensitive search
-" --no-ignore: Do not respect .gitignore, etc...
-" --hidden: Search hidden files and folders
-" --follow: Follow symlinks
-" --glob: Additional conditions for search (in this case ignore everything in the .git/ folder)
-" --color: Search color options
-command! -bang -nargs=* Find 
-  \ call fzf#run(fzf#wrap({'source': 'rg --files --hidden --glob "!{.git/*}"', 'down': '40%', 'options': '--expect=ctrl-t,ctrl-x,ctrl-v --multi --reverse'}))
-
-nnoremap <silent> <leader>o :Find<CR>
-nnoremap <silent> <leader>b :Buffers<CR>
-nnoremap <silent> <leader>l :BLines<CR>
-nnoremap <silent> <F1> :Helptags<CR>
-
-command! -bang -nargs=* Rg
-  \ call fzf#vim#grep(
-  \   'rg --column --line-number --no-heading --color=always --smart-case '.shellescape(<q-args>), 1, 
-  \   fzf#vim#with_preview(), <bang>0)
+" Do NOT remove these calls!
+call spaceneovim#init()
+call Layers()
+call UserInit()
+call spaceneovim#bootstrap()
+call UserConfig()
