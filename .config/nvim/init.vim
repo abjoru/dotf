@@ -8,6 +8,7 @@ function! Modules()
   Module 'nav/buffers'
   Module 'nav/search'
   Module 'ui/statusbar'
+  Module 'ui/colors'
   Module 'tools/terminal'
   Module 'tools/completion'
 

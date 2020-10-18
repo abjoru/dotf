@@ -1,2 +1,2 @@
-DfAddPlugin 'junegunn/fzf', { 'dir': '~/.config/fzf', 'do': './install --all' }
+DfAddPlugin 'junegunn/fzf', { 'do': './install --all' }
 DfAddPlugin 'junegunn/fzf.vim'
