@@ -44,7 +44,7 @@ set relativenumber      " enable relative line numbers
 " Font "
 """"""""
 
-set guifont=Droid\ Sans\ Mono\ for\ Powerline\ Nerd\ Font\ Complete\ 12
+"set guifont=Droid\ Sans\ Mono\ for\ Powerline\ Nerd\ Font\ Complete\ 12
 
 """""""""""
 " Backups "
@@ -88,6 +88,10 @@ nnoremap / :set hlsearch<cr>/
 " clear search highlight on 'spc spc'
 nnoremap <leader><leader> :noh<CR>
 
+"""""""""""""""""
+" Uncategorized "
+"""""""""""""""""
+
 " make super tab start from the top and go down
 let g:SuperTabDefaultCompletionType = "<c-n>"
 
@@ -104,3 +108,6 @@ set shortmess=at
 set breakindent
 set breakindentopt=shift:0
 set showbreak=\ \·
+
+set wildmenu
+set wildignore+=*/tmp/*,*.so,*.swp,*.zip,*.class,*.hi,*.o,*/target/*,*/target,*/out

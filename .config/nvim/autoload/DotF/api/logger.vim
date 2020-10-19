@@ -7,7 +7,7 @@ let s:self = {
       \ 'temp': [],
       \ }
 
-let s:levels = ['Info', 'Warn', 'Error']
+let s:levels = ['Info', 'Warn', 'Error', 'Debug']
 
 function! DotF#api#logger#get() abort
   return deepcopy(s:self)
@@ -27,7 +27,7 @@ endfunction
 
 function! s:self.debug(msg) abort
   let time = strftime('%H:%M:%S')
-  let log = '[ ' . self.name . ' ] [' . time . '] [ Debug ] ' . a:msg
+  let log = '[ ' . self.name . ' ] [' . time . '] [ ' . s:level[3] . ' ] ' . a:msg
   if !self.silent && self.verbose >= 1
     echohl Debug
     echom log

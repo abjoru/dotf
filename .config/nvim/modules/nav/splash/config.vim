@@ -7,12 +7,12 @@
 " returns all modified files of the current git repo
 " `2>/dev/null` makes the command fail quietly if not in repo
 function! s:git_modified()
-  "let l:files = []
-  "if getcwd() == shellescape(fnamemodify('~', ':p'))
-    "let l:files = systemlist('dotf ls-files -m 2>/dev/null')
-  "else
+  let l:files = []
+  if getcwd() == shellescape(fnamemodify('~', ':p'))
+    let l:files = systemlist('dotf ls-files -m 2>/dev/null')
+  else
     let l:files = systemlist('git ls-files -m 2>/dev/null')
-  "endif
+  endif
   return map(l:files, "{'line': v:val, 'path': v:val}")
 endfunction
 
@@ -21,6 +21,9 @@ function! s:git_untracked()
   let l:files = systemlist('git ls-files -o --exclude-standard 2>/dev/null')
   return map(l:files, "{'line': v:val, 'path': v:val}")
 endfunction
+
+" Don't change to directory of file opened from startify
+let g:startify_change_to_dir = 0
 
 let g:startify_lists = [
   \ { 'type': 'files', 'header': ['   MRU'] },
