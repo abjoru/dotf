@@ -1,9 +1,15 @@
 #!/bin/bash
 #
-# nvim postinstall actions
+# dotf nvim postinstall actions
+CACHE_DIR="$HOME/.cache/nvim"
+LOCK_FILE="$HOME/.config/nvim/bootstrap.lock"
 
-# Make sure we have vim-plug installed so that we can bootstrap nvim
-if [ ! -f "${XDG_DATA_HOME:-$HOME/.local/share}/nvim/site/autoload/plug.vim" ]; then
-  curl -fLo "${XDG_DATA_HOME:-$HOME/.local/share}"/nvim/site/autoload/plug.vim --create-dirs https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim 
-  nvim --headless +PlugInstall +qall
+# check for bootstrap lock file
+if [ ! -f "$LOCK_FILE" ]; then
+  mkdir -p "$CACHE_DIR" \
+    && echo ">>> Launching nvim for plugin bootstrap" \
+    && nvim --cmd "let g:dotf_do_not_run_bootstrap=1" +DfInstall \
+    && echo ">>> Done!"
+else
+  echo ">>> DotF neovim already bootstrapped!"
 fi
