@@ -1,8 +1,4 @@
-function! s:debug(msg)
-  if g:dotf_module_debug
-    echom a:msg
-  endif
-endfunction
+let s:LOG = DotF#logger#derive('automodule')
 
 " Paths
 let s:config_dir = $HOME . '/.config/nvim'
@@ -16,7 +12,7 @@ let g:loaded_dotf = 1
 
 " Setup default plugin configuration
 function! s:dotf_preinstall()
-  call s:debug('>>> Run pre-install')
+  call s:LOG.warn('Run pre-install')
 
   " create default vim-leader-guide map, etc
   let g:lmap = get(g:, 'lmap', {})
@@ -36,7 +32,7 @@ function! s:dotf_preinstall()
 endfunction
 
 function! g:Dotf_postinit()
-  call s:debug('>>> Run postinit')
+  call s:LOG.warn('Run postinit')
 
   " configure vim-arpeggio
   if exists('g:loaded_arpeggio')
@@ -48,7 +44,7 @@ function! g:Dotf_postinit()
 
   " configure vim-leader-guide
   if exists('g:loaded_leaderGuide_vim')
-    call s:debug('>>> Configure vim-leader-guide')
+    call s:LOG.warn('Configure vim-leader-guide')
 
     " cleanup displayed key bindings
     function! s:dotf_displayfunc()
@@ -79,7 +75,7 @@ endfunction
 
 function! g:Dotf_postinstall()
   try
-    call s:debug('>>> Run post install')
+    call s:LOG.debug('Run post install')
     let l:leader_key = dotf#get_leader_key
     call leaderGuide#register_prefix_descriptions(l:leader_key, 'g:lmap')
   catch

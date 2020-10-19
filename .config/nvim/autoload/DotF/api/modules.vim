@@ -7,7 +7,8 @@ let s:self = {
   \ 'all': [],
   \ 'enabled': [],
   \ 'core': [],
-  \ 'plugins': []
+  \ 'plugins': [],
+  \ 'module_plugins': []
   \ }
 
 function! DotF#api#modules#get() abort
@@ -28,6 +29,13 @@ function! s:self.add_plugin(name, ...) abort
   let l:cfg = get(a:, '1', {})
   if index(self.plugins, a:name) ==? -1
     call add(self.plugins, {'name': a:name, 'config': l:cfg})
+  endif
+endfunction
+
+function! s:self.add_module_plugin(name, ...) abort
+  let l:cfg = get(a:, '1', {})
+  if index(self.module_plugins, a:name) ==? -1
+    call add(self.module_plugins, {'name': a:name, 'config': l:cfg})
   endif
 endfunction
 
@@ -66,7 +74,24 @@ function! s:self.list_enabled_noncore_modules() abort
 endfunction
 
 function! s:self.list_plugins() abort
-  return self.plugins
+  " combine module_plugins and plugins and make it distinct
+  let l:pgs = self.module_plugins
+  for l:plugin in self.plugins
+    if index(l:pgs, l:plugin) == -1
+      call add(l:pgs, l:plugin)
+    endif
+  endfor
+
+  return l:pgs
+endfunction
+
+function! s:self.list_plugin_names() abort
+  let l:plugins = []
+  for l:plugin in s:self.list_plugins()
+    call add(l:plugins, l:plugin.name)
+  endfor
+
+  return l:plugins
 endfunction
 
 function! s:self.get_module_dir() abort

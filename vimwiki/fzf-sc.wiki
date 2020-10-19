@@ -1,1 +1,27 @@
 = FZF Fuzzy Finder =
+
+  * Use '<term> or fzf -e for exact matches (otherwise fuzzy by default)
+  * Globs is not supported.
+  * Use multiple terms and eol markers '$' or negate '!'
+  * Multiselect with <tab>
+  * Search and open with: nvim -o `fzf`
+
+## Commandline
+
+  * Use '***' to open fuzzy finder from paths, i.e: nvim ~/.config/***
+  * Use '**' with cd to change dirs with fuzzy search
+  * <ctrl-T> paste selected dirs/files into cmd line
+  * <opt-C> cd into selected dir
+  * Remote connect with ssh support: ssh ** to search for used IPs
+  * Kill apps with: kill -9 <tab>
+
+## Nvim
+
+  * Open search with <leader> + o
+    * <ctrl-T> open in a new tab
+    * <ctrl-V> open in a vertical split
+    * *F2* to preview files in search box
+  * Find buffer with <leader> + b
+  * Find line in current buffer with <leader> + l
+  * Search help with <F1>
+  * Search for contents with *:Rg <term>*

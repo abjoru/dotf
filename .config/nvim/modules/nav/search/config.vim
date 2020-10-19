@@ -2,7 +2,6 @@ let g:lmap.f = get(g:lmap, 'f', { 'name': 'files' })
 
 DfNMap 'fb', 'find-buffer', 'Buffers'
 DfNMap 'ff', 'find-file', 'Files'
-"DfNMap 'ff', 'find-file', 'Find'
 DfNMap 'fl', 'find-line', 'Lines'
 
 if executable('rg')

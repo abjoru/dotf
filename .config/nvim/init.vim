@@ -14,6 +14,7 @@ function! Modules()
   DfModule 'tools/terminal'
   DfModule 'tools/completion'
   DfModule 'tools/drag'
+  DfModule 'scm/git'
 
   DfModule 'ui/icons'
 
@@ -22,28 +23,15 @@ function! Modules()
 endfunction
 
 function! Options()
-  " Tree width
-  let g:dotf_nav_tree_width = 40
-  " Tab support
-  let g:dotf_ui_statusbar_tabline_enabled = 1
+  DfTreeWidth(40)
 endfunction
 
 function! DotfPre()
-  "EnableDebug
-  "EnableVerboseDebug
-  "EnableModuleDebug
 endfunction
 
 function! DotfPost()
   DfSetTheme 'dark', 'gruvbox', 'gruvbox'
-
-  " FIXME move somewhere with module checks!
-  autocmd VimEnter *
-        \ if !argc()
-        \ | Startify
-        \ | NERDTree
-        \ | wincmd w
-        \ | endif
+  DfStartWithTree
 endfunction
 
 " Loader, do not edit!

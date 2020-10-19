@@ -35,3 +35,14 @@ function! DotF#api#register(name, api) abort
     let s:apis[a:name] = deepcopy(a:api)
   endif
 endfunction
+
+function! DotF#api#has_python() abort
+  return has('python') || has('python3')
+endfunction
+
+function! DotF#api#echo(msg)
+  echohl WarningMsg
+  echo 'Warning'
+  echohl None
+  echon ': ' . a:msg
+endfunction
