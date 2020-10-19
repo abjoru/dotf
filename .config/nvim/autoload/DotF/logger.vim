@@ -18,6 +18,10 @@ function! DotF#logger#error(msg) abort
   call s:LOGGER.error(msg)
 endfunction
 
+function! DotF#logger#debug(msg) abort
+  call s:LOGGER.debug(msg)
+endfunction
+
 function! DotF#logger#viewRuntimeLog() abort
   let info = "### DotF runtime log :\n\n"
   let info .= "```log\n"
@@ -68,6 +72,12 @@ endfunction
 function! s:derive_error(msg) abort
   call s:LOGGER.set_name(self.derive_name)
   call s:LOGGER.error(a:msg)
+  call s:LOGGER.set_name(self.origin_name)
+endfunction
+
+function! s:derive_debug(msg) abort
+  call s:LOGGER.set_name(self.derive_name)
+  call s:LOGGER.debug(a:msg)
   call s:LOGGER.set_name(self.origin_name)
 endfunction
 

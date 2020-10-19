@@ -25,8 +25,19 @@ function! s:self.set_level(l) abort
   let self.level = a:l
 endfunction
 
+function! s:self.debug(msg) abort
+  let time = strftime('%H:%M:%S')
+  let log = '[ ' . self.name . ' ] [' . time . '] [ Debug ] ' . a:msg
+  if !self.silent && self.verbose >= 1
+    echohl Debug
+    echom log
+    echohl None
+  endif
+  call self.write(log)
+endfunction
+
 function! s:self.error(msg) abort
-  let time strftime('%H:%M:%S')
+  let time = strftime('%H:%M:%S')
   let log = '[ ' . self.name . ' ] [' . time . '] [ ' . s:levels[2] . ' ] ' . a:msg
   if !self.silent && self.verbose >= 1
     echohl Error

@@ -37,9 +37,13 @@ endfunction
 function! DotfPost()
   DfSetTheme 'dark', 'gruvbox', 'gruvbox'
 
-  "if exists('g:loaded_webdevicons')
-    "call webdevicons#refresh()
-  "endif
+  " FIXME move somewhere with module checks!
+  autocmd VimEnter *
+        \ if !argc()
+        \ | Startify
+        \ | NERDTree
+        \ | wincmd w
+        \ | endif
 endfunction
 
 " Loader, do not edit!
