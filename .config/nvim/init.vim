@@ -1,83 +1,55 @@
 " -*- mode: vimrc -*-
-"vim: ft=vim
+" vim: ft=vim
 
-function! Layers()
-" Configuration Layers declaration.
-" Add layers with `Layer '+layername'` and add individual packages
-" with `ExtraPlugin 'githubUser/Repo'`.
+function! Modules()
+  " Enabled Modules
+  DfModule 'core/base'
+  DfModule 'ui/statusbar'
 
-  Layer '+core/behavior'
-  Layer '+core/sensible'
-  Layer '+completion/coc'
-  Layer '+completion/snippets'
-  Layer '+checkers/ale' " Or '+checkers/neomake'
-  Layer '+checkers/quickfix'
-  Layer '+nav/buffers'
-  Layer '+nav/comments'
-  Layer '+nav/files'
-  Layer '+nav/fuzzy' " Or '+nav/fzf'
-  Layer '+nav/navigation'
-  Layer '+nav/quit'
-  Layer '+nav/start-screen'
-  Layer '+nav/text'
-  Layer '+nav/tmux'
-  Layer '+nav/windows'
-  Layer '+scm/git'
-  Layer '+specs/testing'
-  Layer '+tools/language-server'
-  Layer '+tools/multicursor'
-  Layer '+tools/terminal'
-  Layer '+ui/airline'
-  Layer '+ui/toggles'
+  DfModule 'nav/tree'
+  DfModule 'nav/splash'
+  DfModule 'nav/buffers'
+  DfModule 'nav/search'
+  DfModule 'ui/colors'
+  DfModule 'tools/terminal'
+  DfModule 'tools/completion'
+  DfModule 'tools/drag'
 
-  " Language layers.
-  "Layer '+lang/elm'
-  "Layer '+lang/haskell'
-  "Layer '+lang/rust'
-  "Layer '+lang/go'
-  "Layer '+lang/fsharp'
-  "Layer '+lang/java'
-  "Layer '+lang/javascript'
-  "Layer '+lang/purescript'
-  "Layer '+lang/python'
-  "Layer '+lang/ruby'
-  "Layer '+lang/php'
-  Layer '+lang/vim'
+  DfModule 'ui/icons'
 
-  " Additional plugins.
-  ExtraPlugin 'morhetz/gruvbox'
+  " Extra Plugins
+  DfPlugin 'morhetz/gruvbox'
 endfunction
 
-function! UserInit()
-" This block is called at the very startup of Spaceneovim initialization
-" before layers configuration.
-
-  " General
-  set t_Co=256 " Set if term supports 256 colors.
-
-  " Use own forked layers repo
-  let g:dotspaceneovim_layers_repository = 'https://github.com/abjoru/spaceneovim-layers.git'
-
-  " Set language server backend to coc.nvim.
-  let g:spLspBackend = 'coc-lsp'
-  " Show type/doc information when leaving cursor on an item. Also accessible
-  " via `SPC l i`.
-  let g:spCocHoverInfo = 1
-  " Set Haskell backend to LSP.
-  let g:spHaskellBackend = 'lsp'
-
+function! Options()
+  " Tree width
+  let g:dotf_nav_tree_width = 40
+  " Tab support
+  let g:dotf_ui_statusbar_tabline_enabled = 1
 endfunction
 
-function! UserConfig()
-" This block is called after Spaceneovim layers are configured.
-
-  "SetThemeWithBg 'dark', 'gruvbox', 'base16'
-  SetThemeWithBg 'dark', 'gruvbox', 'gruvbox'
+function! DotfPre()
+  "EnableDebug
+  "EnableVerboseDebug
+  "EnableModuleDebug
 endfunction
 
-" Do NOT remove these calls!
-call spaceneovim#init()
-call Layers()
-call UserInit()
-call spaceneovim#bootstrap()
-call UserConfig()
+function! DotfPost()
+  DfSetTheme 'dark', 'gruvbox', 'gruvbox'
+
+  " FIXME move somewhere with module checks!
+  autocmd VimEnter *
+        \ if !argc()
+        \ | Startify
+        \ | NERDTree
+        \ | wincmd w
+        \ | endif
+endfunction
+
+" Loader, do not edit!
+call dotf#init()
+call Options()
+call Modules()
+call DotfPre()
+call dotf#bootstrap()
+call DotfPost()

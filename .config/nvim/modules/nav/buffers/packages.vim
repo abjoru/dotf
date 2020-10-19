@@ -1,0 +1,1 @@
+DfAddPlugin 'schickling/vim-bufonly'

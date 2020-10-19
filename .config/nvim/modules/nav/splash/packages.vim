@@ -1,0 +1,1 @@
+DfAddPlugin 'mhinz/vim-startify'
