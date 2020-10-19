@@ -14,6 +14,7 @@ function! Modules()
   DfModule 'tools/terminal'
   DfModule 'tools/completion'
   DfModule 'tools/drag'
+  DfModule 'scm/git'
 
   DfModule 'ui/icons'
 

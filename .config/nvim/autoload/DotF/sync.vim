@@ -34,11 +34,14 @@ function! DotF#sync#check_plugins() abort
     let l:old_plugins = []
   endif
 
-  if l:old_plugins != DotF#modules#enabledplugins()
+  if l:old_plugins != DotF#modules#enabledpluginnames()
+    call s:LOG.warn('!Plugin changes detected! Please run :DfSync to refresh installation!')
     echohl WarningMsg
     echo 'Warning'
     echohl None
     echon ': Plugin changes detected! Please run :DfSync to refresh installation!'
+  else
+    call s:LOG.info('Plugins are up to date!')
   endif
 endfunction
 
@@ -53,7 +56,7 @@ function! s:detect_plugin_changes() abort
     let l:old_plugins = []
   endif
 
-  if l:old_plugins == DotF#modules#enabledplugins()
+  if l:old_plugins == DotF#modules#enabledpluginnames()
     call s:LOG.info('No changes in plugins')
   else
     call s:LOG.info('Plugins changes detected, installing...')

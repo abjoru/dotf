@@ -46,7 +46,7 @@ function! DotF#commands#load() abort
   """"""""""""""""""""
 
   " Use in packages.vim to add plugin requirement for module
-  command! -nargs=* -bar DfAddPlugin call s:add_plugin(<args>)
+  command! -nargs=* -bar DfAddPlugin call s:add_mplugin(<args>)
 
   " Use in init.vim to configure space indentation
   command! -nargs=+ -bar DfSpaceIndent call s:set_space_indentation(<args>)
@@ -85,9 +85,9 @@ function! s:start_with_tree() abort
         \ | endif
 endfunction
 
-function! s:add_plugin(name, ...) abort
+function! s:add_mplugin(name, ...) abort
   let l:cfg = get(a:, '1', {})
-  call DotF#modules#plugin(a:name, l:cfg)
+  call DotF#modules#mplugin(a:name, l:cfg)
 endfunction
 
 function! s:set_space_indentation(ft, indentation) abort
