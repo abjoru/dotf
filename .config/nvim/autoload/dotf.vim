@@ -31,7 +31,8 @@ let g:dotf_verbose_debug = get(g:, 'dotf_verbose_debug', 0)
 let g:dotf_module_debug = get(g:, 'dotf_module_debug', 0)
 
 let g:dotf_leader_key = get(g:, 'dotf_leader_key', '<Space>')
-let g:dotf_core_module = get(g:, 'dotf_core_module', 'core/base')
+let g:dotf_core_modules = get(g:, 'dotf_core_modules', ['core/base'])
+let g:dotf_delayed_modules = get(g:, 'dotf_delayed_modules', ['ui/icons'])
 
 " vim-plug window location
 let g:plug_window = 'vertical botright new'
@@ -40,39 +41,17 @@ let g:plug_window = 'vertical botright new'
 " API "
 """""""
 
+let s:LOG = DotF#logger#derive('bootstrap')
+
 function! dotf#init()
-  " Defines a module to include
-  " param1: name
-  command! -nargs=1 -bar Module call s:module(<args>)
-  " Defines a plugin to include
-  " param1: name
-  command! -nargs=+ -bar Plugin call dotf#plugin(<args>)
-
-  " Configures theme
-  " param1: background (i.e. 'dark')
-  " param2: theme name (i.e. 'gruvbox')
-  " param3: airline theme name (i.e. 'gruvbox')
-  command! -nargs=+ -bar SetTheme call s:set_theme(<args>)
-
-  " Enables debugging
-  command! -nargs=0 -bar EnableDebug call s:enable_debug()
-  " Enabled verbose debugging
-  command! -nargs=0 -bar EnableVerboseDebug call s:enable_verbose_debug()
-  " Enables module layer debugging
-  command! -nargs=0 -bar EnableModuleDebug call s:enable_module_debug()
-
-  " Returns the configured leader key
-  command! -nargs=0 -bar GetLeader call dotf#get_leader_key()
-  " Sets the leader key
-  " param1: new leader key
-  command! -nargs=1 -bar SetLeader call dotf#set_leader_key(<args>)
+  call DotF#commands#load()
 
   " Invokes full upgrade/reload
   "command! -nargs=0 -bar DotfUpdate call dotf#update_all()
   " Make installer available to CLI
   command! -nargs=0 -bar DotfRunInstallProcess call dotf#install()
 
-  call s:debug('>>> Initializing Dotf')
+  call s:LOG.info('>>> Initializing Dotf')
 endfunction
 
 """""""""""""""""
@@ -82,7 +61,16 @@ endfunction
 function! dotf#bootstrap() abort
   if !exists('g:dotf_do_not_run_bootstrap')
     let l:called_from_bootstrap = 0
-    call s:load_dotf_functionality(l:called_from_bootstrap)
+    let l:has_python = dotf#check_for_python()
+
+    " Source module util functions
+    if filereadable(s:modules_dir . '/auto-modules.vim')
+      execute 'source ' . s:modules_dir . '/auto-modules.vim'
+    endif
+
+    if l:has_python ==? 1 || exists('g:gui_oni')
+      call DotF#modules#install()
+    endif
 
     augroup dotf_plugin_update
       au!
@@ -91,18 +79,19 @@ function! dotf#bootstrap() abort
   endif
 endfunction
 
+" TODO kill this off once the install func has been moved!
 function! s:load_dotf_functionality(called_from_bootstrap)
   let l:has_python = dotf#check_for_python()
   let l:modules = []
   let g:dotf_enabled_modules = get(g:, 'dotf_enabled_modules', {})
 
-  call s:debug('>>> Parsing modules in ' . s:modules_dir . ':')
+  call s:LOG.info('>>> Parsing modules in ' . s:modules_dir . ':')
   let l:modules = dotf#find_all_modules(s:modules_dir)
-  call s:debug('>>> Filtering enabled modules...')
+  call s:LOG.info('>>> Filtering enabled modules...')
   let g:dotf_enabled_modules = dotf#filter_enabled_modules(l:modules, s:configuration_modules)
 
-  call s:verbose_debug('*** modules: ' . string(l:modules))
-  call s:verbose_debug('*** enabled: ' . string(g:dotf_enabled_modules))
+  call s:LOG.warn('*** modules: ' . string(l:modules))
+  call s:LOG.warn('*** enabled: ' . string(g:dotf_enabled_modules))
 
   " Source module util functions
   if filereadable(s:modules_dir . '/auto-modules.vim')
@@ -119,20 +108,19 @@ endfunction
 """""""""""""""""""""
 " Dotf Installation "
 """""""""""""""""""""
-
+" TODO move this out into its own thing..
 function! dotf#install() abort
   call s:setup_installation_state()
 
   " Check for python
   let l:has_python = dotf#check_for_python()
   if l:has_python ==? 0
-    call s:output('IMPORTANT! Neovim could not find support for python, which means')
-    call s:output('some modules may not work. To fix this, install the neovim python')
-    call s:output('package. I.e. `pip install neovim` etc')
-    call s:output('')
+    call s:LOG.error('IMPORTANT! Neovim could not find support for python, which means')
+    call s:LOG.error('some modules may not work. To fix this, install the neovim python')
+    call s:LOG.error('package. I.e. `pip install neovim` etc')
   endif
 
-  call s:debug('>>> Starting Dotf bootstrap')
+  call s:LOG.info('>>> Starting Dotf bootstrap')
 
   if l:has_python ==? 1 || exists('g:gui_oni')
     call dotf#setup_vim_plug()
@@ -142,14 +130,14 @@ function! dotf#install() abort
   call s:load_dotf_functionality(l:called_from_bootstrap)
   call dotf#install_vim_plug_plugins()
 
-  call s:debug('>>> Finished Dotf bootstrap')
+  call s:LOG.info('>>> Finished Dotf bootstrap')
 
   " Make sure we don't bootstrap again
   if writefile([], s:bootstrap_lock_file)
-    call s:debug('>>> Writing bootstrap lock file')
+    call s:LOG.info('>>> Writing bootstrap lock file')
   endif
 
-  call s:debug('--- Installation finished, please restart Neovim! ---')
+  call s:LOG.info('--- Installation finished, please restart Neovim! ---')
   ":quitall
 endfunction
 
@@ -163,100 +151,10 @@ function! s:setup_installation_state()
 endfunction
 
 """"""""""""""""""""
-" Module functions "
-""""""""""""""""""""
-
-function! s:module(module_name)
-  call s:verbose_debug('--> User added module ' . a:module_name)
-
-  if index(s:configuration_modules, a:module_name) ==? -1
-    call add(s:configuration_modules, a:module_name)
-  endif
-endfunction
-
-function! dotf#find_all_modules(dir) abort
-  let l:located_modules = []
-  for l:group in split(glob(a:dir . '/*'), '\n')
-    for l:module in split(glob(l:group . '/*'), '\n')
-      " make sure the module is not empty/invalid
-      if filereadable(l:module . '/config.vim') || filereadable(l:module . '/packages.vim')
-        let l:module_name = substitute(l:module, a:dir . '/', '', '')
-        call add(l:located_modules, l:module_name)
-        call s:verbose_debug('    Found ' . l:module_name)
-      endif
-    endfor
-  endfor
-
-  return l:located_modules
-endfunction
-
-function! dotf#filter_enabled_modules(located_modules, configured_modules) abort
-  call s:verbose_debug('*** filter_enabled_modules(' . string(a:located_modules) . ', ' . string(a:configured_modules) . ')')
-  let l:enabled_modules = []
-  for l:c_module in a:configured_modules
-    if index(a:located_modules, l:c_module) != -1
-      call add(l:enabled_modules, l:c_module)
-      call s:verbose_debug('    Enabled ' . l:c_module)
-    endif
-  endfor
-
-  return l:enabled_modules
-endfunction
-
-function! dotf#load_module(module_name)
-  if filereadable(s:modules_dir . '/' . a:module_name . '/func.vim')
-    execute 'source ' . s:modules_dir . '/' . a:module_name . '/func.vim'
-  endif
-
-  if filereadable(s:modules_dir . '/' . a:module_name . '/packages.vim')
-    execute 'source ' . s:modules_dir . '/' . a:module_name . '/packages.vim'
-  endif
-
-  if filereadable(s:modules_dir . '/' . a:module_name . '/config.vim')
-    execute 'source ' . s:modules_dir . '/' . a:module_name . '/config.vim'
-  endif
-endfunction
-
-""""""""""""""""""""
 " Plugin functions "
 """"""""""""""""""""
 
-function! dotf#plugin(plugin_name, ...)
-  call s:verbose_debug('--> User added extra plugin ' . a:plugin_name)
-  let l:plugin_config = get(a:, '1', {})
-  
-  if index(s:additional_plugins, a:plugin_name) ==? -1
-    call add(s:additional_plugins, {'name': a:plugin_name, 'config': l:plugin_config})
-  endif
-endfunction
-
-function! dotf#install_enabled_plugins(enabled_modules, additional_plugins) abort
-  call plug#begin(s:vim_plugged_dir)
-
-  " explicitly load the core module first. The reason is because they might
-  " be defined in other sources than the primary one.
-  call s:debug('>>> Loading core module')
-  if index(a:enabled_modules, g:dotf_core_module) != -1
-    call dotf#load_module(g:dotf_core_module)
-  endif
-
-  call s:debug('>>> Loading remaining modules')
-  for l:mname in a:enabled_modules
-    if l:mname !=# g:dotf_core_module
-      call dotf#load_module(l:mname)
-    endif
-  endfor
-
-  call s:debug('>>> Installing plugins')
-  for l:plugin in a:additional_plugins
-    call s:verbose_debug('    ' . l:plugin.name)
-    Plug l:plugin.name, l:plugin.config
-    call add(s:enabled_plugins, l:plugin.name)
-  endfor
-
-  call plug#end()
-endfunction
-
+" TODO move this out into its own thing!
 function! dotf#detect_plugin_changes()
   if !isdirectory(s:cache_dir)
     call mkdir(s:cache_dir, 'p')
@@ -268,11 +166,12 @@ function! dotf#detect_plugin_changes()
     let l:previously_loaded_plugins = []
   endif
 
-  if l:previously_loaded_plugins == s:enabled_plugins
-    call s:debug('>>> No changes in plugins')
+  if l:previously_loaded_plugins == DotF#modules#enabledplugins() "s:enabled_plugins
+    call s:LOG.info('>>> No changes in plugins')
   else
-    call s:debug('>>> Plugins change detected, installing new ones')
-    call dotf#install_vim_plug_plugins()
+    call s:LOG.info('>>> Plugins change detected, installing new ones')
+    "call dotf#install_vim_plug_plugins()
+    call DotF#modules#install()
   endif
 endfunction
 
@@ -287,7 +186,7 @@ function! dotf#write_plugins_to_cache()
   endif
 
   if writefile(s:enabled_plugins, s:loaded_plugins_cache_file)
-    call s:debug('>>> Could not write loaded plugins to cache file!')
+    call s:LOG.info('>>> Could not write loaded plugins to cache file!')
   endif
 endfunction
 
@@ -317,14 +216,14 @@ function! dotf#setup_vim_plug() abort
       silent execute '!curl -fLo ' . s:vim_plug_file . ' --create-dirs https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim'
     endif
 
-    call s:debug('>>> Sourcing ' . s:vim_plug_file)
+    call s:LOG.info('>>> Sourcing ' . s:vim_plug_file)
     execute ":source " . s:vim_plug_file
   endif
 
   " if no plugins have been installed yet, make sure the cache file is empty!
   if !isdirectory(s:vim_plugged_dir)
     if writefile([], s:loaded_plugins_cache_file)
-      call s:debug('>>> Overwriting cache file, since no plugins were installed!')
+      call s:LOG.info('>>> Overwriting cache file, since no plugins were installed!')
     endif
   endif
 endfunction
@@ -332,9 +231,9 @@ endfunction
 function! dotf#install_vim_plug_plugins()
   call mkdir(s:vim_plugged_dir, 'p')
   call dotf#write_plugins_to_cache()
-  call s:debug('>>> Installing all plugins via vim-plug')
+  call s:LOG.info('>>> Installing all plugins via vim-plug')
   :PlugInstall! --sync
-  call s:debug('>>> All plugins installed')
+  call s:LOG.info('>>> All plugins installed')
 endfunction
 
 """""""""""""""""""""""
@@ -349,74 +248,9 @@ function! dotf#set_leader_key(new_leader)
   let g:dotf_leader_key = a:new_leader
 endfunction
 
-function! s:set_theme(bg, tname, ...)
-  if a:bg ==? 'light'
-    set background=light
-  else
-    set background=dark
-  endif
-
-  try
-    if (has('termguicolors'))
-      set termguicolors
-    endif
-
-    execute 'colorscheme ' . a:tname
-    hi Comment cterm=italic
-
-    if a:0 ==? 1
-      let g:airline_theme = a:1
-    endif
-  catch
-  endtry
-endfunction
-
-function! s:enable_debug()
-  let g:dotf_debug = 1
-endfunction
-
-function! s:enable_verbose_debug()
-  let g:dotf_verbose_debug = 1
-endfunction
-
-function! s:enable_module_debug()
-  let g:dotf_module_debug = 1
-endfunction
-
 """"""""""""""""""
 " Util functions "
 """"""""""""""""""
-
-function! s:output(msg)
-  if !has('nvim') || s:install_output_buff_num == -1
-    echo a:msg
-  else
-    let s:install_output_array += [a:msg]
-    call OutputListToBuffer(s:install_output_buff_num, s:install_output_array)
-  endif
-endfunction
-
-function! s:debug(msg)
-  if g:dotf_debug || s:is_install_bootstrapping
-    if !has('nvim') || s:install_output_buff_num == -1
-      echo a:msg
-    else
-      let s:install_output_array += [a:msg]
-      call OutputListToBuffer(s:install_output_buff_num, s:install_output_array)
-    endif
-  endif
-endfunction
-
-function! s:verbose_debug(msg)
-  if g:dotf_verbose_debug 
-    if !has('nvim') || s:install_output_buff_num == -1
-      echo a:msg
-    else
-      let s:install_output_array += [a:msg]
-      call OutputListToBuffer(s:install_output_buff_num, s:install_output_array)
-    endif
-  endif
-endfunction
 
 function! dotf#check_for_python()
   return has('python') || has('python3')

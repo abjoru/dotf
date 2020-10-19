@@ -1,3 +1,6 @@
+" API
+let g:dotf_nav_tree_width = get(g:, 'dotf_nav_tree_width', 45)
+
 " Toggle tree with <F2>
 map <silent> <F2> :NERDTreeToggle<CR>
 
@@ -42,7 +45,7 @@ let g:NERDTreeDirArrowExpandable = nr2char(8200)  " sets expandable character
 let g:NERDTreeDirArrowCollapsible = nr2char(8200) " sets collapsible character
 let g:WebDevIconsNerdTreeAfterGlyphPadding = ' '  " removes padding after devicon glyph
 let g:WebDevIconsUnicodeDecorateFolderNodes = 1   " enables decorating folder nodes
-let g:NERDTreeWinSize = 60                        " tree width
+let g:NERDTreeWinSize = g:dotf_nav_tree_width     " tree width
 let NERDTreeRespectWildIgnore = 1                 " respect global wildignore
 
 augroup NERDTreeConfig

@@ -7,12 +7,12 @@
 " returns all modified files of the current git repo
 " `2>/dev/null` makes the command fail quietly if not in repo
 function! s:git_modified()
-  let l:files = []
-  if getcwd() == shellescape(fnamemodify('~', ':p'))
-    let l:files = systemlist('dotf ls-files -m 2>/dev/null')
-  else
-    let files = systemlist('git ls-files -m 2>/dev/null')
-  endif
+  "let l:files = []
+  "if getcwd() == shellescape(fnamemodify('~', ':p'))
+    "let l:files = systemlist('dotf ls-files -m 2>/dev/null')
+  "else
+    let l:files = systemlist('git ls-files -m 2>/dev/null')
+  "endif
   return map(l:files, "{'line': v:val, 'path': v:val}")
 endfunction
 

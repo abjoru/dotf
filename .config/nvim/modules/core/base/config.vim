@@ -1,3 +1,6 @@
+set nocompatible
+set encoding=utf-8
+
 " shorten time before the vim-leader-guide buffer appears
 set timeoutlen=300
 set ttimeoutlen=0
@@ -36,6 +39,12 @@ set splitbelow          " split below
 set splitright          " split on the right side
 set number              " show current line number
 set relativenumber      " enable relative line numbers
+
+""""""""
+" Font "
+""""""""
+
+set guifont=Droid\ Sans\ Mono\ for\ Powerline\ Nerd\ Font\ Complete\ 12
 
 """""""""""
 " Backups "

@@ -8,12 +8,6 @@ endfunction
 let s:config_dir = $HOME . '/.config/nvim'
 let s:modules_dir = expand(resolve(s:config_dir . '/modules'))
 
-" Load library files
-call s:debug('>>> Loading helpers')
-execute 'source ' . s:modules_dir . '/helpers.vim'
-call s:debug('>>> Loading keybinding-helpers')
-execute 'source ' . s:modules_dir . '/keybinding-helpers.vim'
-
 " Halt if dotf already loaded
 if exists('g:loaded_dotf')
   finish
