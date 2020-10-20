@@ -33,9 +33,9 @@ DfNMap 'feC', 'clean-plugins', 'PlugClean!'
 "let g:NERDTreeGitStatusNodeColorization = 1 " enables colorization
 "let g:NERDTreeGitStatusWithFlags = 1        " enables flags, required by colorization
 
-"highlight link NERDTreeDir Question               " custom color
-"highlight link NERDTreeGitStatusIgnored Comment   " custom color
-"highlight link NERDTreeGitStatusModified cssURL   " custom color
+highlight link NERDTreeDir Question               " custom color
+highlight link NERDTreeGitStatusIgnored Comment   " custom color
+highlight link NERDTreeGitStatusModified cssURL   " custom color
 
 " NERDTree
 "let g:NERDTreeDirArrowExpandable = nr2char(8200)  " sets expandable character

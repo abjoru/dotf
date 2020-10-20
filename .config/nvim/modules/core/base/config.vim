@@ -1,5 +1,5 @@
 set nocompatible
-set encoding=utf-8
+set encoding=UTF-8
 
 " shorten time before the vim-leader-guide buffer appears
 set timeoutlen=300
@@ -22,10 +22,13 @@ autocmd TermOpen * setlocal nonumber
 " Whitespace, tabs & spaces "
 """""""""""""""""""""""""""""
 
+set shiftwidth=2      	" number of spaces pr tab when indenting
+set autoindent
+set autoread
+set smartindent
 set list                " show invisible characters
 set expandtab           " indent with spaces
 set softtabstop=2     	" number of spaces pr tab when inserting
-set shiftwidth=2      	" number of spaces pr tab when indenting
 set tabstop=2         	" number of spaces tab counts for
 
 """"""
@@ -39,6 +42,7 @@ set splitbelow          " split below
 set splitright          " split on the right side
 set number              " show current line number
 set relativenumber      " enable relative line numbers
+set noshowmode          " mode is shown in status line, no need for another one
 
 """"""""
 " Font "
@@ -87,6 +91,17 @@ vnoremap > >gv
 nnoremap / :set hlsearch<cr>/
 " clear search highlight on 'spc spc'
 nnoremap <leader><leader> :noh<CR>
+let g:llmap['/'] = [':noh', 'Clear highlights']
+
+" Clipboard management
+vnoremap <localleader>y "+y
+nnoremap <localleader>yy "+yg_
+nnoremap <localleader>y "+y
+
+nnoremap <localleader>p "+p
+nnoremap <localleader>pp "+P
+vnoremap <localleader>p "+p
+vnoremap <localleader>pp "+P
 
 """""""""""""""""
 " Uncategorized "

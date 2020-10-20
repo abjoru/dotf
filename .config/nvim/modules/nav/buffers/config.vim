@@ -1,4 +1,5 @@
-let g:lmap.b = get(g:lmap, 'b', { 'name': 'buffers' })
+let g:lmap.b = { 'name' : 'Buffers' }
+"get(g:lmap, 'b', { 'name': 'buffers' })
 
 nnoremap <leader><C-I> :b#<CR>
 

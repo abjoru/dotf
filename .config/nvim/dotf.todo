@@ -1,11 +1,17 @@
 DotF Neovim:
-  ☐ Figure out why copy/paste (external) won't work properly! @priority(high)
+  ✓ Enable preview in fzf main search @priority(high) @done(2020-10-20 16:47) @project(DotF Neovim)
+  ✓ Figure out why copy/paste (external) won't work properly! @priority(high) @done(2020-10-20 09:57) @project(DotF Neovim)
   ☐ Figure out why <tab> does not scroll autocomplete dialog! @priority(high)
-  ☐ Add task commands to leader guide @priority(high)
-  ☐ Add fugitive diff commands to leader guide @priority(medium)
+  ✓ Add task commands to leader guide @priority(high) @done(2020-10-20 11:40) @project(DotF Neovim)
+  ✓ Add fugitive diff commands to leader guide @priority(medium) @done(2020-10-20 09:39) @project(DotF Neovim)
   ✓ Find a decent task plugin @priority(medium) @done(2020-10-19 23:39) @project(Configurations)
-  ☐ Create better key mapping for tasks @priority(medium)
+  ✘ Create better key mapping for tasks @priority(medium) @cancelled(2020-10-20 11:39) @project(DotF Neovim)
   ☐ Change devicons colors to match gruvbox theme @priority(low)
-  ☐ Check if we can get tasks displayed in startify @priority(low)
-  ☐ Figure out how the leader-guide config actually works! @priority(low)
+  ✓ Check if we can get tasks displayed in startify @priority(low) @done(2020-10-20 11:39) @project(DotF Neovim)
+    ☐ Check if file has changed and reload tasks
+    ✓ Split task list up by project (index) and have function with index to retrieve tasks. Function for header(index) also @done(2020-10-20 13:55) @project(DotF Neovim)
+    ✓ Remove empty lines @priority(low) @done(2020-10-20 12:47) @project(DotF Neovim)
+    ☐ Make task file loading generic in searching for *.todo @priority(low)
 
+DotF API:
+  ☐ Investigate functional vimscript @priority(low)

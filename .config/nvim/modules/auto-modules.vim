@@ -18,6 +18,10 @@ function! s:dotf_preinstall()
   let g:lmap = get(g:, 'lmap', {})
   let g:lmap.m = get(g:lmap, 'm', {'name': 'major-mode-cmd'})
 
+  " create default localleader map
+  let g:llmap = {}
+
+
   " reset nerdcommenter key mappings
   let g:NERDCreateDefaultMappings = get(g:, 'NERDCreateDefaultMappings', 0)
 
@@ -35,12 +39,12 @@ function! g:Dotf_postinit()
   call s:LOG.warn('Run postinit')
 
   " configure vim-arpeggio
-  if exists('g:loaded_arpeggio')
-    if exists('g:dotf_escape_key_sequence')
-      call arpeggio#map('i', '', 0, g:dotf_escape_key_sequence, '<Esc>')
-    endif
-    let g:arpeggio_timeoutlen = get(g:, 'arpeggio_timeoutlen', 100)
-  endif
+  "if exists('g:loaded_arpeggio')
+    "if exists('g:dotf_escape_key_sequence')
+      "call arpeggio#map('i', '', 0, g:dotf_escape_key_sequence, '<Esc>')
+    "endif
+    "let g:arpeggio_timeoutlen = get(g:, 'arpeggio_timeoutlen', 100)
+  "endif
 
   " configure vim-leader-guide
   if exists('g:loaded_leaderGuide_vim')
@@ -48,7 +52,7 @@ function! g:Dotf_postinit()
 
     " cleanup displayed key bindings
     function! s:dotf_displayfunc()
-      let g:leaderGuide#displayname = substitute(g:leaderGuide#displayname, '\c<cr>$', '', '')
+      "let g:leaderGuide#displayname = substitute(g:leaderGuide#displayname, '\c<cr>$', '', '')
       let g:leaderGuide#displayname = substitute(g:leaderGuide#displayname, '^<SID>', '', '')
       let g:leaderGuide#displayname = substitute(g:leaderGuide#displayname, '^<Plug>', '', '')
       let g:leaderGuide#displayname = substitute(g:leaderGuide#displayname, '#', '', '')
@@ -68,8 +72,25 @@ function! g:Dotf_postinit()
     else
       let g:mapleader = l:leader_key
     endif
+  
+    " register localleader map
+    call leaderGuide#register_prefix_descriptions('\', 'g:llmap')
+
+    " create toplevel dict
+    let g:topdict = {}
+    let g:topdict[' '] = g:lmap
+    let g:topdict[' ']['name'] = '<leader>'
+    let g:topdict['\'] = g:llmap
+    let g:topdict['\']['name'] = '<localleader>'
+    call leaderGuide#register_prefix_descriptions("", 'g:topdict')
+
     execute 'nnoremap <silent> <Leader> :<c-u>LeaderGuide "' . l:leader_key . '"<CR>'
     execute 'vnoremap <silent> <Leader> :<c-u>LeaderGuideVisual "' . l:leader_key . '"<CR>'
+    nnoremap <silent> <localleader> :<c-u>LeaderGuide '\'<CR>
+  endif
+
+  if exists('g:loaded_webdevicons')
+    call webdevicons#refresh()
   endif
 endfunction
 
