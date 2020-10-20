@@ -10,10 +10,12 @@ function! Modules()
   DfModule 'nav/splash'
   DfModule 'nav/buffers'
   DfModule 'nav/search'
+  DfModule 'nav/comments'
   DfModule 'ui/colors'
   DfModule 'tools/terminal'
   DfModule 'tools/completion'
   DfModule 'tools/drag'
+  DfModule 'tools/tasks'
   DfModule 'scm/git'
 
   DfModule 'ui/icons'

@@ -110,4 +110,4 @@ set breakindentopt=shift:0
 set showbreak=\ \·
 
 set wildmenu
-set wildignore+=*/tmp/*,*.so,*.swp,*.zip,*.class,*.hi,*.o,*/target/*,*/target,*/out
+set wildignore+=*/tmp/*,*.so,*.swp,*.zip,*.class,*.hi,*.o,*/target/*,*/target,*/out,*/.bloop

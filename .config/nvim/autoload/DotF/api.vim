@@ -28,6 +28,8 @@ function! DotF#api#import(name) abort
   return p
 endfunction
 
+""
+" Register some API
 function! DotF#api#register(name, api) abort
   if !empty(DotF#api#import(a:name))
     echoerr '[DotF API] Api: ' . a:name . ' already exists!'
@@ -36,13 +38,9 @@ function! DotF#api#register(name, api) abort
   endif
 endfunction
 
+""
+" Tests if python is enabled.
+" return: true if enabled, false otherwise
 function! DotF#api#has_python() abort
   return has('python') || has('python3')
-endfunction
-
-function! DotF#api#echo(msg)
-  echohl WarningMsg
-  echo 'Warning'
-  echohl None
-  echon ': ' . a:msg
 endfunction

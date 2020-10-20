@@ -28,7 +28,7 @@ settings:
   statusbar.show:
     global: in-mode
   tabs.show:
-    global: always
+    global: switching
   url.searchengines:
     global:
       DEFAULT: https://www.google.com/search?hl=en&q={}

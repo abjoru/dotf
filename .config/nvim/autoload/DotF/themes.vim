@@ -1,3 +1,5 @@
+""
+" Sets the vim theme (and optionally airline theme if enabled)
 function! DotF#themes#set(bg, name, ...) abort
   " Set background
   if a:bg ==? 'light'
