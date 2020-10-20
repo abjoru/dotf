@@ -1,8 +1,11 @@
 DotF Neovim:
   ☐ Figure out why copy/paste (external) won't work properly! @priority(high)
-  ☐ Figure out how the leader-guide config actually works! @priority(low)
   ☐ Figure out why <tab> does not scroll autocomplete dialog! @priority(high)
+  ☐ Add task commands to leader guide @priority(high)
+  ☐ Add fugitive diff commands to leader guide @priority(medium)
   ✓ Find a decent task plugin @priority(medium) @done(2020-10-19 23:39) @project(Configurations)
   ☐ Create better key mapping for tasks @priority(medium)
-  ☐ Add task commands to leader guide @priority(high)
+  ☐ Change devicons colors to match gruvbox theme @priority(low)
+  ☐ Check if we can get tasks displayed in startify @priority(low)
+  ☐ Figure out how the leader-guide config actually works! @priority(low)
 
