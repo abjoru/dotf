@@ -3,10 +3,13 @@ let s:LOG = DotF#logger#derive('sync')
 let s:cache_dir = expand(resolve($HOME . '/.cache/nvim'))
 let s:cache_file = expand(resolve(s:cache_dir . '/loaded-plugins.vim'))
 
-  function! DotF#sync#run() abort
-    call s:detect_plugin_changes()
-    call DotF#sync#configuration()
-  endfunction
+""
+" Run plugin/config synchronization.
+function! DotF#sync#run() abort
+  call s:detect_plugin_changes()
+  call DotF#sync#configuration()
+endfunction
+
 " make sure we don't re-source these functions!
 if !exists('g:dotf_update_and_sync_already_defined')
   let g:dotf_update_and_sync_already_defined = 1
@@ -23,6 +26,9 @@ if !exists('g:dotf_update_and_sync_already_defined')
   endfunction
 endif
 
+""
+" Check if plugins needs to be updated.
+" This function logs to messages.
 function! DotF#sync#check_plugins() abort
   if !isdirectory(s:cache_dir)
     call mkdir(s:cache_dir, 'p')
@@ -45,6 +51,8 @@ function! DotF#sync#check_plugins() abort
   endif
 endfunction
 
+""
+" Detect plugin changes and invokes sync.
 function! s:detect_plugin_changes() abort
   if !isdirectory(s:cache_dir)
     call mkdir(s:cache_dir, 'p')

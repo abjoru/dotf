@@ -1,0 +1,1 @@
+DfAddPlugin 'crispydrone/vim-tasks'

@@ -29,8 +29,17 @@ function! DotF#commands#load() abort
   " param3: airline theme [gruvbox|..]
   command! -nargs=+ -bar DfSetTheme call DotF#themes#set(<args>)
 
+  ""
+  " Sets the initial width of the NERDTree buffer.
+  " param1: int (default 45)
   command! -nargs=1 -bar DfTreeWidth call s:tree_width(<args>)
+
+  ""
+  " Disables the tabline.
   command! -nargs=0 -bar DfDisableTabline call s:disable_tabline()
+
+  ""
+  " Starts with NERDTree open.
   command! -nargs=0 -bar DfStartWithTree call s:start_with_tree()
 
   """"""""""""""""""""
@@ -53,6 +62,10 @@ function! DotF#commands#load() abort
 
   " use in init.vim to configure tab indentation
   command! -nargs=+ -bar DfTabIndent call s:set_tab_indentation(<args>)
+
+  """"""""""""""""""""
+  " Mapping commands "
+  """"""""""""""""""""
 
   command! -nargs=+ -bar DfBind call s:buf_bind(<args>)
   command! -nargs=+ -bar DfMap call s:buf_map(<args>)
