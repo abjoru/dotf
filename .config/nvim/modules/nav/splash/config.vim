@@ -15,13 +15,14 @@ function! s:git_modified()
   else
     let l:files = systemlist('git ls-files -m 2>/dev/null')
   endif
-  return map(l:files, "{'line': v:val, 'path': v:val}")
+
+  return map(l:files, {v -> {'line': v, 'path': v}})
 endfunction
 
 " same as above but shows untracked files (not for dotf)
 function! s:git_untracked()
   let l:files = systemlist('git ls-files -o --exclude-standard 2>/dev/null')
-  return map(l:files, "{'line': v:val, 'path': v:val}")
+  return map(l:files, {v -> {'line': v, 'path': v}})
 endfunction
 
 function! s:load_tasks(file)
@@ -31,19 +32,17 @@ function! s:load_tasks(file)
     let l:topic = ''
     let l:tasks = []
 
-    for l:line in l:lines
-      if !empty(l:line)
-        if l:line =~ ".*:\s*$"
-          if !empty(l:topic)
-            call add(l:output, {'topic': l:topic, 'tasks': l:tasks})
-            let l:topic = substitute(l:line, ':', '', '')
-            let l:tasks = []
-          else
-            let l:topic = substitute(l:line, ':', '', '')
-          endif
+    for l:line in filter(l:lines, {_, l -> !empty(l)})
+      if l:line =~ ".*:\s*$"
+        if !empty(l:topic)
+          call add(l:output, {'topic': l:topic, 'tasks': l:tasks})
+          let l:topic = substitute(l:line, ':', '', '')
+          let l:tasks = []
         else
-          call add(l:tasks, {'line': l:line, 'path': a:file})
+          let l:topic = substitute(l:line, ':', '', '')
         endif
+      else
+        call add(l:tasks, {'line': l:line, 'path': a:file})
       endif
     endfor
 
@@ -64,15 +63,15 @@ function! s:build_startify_lists()
   let l:startify = [
     \ { 'type': 'files', 'header': ['   MRU'] },
     \ { 'type': 'dir', 'header': ['   MRU ' . getcwd()] },
-    \ { 'type': function('s:git_modified'), 'header': ['   GIT Modified'] },
-    \ { 'type': function('s:git_untracked'), 'header': ['   GIT Untracked'] }
+    \ { 'type': {-> s:git_modified()}, 'header': ['   GIT Modified'] },
+    \ { 'type': {-> s:git_untracked()}, 'header': ['   GIT Untracked'] }
     \ ]
 
   let l:tasks = s:load_tasks($HOME . '/.config/nvim/dotf.todo')
   let l:tasks = map(l:tasks, {i, v -> {'idx': i, 'topic': v.topic}})
 
   for item in l:tasks
-    call add(l:startify, {'type': function('s:tasks', [item.idx]), 'header': ['   Tasks: ' . item.topic]})
+    call add(l:startify, {'type': {-> s:tasks(item.idx)}, 'header': ['   Tasks: ' . item.topic]})
   endfor
 
   return l:startify

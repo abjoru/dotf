@@ -1,6 +1,7 @@
 DotF Neovim:
   ☐ Make box comment filetype aware and map to `cc` @priority(high)
   ☐ Fix DotF bootstrap sync of modules @priority(high)
+    ☐ Make sync cmd just update plug and coc 
   ☐ Map NERDCommenter commands
   ☐ Change devicons colors to match gruvbox theme @priority(low)
   ☐ Check if file has changed and reload tasks @priority(low)

@@ -137,8 +137,9 @@ runOsInstall() {
 }
 
 buildHomepage() {
-  echo "Not implemented!"
-  exit 1
+  amm ${SC_DIR}/cmd_homepage.sc
+  echo "Homepage generation complete!"
+  exit
 }
 
 # Verify that we have a JRE

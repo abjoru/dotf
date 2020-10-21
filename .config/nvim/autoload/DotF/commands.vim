@@ -9,7 +9,11 @@ function! DotF#commands#load() abort
   " Main installation command (called from install scripts)
   command! -nargs=0 -bar DfInstall call s:install_dotf()
 
+  " Update DotF (vim plug and coc)
+  "command! -nargs=0 -bar DfUpdate call s:update_dotf()
+
   " Sync plugins and configurations
+  " @deprected TODO use DfUpdate instead after impl
   command! -nargs=0 -bar DfSync call s:syn_dotf()
 
   """"""""""""""""""""""""
