@@ -1,11 +1,7 @@
 DotF Neovim:
-  ☐ Figure out why copy/paste (external) won't work properly! @priority(high)
-  ☐ Figure out why <tab> does not scroll autocomplete dialog! @priority(high)
-  ☐ Add task commands to leader guide @priority(high)
-  ☐ Add fugitive diff commands to leader guide @priority(medium)
-  ✓ Find a decent task plugin @priority(medium) @done(2020-10-19 23:39) @project(Configurations)
-  ☐ Create better key mapping for tasks @priority(medium)
+  ☐ Make box comment filetype aware and map to `cc` @priority(high)
+  ☐ Fix DotF bootstrap sync of modules @priority(high)
+  ☐ Map NERDCommenter commands
   ☐ Change devicons colors to match gruvbox theme @priority(low)
-  ☐ Check if we can get tasks displayed in startify @priority(low)
-  ☐ Figure out how the leader-guide config actually works! @priority(low)
-
+  ☐ Check if file has changed and reload tasks @priority(low)
+  ☐ Make task file loading generic in searching for *.todo @priority(low)

@@ -1,3 +1,5 @@
+let g:fzf_preview_window = 'right:60%'
+
 let g:lmap.f = get(g:lmap, 'f', { 'name': 'files' })
 
 DfNMap 'fb', 'find-buffer', 'Buffers'
