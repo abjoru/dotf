@@ -1,3 +1,5 @@
+let s:LIST = DotF#api#import('list')
+
 "let g:startify_custom_header = get(g:, 'startify_custom_header', [
 "\'',
 "\'          [D o t F - N e o V i m - B u i l d]',
@@ -13,13 +15,14 @@ function! s:git_modified()
   else
     let l:files = systemlist('git ls-files -m 2>/dev/null')
   endif
-  return map(l:files, "{'line': v:val, 'path': v:val}")
+
+  return map(l:files, {v -> {'line': v, 'path': v}})
 endfunction
 
 " same as above but shows untracked files (not for dotf)
 function! s:git_untracked()
   let l:files = systemlist('git ls-files -o --exclude-standard 2>/dev/null')
-  return map(l:files, "{'line': v:val, 'path': v:val}")
+  return map(l:files, {v -> {'line': v, 'path': v}})
 endfunction
 
 function! s:load_tasks(file)
@@ -29,19 +32,17 @@ function! s:load_tasks(file)
     let l:topic = ''
     let l:tasks = []
 
-    for l:line in l:lines
-      if !empty(l:line)
-        if l:line =~ ".*:\s*$"
-          if !empty(l:topic)
-            call add(l:output, {'topic': l:topic, 'tasks': l:tasks})
-            let l:topic = substitute(l:line, ':', '', '')
-            let l:tasks = []
-          else
-            let l:topic = substitute(l:line, ':', '', '')
-          endif
+    for l:line in filter(l:lines, {_, l -> !empty(l)})
+      if l:line =~ ".*:\s*$"
+        if !empty(l:topic)
+          call add(l:output, {'topic': l:topic, 'tasks': l:tasks})
+          let l:topic = substitute(l:line, ':', '', '')
+          let l:tasks = []
         else
-          call add(l:tasks, {'line': l:line, 'path': a:file})
+          let l:topic = substitute(l:line, ':', '', '')
         endif
+      else
+        call add(l:tasks, {'line': l:line, 'path': a:file})
       endif
     endfor
 
@@ -53,11 +54,7 @@ function! s:load_tasks(file)
   return l:output
 endfunction
 
-function! s:task_headers(index, data)
-  return a:data[a:index].topic
-endfunction
-
-function! s:task_contents(index)
+function! s:tasks(index)
   let l:data = s:load_tasks($HOME . '/.config/nvim/dotf.todo')
   return l:data[a:index].tasks
 endfunction
@@ -66,18 +63,16 @@ function! s:build_startify_lists()
   let l:startify = [
     \ { 'type': 'files', 'header': ['   MRU'] },
     \ { 'type': 'dir', 'header': ['   MRU ' . getcwd()] },
-    \ { 'type': function('s:git_modified'), 'header': ['   GIT Modified'] },
-    \ { 'type': function('s:git_untracked'), 'header': ['   GIT Untracked'] }
+    \ { 'type': {-> s:git_modified()}, 'header': ['   GIT Modified'] },
+    \ { 'type': {-> s:git_untracked()}, 'header': ['   GIT Untracked'] }
     \ ]
 
   let l:tasks = s:load_tasks($HOME . '/.config/nvim/dotf.todo')
+  let l:tasks = map(l:tasks, {i, v -> {'idx': i, 'topic': v.topic}})
 
-  let i = 0
-  let m = len(l:tasks)
-  while i < m
-    call add(l:startify, {'type': function('s:task_contents', [i]), 'header': ['   Tasks: ' . s:task_headers(i, l:tasks)]})
-    let i += 1
-  endwhile
+  for item in l:tasks
+    call add(l:startify, {'type': {-> s:tasks(item.idx)}, 'header': ['   Tasks: ' . item.topic]})
+  endfor
 
   return l:startify
 endfunction

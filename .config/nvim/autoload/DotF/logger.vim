@@ -1,3 +1,8 @@
+
+"""""""""""""""""
+" Logger Facade "
+"""""""""""""""""
+
 let s:LOGGER = DotF#api#import('logger')
 
 call s:LOGGER.set_name('DotF')

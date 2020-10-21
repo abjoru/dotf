@@ -52,7 +52,10 @@ function! s:write_plugin_cache() abort
     call mkdir(g:cache_dir, 'p')
   endif
 
-  if writefile(DotF#modules#enabledpluginnames(), s:cache_file)
+  let ps = DotF#modules#enabledpluginnames()
+  if writefile(ps, s:cache_file)
     call s:LOG.error('Could not write loaded plugins to cache file!')
+  else
+    call s:LOG.info('Wrote plugins: ' . string(ps))
   endif
 endfunction

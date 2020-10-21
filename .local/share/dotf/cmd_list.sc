@@ -3,7 +3,6 @@ import ammonite.ops._
 import $file.common
 import common._
 
-// TODO make list untracked to check untracked files in each config parent (or parent in general)
 @main
 def main(action: String = "all"): Unit = action match {
   case "pkgs" => Const.pkgs().foreach(p => println(p.name))
@@ -15,6 +14,7 @@ def main(action: String = "all"): Unit = action match {
   case other => Printer.err(s"[ERROR]: Invalid command '$other'")
 }
 
+// FIXME This does not handle untracked in parent tracked directories!
 private def showUntracked(): Unit = {
   val tracked = Const.managedFiles()
   

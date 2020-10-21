@@ -2,6 +2,6 @@ augroup auto_colorize
   autocmd!
   autocmd
         \ BufNewFile,BufRead,BufEnter,BufLeave,WinEnter,WinLeave,WinNew
-        \ *.hs,*.css
+        \ *.hs,*.css,*.vim
         \ ColorHighlight
 augroup END

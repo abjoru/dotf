@@ -103,6 +103,10 @@ nnoremap <localleader>pp "+P
 vnoremap <localleader>p "+p
 vnoremap <localleader>pp "+P
 
+" Comment boxes
+vmap ,hh !boxes -f ~/.config/nvim/cfg/boxes -d scala<CR>
+vmap ,hv !boxes -f ~/.config/nvim/cfg/boxes -d vim-box<CR>
+
 """""""""""""""""
 " Uncategorized "
 """""""""""""""""

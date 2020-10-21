@@ -38,14 +38,6 @@ endfunction
 function! g:Dotf_postinit()
   call s:LOG.warn('Run postinit')
 
-  " configure vim-arpeggio
-  "if exists('g:loaded_arpeggio')
-    "if exists('g:dotf_escape_key_sequence')
-      "call arpeggio#map('i', '', 0, g:dotf_escape_key_sequence, '<Esc>')
-    "endif
-    "let g:arpeggio_timeoutlen = get(g:, 'arpeggio_timeoutlen', 100)
-  "endif
-
   " configure vim-leader-guide
   if exists('g:loaded_leaderGuide_vim')
     call s:LOG.warn('Configure vim-leader-guide')

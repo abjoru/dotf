@@ -1,5 +1,7 @@
-" Based on SpaceVim API
-"
+"""""""""""""""""""""""""
+" Based on SpaceVim API "
+"""""""""""""""""""""""""
+
 " To use the API, make sure DotF has been added to your &rtp and then use the
 " `DotF#api#import` to import the API you need.
 "
