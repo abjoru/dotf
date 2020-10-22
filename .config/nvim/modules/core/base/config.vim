@@ -104,8 +104,15 @@ vnoremap <localleader>p "+p
 vnoremap <localleader>pp "+P
 
 " Comment boxes
-vmap ,hh !boxes -f ~/.config/nvim/cfg/boxes -d scala<CR>
-vmap ,hv !boxes -f ~/.config/nvim/cfg/boxes -d vim-box<CR>
+autocmd FileType vim vnoremap <buffer> ,cc !boxes -f ~/.config/nvim/cfg/boxes -d vim-box<CR>
+autocmd FileType scala vnoremap <buffer> ,cc !boxes -f ~/.config/nvim/cfg/boxes -d scala<CR>
+
+""""""""""""""
+" File types "
+""""""""""""""
+
+" Make ammonite .sc files use scala syntax
+au BufRead,BufNewFile *.sc set filetype=scala
 
 """""""""""""""""
 " Uncategorized "

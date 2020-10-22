@@ -3,6 +3,8 @@ import ammonite.ops._
 import $file.common
 import common._
 
+implicit val wd = home
+
 @main
 def main(action: String = "all"): Unit = action match {
   case "pkgs" => Const.pkgs().foreach(p => println(p.name))
@@ -14,24 +16,23 @@ def main(action: String = "all"): Unit = action match {
   case other => Printer.err(s"[ERROR]: Invalid command '$other'")
 }
 
-// FIXME This does not handle untracked in parent tracked directories!
 private def showUntracked(): Unit = {
-  val tracked = Const.managedFiles()
-  
-  tracked.map(v => v/up).distinct.filterNot(_ == home).foreach { p =>
-    val (dx, fx) = (ls! p).partition(_.isDir)
+  val trackedFiles = Const.managedFiles()
+  val allRoots = Const.unmanagedDirs()
+  val (tracked, untracked) = allRoots.partition(r => trackedFiles.exists(_.startsWith(r)))
 
-    val untrackedDirs = dx.filterNot(d => tracked.contains(d)).filterNot { d =>
-      tracked.find(_.toString.startsWith(d.toString)).isDefined
-    }
+  Printer.info(s"\nUntraced directories in $home")
+  untracked.foreach(println)
 
-    val untrackedFiles = fx.filterNot(f => tracked.contains(f))
+  tracked.foreach { p =>
+    val gitDir = (home/".dotf").toString
+    val workTree = home.toString
+    val cmd = %%("git", s"--git-dir=$gitDir", s"--work-tree=$workTree", "ls-files", "--other", "--directory", p)
+    val untrackedTargets = cmd.out.lines
 
-    if (untrackedDirs.nonEmpty || untrackedFiles.nonEmpty)
+    if (untrackedTargets.nonEmpty) {
       Printer.info(s"\nUntracked items in $p")
-
-    untrackedDirs.foreach(println)
-    untrackedFiles.foreach(println)
+      untrackedTargets.foreach(println)
+    }
   }
-
 }

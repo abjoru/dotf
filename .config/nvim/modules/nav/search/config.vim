@@ -10,6 +10,6 @@ if executable('rg')
   DfNMap 'fg', 'find-rg', 'Rg'
 endif
 
-if DotF#modules#isenabled('scm/git')
+if DotF#modules#is_enabled('scm/git')
   DfNMap 'fG', 'find-git-grep', 'GGrep'
 endif

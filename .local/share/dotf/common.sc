@@ -20,6 +20,9 @@ object Const {
     cmd.out.lines.map(l => os.Path(s"${home.toString}/$l")).toSeq
   }
 
+  def unmanagedDirs(): Seq[os.Path] = 
+    home.toIO.listFiles().filter(_.isDirectory()).map(os.Path(_))
+
   def customInstallers(): Seq[os.Path] = managedFiles().filter(_.last == "install.sh")
 
   /** Returns a sequence of managed `Pkg`s. */
