@@ -34,11 +34,11 @@ displayUsageAndExit() {
   echo "  *                 delegates to git commands"
   echo
   echo "Actions:"
-  echo "  pkgs                list all packages"
-  echo "  warn                list all warnings"
-  echo "  custom              list all custom installers"
-  echo "  tracked             list all tracked files"
-  echo "  untracked [<path>]  list all untracked files in established parent dirs"
+  echo "  pkgs      list all packages"
+  echo "  warn      list all warnings"
+  echo "  custom    list all custom installers"
+  echo "  tracked   list all tracked files"
+  echo "  untracked list all untracked files in established parent dirs"
   exit
 }
 
@@ -86,13 +86,7 @@ invalidCommand() {
 }
 
 runList() {
-  shift
-  if [ -n "$2" ]; then
-    amm ${SC_DIR}/cmd_list.sc "$1" "$2"
-  else
-    amm ${SC_DIR}/cmd_list.sc "$1" ""
-  fi
-
+  amm ${SC_DIR}/cmd_list.sc "$1"
   exit
 }
 
@@ -165,7 +159,7 @@ done
 shift $((OPTIND-1))
 
 case $1 in
-  list) runList "$@" ;;
+  list) runList "$2" ;;
   update) runUpdate "$MODE" "$VERBOSE" ;;
   upgrade) runUpgrade "$MODE" "$VERBOSE" ;;
   sync) runSync "$MODE" "$2" ;;

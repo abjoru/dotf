@@ -4,9 +4,6 @@
 " Globals "
 """""""""""
 
-" TODO deprecate this
-let g:scratch_buffer_no = get(g:, 'scratch_buffer_no', -1)
-
 " Global Paths
 let g:home_dir = $HOME
 let g:cache_dir = expand(resolve(g:home_dir . '/.cache/nvim'))
@@ -60,6 +57,10 @@ function! dotf#bootstrap() abort
     au VimEnter * call DotF#updates#check()
   augroup END
 endfunction
+
+"""""""""""""""""""""
+" Utility functions "
+"""""""""""""""""""""
 
 " Load all plugins using vim-plug
 function! s:load_all_plugins() abort

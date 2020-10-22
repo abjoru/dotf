@@ -67,13 +67,14 @@ function! DotF#commands#load() abort
   " Mapping commands "
   """"""""""""""""""""
 
-  command! -nargs=+ -bar DfBind call s:buf_bind(<args>)
-  command! -nargs=+ -bar DfMap call s:buf_map(<args>)
-  command! -nargs=+ -bar DfNMap call s:buf_nmap(<args>)
-  command! -nargs=+ -bar DfVMap call s:buf_vmap(<args>)
-  command! -nargs=+ -bar DfFileTypeBind call s:filetype_bind(<args>)
-  command! -nargs=+ -bar DfFileTypeMap call s:filetype_map(<args>)
-  command! -nargs=+ -bar DfFileTypeNMap call s:filetype_nmap(<args>)
+  command! -nargs=+ -bar DfBind call DotF#mappings#buf_bind(<args>)
+  command! -nargs=+ -bar DfMap call DotF#mappings#buf_map(<args>)
+  command! -nargs=+ -bar DfNMap call DotF#mappings#buf_nmap(<args>)
+  command! -nargs=+ -bar DfVMap call DotF#mappings#buf_vmap(<args>)
+
+  command! -nargs=+ -bar DfFileTypeBind call DotF#mappings#ft_bind(<args>)
+  command! -nargs=+ -bar DfFileTypeMap call DotF#mappings#ft_map(<args>)
+  command! -nargs=+ -bar DfFileTypeNMap call DotF#mappings#ft_nmap(<args>)
 
 endfunction
 
@@ -115,101 +116,6 @@ endfunction
 function! s:set_tab_indentation(ft, indentation) abort
   let l:indent = get(g:, 'df_' . a:ft . '_indentation', a:indentation)
   execute 'au FileType ' . a:ft . ' setlocal noexpandtab shiftwidth=' . l:indent . ' tabstop=' . l:indent
-endfunction
-
-function! s:buf_bind(map, binding, name, value, isCmd) abort
-  if a:isCmd
-    let l:value = ':' . a:value . '<cr>'
-  else
-    let l:value = a:value
-  endif
-
-  if a:map ==# 'map' && maparg('<Leader>' . a:binding, '') ==# ''
-    let l:noremap = 'noremap'
-  elseif a:map ==# 'nmap' && maparg('<Leader>' . a:binding, '') ==# ''
-    let l:noremap = 'nnoremap'
-  elseif a:map ==# 'vmap' && maparg('<Leader>' . a:binding, '') ==# ''
-    let l:noremap = 'vnoremap'
-  elseif a:map ==# 'tmap' && maparg('<Leader>' . a:binding, '') ==# ''
-    let l:noremap = 'tnoremap'
-  else
-    let l:noremap = ''
-  endif
-  
-  if l:noremap !=# ''
-    execute 'au VimEnter * ' . l:noremap . ' <SID>' . a:name . '# ' . l:value
-    execute 'au VimEnter * ' . a:map . ' <Leader>' . a:binding . ' <SID>' . a:name . '#'
-  endif
-endfunction
-
-function! s:buf_map(binding, name, value, ...) abort
-  let l:isCmd = 1
-  if a:0 > 0
-    let l:isCmd = a:1
-  endif
-  call s:buf_bind('map', a:binding, a:name, a:value, l:isCmd)
-endfunction
-
-function! s:buf_nmap(binding, name, value, ...) abort
-  let l:isCmd = 1
-  if a:0 > 0
-    let l:isCmd = a:1
-  endif
-  call s:buf_bind('nmap', a:binding, a:name, a:value, l:isCmd)
-endfunction 
-
-function! s:buf_vmap(binding, name, value, ...) abort
-  let l:isCmd = 1
-  if a:0 > 0
-    let l:isCmd = a:1
-  endif
-  call s:buf_bind('vmap', a:binding, a:name, a:value, l:isCmd)
-endfunction 
-
-function! s:filetype_bind(ft, map, binding, name, value, isCmd) abort
-  if a:isCmd
-    let l:value = ':' . a:value . '<cr>'
-  else
-    let l:value = a:value
-  endif
-
-  if a:map ==# 'map' && maparg('<Leader>' . a:binding, '') ==# ''
-    let l:noremap = 'noremap'
-  elseif a:map ==# 'nmap' && maparg('<Leader>' . a:binding, '') ==# ''
-    let l:noremap = 'nnoremap'
-  elseif a:map ==# 'vmap' && maparg('<Leader>' . a:binding, '') ==# ''
-    let l:noremap = 'vnoremap'
-  elseif a:map ==# 'tmap' && maparg('<Leader>' . a:binding, '') ==# ''
-    let l:noremap = 'tnoremap'
-  else
-    let l:noremap = ''
-  endif
-
-  if l:noremap !=# ''
-    execute 'au VimEnter * if &ft ==? "' . a:ft . '" | ' . l:noremap . ' <buffer> <SID>' . a:name . '# ' . l:value . ' | endif '
-    execute 'au VimEnter * if &ft ==? "' . a:ft . '" | ' . a:map . ' <buffer> <Leader>' . a:binding . ' <SID>' . a:name . '# | endif '
-
-    execute 'au FileType ' . a:ft . ' ' . l:noremap . ' <buffer> <SID>' . a:name . '# ' . l:value
-    execute 'au FileType ' . a:ft . ' ' . a:map . ' <buffer> <Leader>' . a:binding . ' <SID>' . a:name . '#'
-  endif
-endfunction
-
-function! s:filetype_map(tfile, binding, name, value, ...) abort
-  let l:isCmd = 1
-  if a:0 > 0
-    let l:isCmd = a:1
-  endif
-
-  call s:filetype_bind(a:tfile, 'map', a:binding, a:name, a:value, l:isCmd)
-endfunction
-
-function! s:filetype_nmap(tfile, binding, name, value, ...) abort
-  let l:isCmd = 1
-  if a:0 > 0
-    let l:isCmd = a:1
-  endif
-
-  call s:filetype_bind(a:tfile, 'nmap', a:binding, a:name, a:value, l:isCmd)
 endfunction
 
 function! s:install_dotf() abort
