@@ -28,18 +28,32 @@ function! Options()
   DfTreeWidth(40)
 endfunction
 
-function! DotfPre()
+function! Before()
 endfunction
 
-function! DotfPost()
+function! After()
   DfSetTheme 'dark', 'gruvbox', 'gruvbox'
   DfStartWithTree
 endfunction
 
 " Loader, do not edit!
-call dotf#init()
+call dotf#initialize()
 call Options()
 call Modules()
-call DotfPre()
+call Before()
 call dotf#bootstrap()
-call DotfPost()
+call After()
+
+" Describe New Boot sequence
+"
+" 1. load commands
+" 2. check for plugin changes (augroup?)
+"   a. ask to update follow by quit (for reload)
+"   b. proceed normally if no changes
+" 3. load plugins
+" 4. done
+"
+" Updates should have its own separate flow/command. This would really only
+" deal with plugin/coc changes since bootstrap takes care of new modules. Not
+" a problem having to restart after module addition, which would prevent
+" having to re-source code anyways (safer)

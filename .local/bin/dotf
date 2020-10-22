@@ -26,19 +26,19 @@ displayUsageAndExit() {
   echo "  -h  Display this help"
   echo
   echo "Commands:"
-  echo "  list [<action>] 	list managed files"
-  echo "  update           	update managed files"
-  echo "  upgrade           	upgrade managed packages and settings"
-  echo "  sync <branch>         sync current branch with some other branch using no fastforward and no commit"
-  echo "  homepage 		build/re-build homepage"
-  echo "  * 			delegates to git commands"
+  echo "  list [<action>]   list managed files"
+  echo "  update            update managed files"
+  echo "  upgrade           upgrade managed packages and settings"
+  echo "  sync <branch>     sync current branch with some other branch using no fastforward and no commit"
+  echo "  homepage          build/re-build homepage"
+  echo "  *                 delegates to git commands"
   echo
   echo "Actions:"
-  echo "  pkgs   	list all packages"
-  echo "  warn   	list all warnings"
-  echo "  custom 	list all custom installers"
-  echo "  tracked 	list all tracked files"
-  echo "  untracked 	list all untracked files in established parent dirs"
+  echo "  pkgs                list all packages"
+  echo "  warn                list all warnings"
+  echo "  custom              list all custom installers"
+  echo "  tracked             list all tracked files"
+  echo "  untracked [<path>]  list all untracked files in established parent dirs"
   exit
 }
 
@@ -86,7 +86,13 @@ invalidCommand() {
 }
 
 runList() {
-  amm ${SC_DIR}/cmd_list.sc "$1"
+  shift
+  if [ -n "$2" ]; then
+    amm ${SC_DIR}/cmd_list.sc "$1" "$2"
+  else
+    amm ${SC_DIR}/cmd_list.sc "$1" ""
+  fi
+
   exit
 }
 
@@ -159,7 +165,7 @@ done
 shift $((OPTIND-1))
 
 case $1 in
-  list) runList "$2" ;;
+  list) runList "$@" ;;
   update) runUpdate "$MODE" "$VERBOSE" ;;
   upgrade) runUpgrade "$MODE" "$VERBOSE" ;;
   sync) runSync "$MODE" "$2" ;;

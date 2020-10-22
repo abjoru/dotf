@@ -25,7 +25,7 @@ if executable('rg')
   command! -bang -nargs=* Rg call s:rg(<q-args>, <bang>0)
 endif
 
-if DotF#modules#isenabled('scm/git')
+if DotF#modules#is_enabled('scm/git')
   function! s:git_grep(query, bang)
     let l:query = a:query
     if empty(a:query)

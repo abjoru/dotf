@@ -1,6 +1,6 @@
 " Use ripgrep if available
 if executable('rg')
-  if !DotF#modules#isenabled('nav/fzf')
+  if !DotF#modules#is_enabled('nav/fzf')
     command! -nargs=+ -complete=file -bar Rg silent! grep! <args>|cwindow|redraw!
   endif
 

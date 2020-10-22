@@ -1,0 +1,1 @@
+DfAddPlugin 'ryanoasis/vim-devicons'

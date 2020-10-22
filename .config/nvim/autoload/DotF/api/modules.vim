@@ -85,15 +85,6 @@ function! s:self.list_plugins() abort
   return l:pgs
 endfunction
 
-function! s:self.list_plugin_names() abort
-  let l:plugins = []
-  for l:plugin in s:self.list_plugins()
-    call add(l:plugins, l:plugin.name)
-  endfor
-
-  return l:plugins
-endfunction
-
 function! s:self.get_module_dir() abort
   return self.dir
 endfunction

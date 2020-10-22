@@ -41,21 +41,8 @@ endfunction
 " Install/sync all plugins using vim-plug
 function! DotF#plug#install() abort
   call mkdir(s:plug_dir, 'p')
-  call s:write_plugin_cache()
+  call DotF#cache#write_plugins()
   call s:LOG.info('Installing all plugins via vim-plug')
   :PlugInstall! --sync
   call s:LOG.info('All plugins installed')
-endfunction
-
-function! s:write_plugin_cache() abort
-  if !isdirectory(g:cache_dir)
-    call mkdir(g:cache_dir, 'p')
-  endif
-
-  let ps = DotF#modules#enabledpluginnames()
-  if writefile(ps, s:cache_file)
-    call s:LOG.error('Could not write loaded plugins to cache file!')
-  else
-    call s:LOG.info('Wrote plugins: ' . string(ps))
-  endif
 endfunction

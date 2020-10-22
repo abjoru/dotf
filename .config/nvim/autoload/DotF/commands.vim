@@ -10,18 +10,14 @@ function! DotF#commands#load() abort
   command! -nargs=0 -bar DfInstall call s:install_dotf()
 
   " Update DotF (vim plug and coc)
-  "command! -nargs=0 -bar DfUpdate call s:update_dotf()
-
-  " Sync plugins and configurations
-  " @deprected TODO use DfUpdate instead after impl
-  command! -nargs=0 -bar DfSync call s:syn_dotf()
+  command! -nargs=0 -bar DfUpdate call s:update_dotf()
 
   """"""""""""""""""""""""
   " User config commands "
   """"""""""""""""""""""""
 
   " Configure module
-  command! -nargs=1 -bar DfModule call DotF#modules#enable(<args>)
+  command! -nargs=1 -bar DfModule call DotF#modules#module(<args>)
 
   " Configure plugin
   command! -nargs=* -bar DfPlugin call DotF#modules#plugin(<args>)
@@ -85,14 +81,17 @@ endfunction
 " Command implementations "
 """""""""""""""""""""""""""
 
+" Set nerdtree width
 function! s:tree_width(width) abort
   let g:dotf_nav_tree_width = a:width
 endfunction
 
+" Disable tabline
 function! s:disable_tabline() abort
   let g:dotf_ui_statusbar_tabline_enabled = 0
 endfunction
 
+" Show nerdtree on startup
 function! s:start_with_tree() abort
   autocmd VimEnter * 
         \ if !argc()
@@ -102,9 +101,10 @@ function! s:start_with_tree() abort
         \ | endif
 endfunction
 
+" Enable plugin from module
 function! s:add_mplugin(name, ...) abort
   let l:cfg = get(a:, '1', {})
-  call DotF#modules#mplugin(a:name, l:cfg)
+  call DotF#modules#module_plugin(a:name, l:cfg)
 endfunction
 
 function! s:set_space_indentation(ft, indentation) abort
@@ -212,52 +212,10 @@ function! s:filetype_nmap(tfile, binding, name, value, ...) abort
   call s:filetype_bind(a:tfile, 'nmap', a:binding, a:name, a:value, l:isCmd)
 endfunction
 
-" FIXME use local logger that logs to install_log file!
 function! s:install_dotf() abort
-  let l:has_python = DotF#api#has_python()
-
-  if l:has_python ==? 0
-    call s:LOG.error('IMPORTANT! Neovim could not find support for python, which means')
-    call s:LOG.error('some modules may not work. To fix this, install the neovim python')
-    call s:LOG.error('package. I.e. `pip install neovim` etc')
-  endif
-
-  s:LOG.info('Starting DotF installation')
-
-  " Download and install vim-plug
-  if l:has_python ==? 1 || exists('g:gui_oni')
-    call DotF#plug#download()
-  endif
-
-  " source module utils
-  if filereadable(g:modules_dir . '/auto-modules.vim')
-    execute 'source ' . g:modules_dir . '/auto-modules.vim'
-  endif
-
-  call DotF#modules#install()
-  call DotF#plug#install()
-
-  s:LOG.info('Finished DotF installation')
-
-  " write lock file to prevent re-installation
-  if writefile([], g:config_dir . '/bootstrap_lock_file')
-    call s:LOG.info('Writing installation bootstrap lock file')
-  endif
-
-  call s:LOG.info('--- Installation finished, please restart Neovim! ---')
-  :quitall
+  call DotF#install#run()
 endfunction
 
-function! s:syn_dotf() abort
-  let l:has_python = DotF#api#has_python()
-
-  if filereadable(g:modules_dir . '/auto-modules.vim')
-    execute 'source ' . g:modules_dir . '/auto-modules.vim'
-  endif
-
-  if l:has_python ==? 1 || exists('g:gui_oni')
-    call DotF#modules#install()
-  endif
-
-  call DotF#sync#run()
+function! s:update_dotf() abort
+  call DotF#updates#run()
 endfunction
