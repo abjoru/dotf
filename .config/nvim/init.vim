@@ -19,6 +19,8 @@ function! Modules()
   DfModule 'ui/icons'
   DfModule 'ui/windows'
   DfModule 'tools/completion'
+  DfModule 'tools/expand'
+  DfModule 'lang/base'
 
   " Extra Plugins
   DfPlugin 'morhetz/gruvbox'
