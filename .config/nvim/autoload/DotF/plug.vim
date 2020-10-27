@@ -1,5 +1,8 @@
 let s:LOG = DotF#logger#derive('plug')
+let s:UTILS = DotF#api#import('utils')
+let s:CACHE = DotF#api#import('cache')
 
+" Directories and files
 let s:plug_dir = expand(resolve(g:config_dir . '/plugged'))
 let s:plug_file = expand(resolve(g:config_dir . '/autoload/plug.vim'))
 let s:cache_file = expand(resolve(g:cache_dir . '/loaded-plugins.vim'))
@@ -28,7 +31,7 @@ function! DotF#plug#download() abort
     endif
 
     call s:LOG.info('Sourcing ' . s:plug_file)
-    execute ':source ' . s:plug_file
+    call s:UTILS.source(s:plug_file)
   endif
 
   if !isdirectory(s:plug_dir)
@@ -41,7 +44,7 @@ endfunction
 " Install/sync all plugins using vim-plug
 function! DotF#plug#install() abort
   call mkdir(s:plug_dir, 'p')
-  call DotF#cache#write_plugins()
+  call s:CACHE.write_plugins()
   call s:LOG.info('Installing all plugins via vim-plug')
   :PlugInstall! --sync
   call s:LOG.info('All plugins installed')

@@ -21,6 +21,7 @@ function! Modules()
   DfModule 'tools/completion'
   DfModule 'tools/expand'
   DfModule 'lang/base'
+  DfModule 'lang/haskell'
 
   " Extra Plugins
   DfPlugin 'morhetz/gruvbox'
@@ -45,17 +46,3 @@ call Modules()
 call Before()
 call dotf#bootstrap()
 call After()
-
-" Describe New Boot sequence
-"
-" 1. load commands
-" 2. check for plugin changes (augroup?)
-"   a. ask to update follow by quit (for reload)
-"   b. proceed normally if no changes
-" 3. load plugins
-" 4. done
-"
-" Updates should have its own separate flow/command. This would really only
-" deal with plugin/coc changes since bootstrap takes care of new modules. Not
-" a problem having to restart after module addition, which would prevent
-" having to re-source code anyways (safer)

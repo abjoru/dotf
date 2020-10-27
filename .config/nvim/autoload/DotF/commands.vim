@@ -1,4 +1,5 @@
 let s:LOG = DotF#logger#derive('commands')
+let s:MODULES = DotF#modules#instance()
 
 function! DotF#commands#load() abort
 
@@ -17,10 +18,10 @@ function! DotF#commands#load() abort
   """"""""""""""""""""""""
 
   " Configure module
-  command! -nargs=1 -bar DfModule call DotF#modules#module(<args>)
+  command! -nargs=1 -bar DfModule call s:MODULES.add_module(<args>)
 
   " Configure plugin
-  command! -nargs=* -bar DfPlugin call DotF#modules#plugin(<args>)
+  command! -nargs=* -bar DfPlugin call s:MODULES.add_plugin(<args>)
 
   ""
   " Configure DotF themes
@@ -105,7 +106,7 @@ endfunction
 " Enable plugin from module
 function! s:add_mplugin(name, ...) abort
   let l:cfg = get(a:, '1', {})
-  call DotF#modules#module_plugin(a:name, l:cfg)
+  call s:MODULES.add_module_plugin(a:name, l:cfg)
 endfunction
 
 function! s:set_space_indentation(ft, indentation) abort

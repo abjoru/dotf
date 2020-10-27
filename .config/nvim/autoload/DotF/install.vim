@@ -1,8 +1,9 @@
 let s:LOG = DotF#logger#derive('install')
+let s:UTILS = DotF#api#import('utils')
 
 function! DotF#install#run() abort
   call s:LOG.info('Starting install process...')
-  let has_python = DotF#api#has_python()
+  let has_python = s:UTILS.has_python()
 
   if has_python ==? 0
     call s:LOG.error('IMPORTANT! Neovim could not find support for python, which means')

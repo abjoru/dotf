@@ -6,9 +6,9 @@
 " `DotF#api#import` to import the API you need.
 "
 " Example:
-" let s:json = DotF#api#import('data#json')
-" let rst = s:json.json_encode(object)
-" let rst = s:json.json_decode(string)
+" let s:log = DotF#api#import('logger')
+" let rst = s:log.info('msg')
+" let rst = s:log.warn('msg')
 
 " the api itself is a dict
 let s:apis = {}
@@ -38,11 +38,4 @@ function! DotF#api#register(name, api) abort
   else 
     let s:apis[a:name] = deepcopy(a:api)
   endif
-endfunction
-
-""
-" Tests if python is enabled.
-" return: true if enabled, false otherwise
-function! DotF#api#has_python() abort
-  return has('python') || has('python3')
 endfunction

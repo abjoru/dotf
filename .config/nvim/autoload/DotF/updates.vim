@@ -1,4 +1,5 @@
 let s:LOG = DotF#logger#derive('update')
+let s:CACHE = DotF#api#import('cache')
 
 function! DotF#updates#run() abort
   call s:LOG.info('Starting update process...')
@@ -7,10 +8,10 @@ function! DotF#updates#run() abort
 endfunction
 
 function! DotF#updates#check() abort
-  if DotF#cache#has_plugins_changed()
+  if s:CACHE.has_plugin_changes()
     let choice = input('Update plugins (y/N)? ')
     if choice == 'y' || 'Y'
-      DotF#updates#run()
+      call DotF#updates#run()
     endif
   else
     call s:LOG.info('No plugin changes detected!')
