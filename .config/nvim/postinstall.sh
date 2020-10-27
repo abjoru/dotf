@@ -2,7 +2,7 @@
 #
 # dotf nvim postinstall actions
 CACHE_DIR="$HOME/.cache/nvim"
-LOCK_FILE="$HOME/.config/nvim/bootstrap.lock"
+LOCK_FILE="$CACHE_DIR/bootstrap.lock"
 
 # check for bootstrap lock file
 if [ ! -f "$LOCK_FILE" ]; then
@@ -11,5 +11,5 @@ if [ ! -f "$LOCK_FILE" ]; then
     && nvim +DfInstall \
     && echo ">>> Done!"
 else
-  echo ">>> DotF neovim already bootstrapped!"
+  echo ">>> DotF neovim already installed!"
 fi

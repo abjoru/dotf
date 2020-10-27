@@ -1,0 +1,1 @@
+DfAddPlugin 'neovimhaskell/haskell-vim'

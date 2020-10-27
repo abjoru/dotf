@@ -25,6 +25,10 @@ let g:dotf_ui_statusbar_tabline_enabled = get(g:, 'dotf_ui_statusbar_tabline_ena
 
 " Local logger instance
 let s:LOG = DotF#logger#derive('bootstrap')
+" Utils API
+let s:UTILS = DotF#api#import('utils')
+" Modules API
+let s:MODULES = DotF#modules#instance()
 
 """""""""""""""""
 " Bootstrapping "
@@ -38,12 +42,12 @@ endfunction
 ""
 " Standard bootstrapping for DotF
 function! dotf#bootstrap() abort
-  let has_python = DotF#api#has_python()
+  let has_python = s:UTILS.has_python()
   let modApiFile = g:modules_dir . '/auto-modules.vim'
 
   if filereadable(modApiFile)
     echo modApiFile
-    execute 'source ' . modApiFile
+    call s:UTILS.source(modApiFile)
   endif
 
   if has_python ==? 1 || exists('g:gui_oni')
@@ -67,7 +71,7 @@ function! s:load_all_plugins() abort
   call plug#begin(g:plugged_dir)
 
   call s:LOG.info('Loading all plugins...')
-  for plugin in DotF#modules#list_enabled_plugins()
+  for plugin in s:MODULES.list_plugins()
     call s:LOG.info('Installing ' . plugin.name)
     Plug plugin.name, plugin.config
   endfor
@@ -78,12 +82,12 @@ endfunction
 " Source all user defined modules
 function! s:source_modules() abort
   call s:LOG.info('Loading core modules...')
-  for mod in DotF#modules#list_enabled_core_modules()
+  for mod in s:MODULES.list_enabled_core_modules()
     call s:source_module(mod)
   endfor
 
   call s:LOG.info('Loading enabled modules...')
-  for mod in DotF#modules#list_enabled_noncore_modules()
+  for mod in s:MODULES.list_enabled_noncore_modules()
     call s:source_module(mod)
   endfor
 endfunction
@@ -97,19 +101,19 @@ function! s:source_module(module_name) abort
   " Source package defintions
   if filereadable(pkgSourceFile)
     call s:LOG.info('Sourcing packages for ' . a:module_name)
-    execute 'source ' . pkgSourceFile
+    call s:UTILS.source(pkgSourceFile)
   endif
 
   " Source function definitions
   if filereadable(funcSourceFile)
     call s:LOG.info('Sourcing functions for ' . a:module_name)
-    execute 'source ' . funcSourceFile
+    call s:UTILS.source(funcSourceFile)
   endif
 
   " Source config definitions
   if filereadable(confSourceFile)
     call s:LOG.info('Sourcing configurations for ' . a:module_name)
-    execute 'source ' . confSourceFile
+    call s:UTILS.source(confSourceFile)
   endif
 endfunction
 

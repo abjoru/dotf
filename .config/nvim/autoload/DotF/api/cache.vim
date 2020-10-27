@@ -1,12 +1,15 @@
-"""""""""""""""""""""""""
-" DotF Cache Management "
-"""""""""""""""""""""""""
-
 let s:LOG = DotF#logger#derive('cache')
+let s:MODULES = DotF#modules#instance()
+
+let s:self = {}
 
 let s:plugin_cache_file = expand(resolve(g:cache_dir . '/loaded-plugins.vim'))
 
-function! DotF#cache#write_plugins() abort
+function! DotF#api#cache#get() abort
+  return deepcopy(s:self)
+endfunction
+
+function! s:self.write_plugins() abort
   if !isdirectory(g:cache_dir)
     call mkdir(g:cache_dir, 'p')
   endif
@@ -14,13 +17,13 @@ function! DotF#cache#write_plugins() abort
   let names = s:get_plugin_names()
 
   if writefile(names, s:plugin_cache_file)
-    call s:LOG.error('Could not write loaded plugins to cache file!')
-  else
-    call s:LOG.info('Write loaded plugins: ' . string(names))
+    call s:LOG.error('Could not write loaded plugins to cache file: ' . s:plugin_cache_file)
+  else 
+    call s:LOG.info('Wrote loaded plugins: ' . string(names))
   endif
 endfunction
 
-function! DotF#cache#read_plugins() abort
+function! s:self.read_plugins() abort
   if filereadable(s:plugin_cache_file)
     let plugins = readfile(s:plugin_cache_file)
   else
@@ -30,13 +33,13 @@ function! DotF#cache#read_plugins() abort
   return plugins
 endfunction
 
-function! DotF#cache#has_plugins_changed() abort
+function! s:self.has_plugin_changes() abort
   let current = sort(s:get_plugin_names())
-  let cached = sort(DotF#cache#read_plugins())
+  let cached = sort(s:self.read_plugins())
   return cached != current
 endfunction
 
 function! s:get_plugin_names() abort
-  let plugins = DotF#modules#list_enabled_plugins()
+  let plugins = s:MODULES.list_plugins()
   return map(copy(plugins), {_, p -> p.name})
 endfunction
