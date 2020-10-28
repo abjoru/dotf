@@ -1,6 +1,6 @@
 #!/bin/bash
 TODAY=$(date +%Y-%m-%d)
-CPDAY="2020-11-19"
+CPDAY="2020-12-10"
 DIFF=0
 
 if [[ "$OSTYPE" == "darwin"* ]]; then
