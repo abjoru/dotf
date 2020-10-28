@@ -1,13 +1,16 @@
 - xmonad:
+    headless: false
     preinstall: 'preinstall.sh'
     brew:
       ignore: true
 - xmonad-contrib:
+    headless: false
     apt:
       name: 'libghc-xmonad-contrib-dev'
     brew:
       ignore: true
 - picom:
+    headless: false
     apt:
       ignore: true
     brew:
@@ -16,6 +19,7 @@
     brew:
       ignore: true
 - dmenu:
+    headless: false
     apt:
       name: 'suckless-tools'
     pacman:
@@ -23,19 +27,23 @@
     brew:
       ignore: true
 - nitrogen:
+    headless: false
     brew:
       ignore: true
 - conky:
+    headless: false
     apt:
       name: 'conky-all'
     brew:
       ignore: true
 - network-manager-applet:
+    headless: false
     brew:
       ignore: true
     apt:
       name: 'budgie-network-manager-applet'
 - volumeicon:
+    headless: false
     brew:
       ignore: true
     apt:

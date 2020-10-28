@@ -58,3 +58,9 @@ listSubDirs :: FilePath -> IO [FilePath]
 listSubDirs d = do
   cx <- listAbsDir d
   filterM (doesDirectoryExist . (d </>)) cx
+
+-- List all lines in the DotF config file
+loadDotFConfigLines :: IO [String]
+loadDotFConfigLines = fmap lines (readFile "~/.config/dotf/dotf.cfg")
+
+-- 1. find xmobar config and return as [String]

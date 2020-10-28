@@ -5,6 +5,8 @@ import scala.io.Source
 
 import $ivy.`io.circe::circe-yaml:0.12.0`
 
+import $file.cfg, cfg.Cfg
+
 import io.circe._
 import io.circe.yaml.parser
 
@@ -33,7 +35,15 @@ object Const {
     obj <- json.asObject
   } yield Pkg(path, obj)
 
-  def pkgs(): Seq[Pkg] = pkgAll().filterNot(_.isIgnored)
+  def pkgs(): Seq[Pkg] = {
+    val c = Cfg.load
+    val filterIgnored = pkgAll().filterNot(_.isIgnored)
+
+    filterIgnored.filter { pkg =>
+      if (c.headless) pkg.isHeadless == true
+      else true
+    }
+  }
 
 }
 
@@ -201,6 +211,9 @@ final case class Pkg(path: os.Path, data: JsonObject) {
 
   /** Tests if this pkg requires special instructions and cannot be batched. */
   def isSpecial: Boolean = preInstallScripts.nonEmpty || postInstallScripts.nonEmpty
+
+  /** Tests if this pkg is for headless installs (default: true) */
+  def isHeadless: Boolean = rootField[Boolean]("headless").getOrElse(true)
 
   /** Gets the path to the optional pre-install scripts. */
   def preInstallScripts: Seq[os.Path] = {

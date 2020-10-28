@@ -2,3 +2,7 @@ DotF Neovim:
   ☐ Remove cache module in favor of api type
   ✓ Move mapping command implementations to api @done(2020-10-22 16:42) @project(DotF Neovim)
   ☐ Change devicons colors to match gruvbox theme @priority(low)
+
+DotF Installer:
+  ☐ Update `master` branch and kill off machine specific ones
+  ☐ XMonad: integrate with dotf.cfg for multi-monitor support

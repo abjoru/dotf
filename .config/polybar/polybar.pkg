@@ -1,16 +1,20 @@
 #- polybar:
+#    headless: false
 #    brew:
 #      ignore: true
 #    apt:
 #      snap: 'edge --devmode'
 #- python-pip:
+#    headless: false
 #    brew:
 #      ignore: true
 #    apt:
 #      name: 'python3-pip'
 #- jq:
+#    headless: false
 #    brew:
 #      ignore: true
 #- udisks2:
+#    headless: false
 #    brew:
 #      ignore: true

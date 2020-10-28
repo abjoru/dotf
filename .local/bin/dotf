@@ -39,6 +39,7 @@ displayUsageAndExit() {
   echo "  custom    list all custom installers"
   echo "  tracked   list all tracked files"
   echo "  untracked list all untracked files in established parent dirs"
+  echo "  config    list global config"
   exit
 }
 
