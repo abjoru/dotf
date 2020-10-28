@@ -1,5 +1,4 @@
 import scala.io.Source
-import org.ini4j.Ini
 import ammonite.ops._
 
 import Console._
@@ -7,11 +6,6 @@ import java.io.File
 
 import scala.util.{Try, Success, Failure}
 import scala.collection.JavaConverters._
-
-//import $ivy.`com.typesafe:config:1.4.1`
-import $ivy.`org.ini4j:ini4j:0.5.4`
-
-//import com.typesafe.config.{ Config, ConfigFactory }
 
 final case class Cfg(
   headless: Boolean,

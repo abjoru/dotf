@@ -11,6 +11,7 @@ import System.FilePath
 import Data.Tree
 import Data.List (find)
 import Data.Maybe (catMaybes)
+import Data.Ini
 
 import XMonad
 import qualified XMonad.Actions.TreeSelect as TS
@@ -58,9 +59,3 @@ listSubDirs :: FilePath -> IO [FilePath]
 listSubDirs d = do
   cx <- listAbsDir d
   filterM (doesDirectoryExist . (d </>)) cx
-
--- List all lines in the DotF config file
-loadDotFConfigLines :: IO [String]
-loadDotFConfigLines = fmap lines (readFile "~/.config/dotf/dotf.cfg")
-
--- 1. find xmobar config and return as [String]

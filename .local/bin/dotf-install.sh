@@ -53,6 +53,12 @@ if [[ ! -d "$HOME/.dotf" ]]; then
   config config status.showUntrackedFiles no
 fi
 
+# Create global config if needed
+if [ ! -f "$HOME/.config/dotf/dotf.cfg" ]; then
+  cp "$HOME/.config/dotf/example.dotf.cfg" "$HOME/.config/dotf/dotf.cfg"
+  echo "Created default global config in $HOME/.config/dotf/dotf.cfg"
+fi
+
 # Ask for Java install..
 if [ ! -x "$(command -v java)" ]; then
   echo "Missing Java runtime environment!"
@@ -76,6 +82,10 @@ if [[ "$SHELL" == *"bash"* ]]; then
   echo 'export PATH="$HOME/.local/bin:$PATH"' >> $HOME/.bashrc
   echo
   echo "Restart your shell to gain access to the 'dotf' command!"
+  echo ""
+  echo "Note: you can modify global configuration values in $HOME/.config/dotf/dotf.cfg"
+  echo "By default, this will be a headless build!"
+  echo ""
   echo "- Run 'dotf -d upgrade' to see what will be installed prior to an actual upgrade."
   echo "- Run 'dotf -h' for help."
   echo
