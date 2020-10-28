@@ -1,7 +1,7 @@
 import ammonite.ops._
 
-import $file.common
-import common._
+import $file.common, common._
+import $file.cfg, cfg.Cfg
 
 implicit val wd = home
 
@@ -13,7 +13,13 @@ def main(action: String = "all"): Unit = action match {
   case "custom" => Const.customInstallers().foreach(println)
   case "untracked" => showUntracked()
   case "tracked" => Const.managedFiles().foreach(println)
+  case "config" => showConfig()
   case other => Printer.err(s"[ERROR]: Invalid command '$other'")
+}
+
+private def showConfig(): Unit = {
+  Printer.info("Current configuration:")
+  println(Cfg.load)
 }
 
 private def showUntracked(): Unit = {
