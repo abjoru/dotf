@@ -40,6 +40,7 @@ displayUsageAndExit() {
   echo "  tracked   list all tracked files"
   echo "  untracked list all untracked files in established parent dirs"
   echo "  config    list global config"
+  echo "  dir <d>   list status of files in 'd'"
   exit
 }
 
@@ -87,7 +88,7 @@ invalidCommand() {
 }
 
 runList() {
-  amm ${SC_DIR}/cmd_list.sc "$1"
+  amm ${SC_DIR}/cmd_list.sc "$@"
   exit
 }
 
@@ -160,7 +161,7 @@ done
 shift $((OPTIND-1))
 
 case $1 in
-  list) runList "$2" ;;
+  list) runList "$@" ;;
   update) runUpdate "$MODE" "$VERBOSE" ;;
   upgrade) runUpgrade "$MODE" "$VERBOSE" ;;
   sync) runSync "$MODE" "$2" ;;

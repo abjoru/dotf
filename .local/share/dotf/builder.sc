@@ -2,7 +2,10 @@ import ammonite.ops._
 
 import $ivy.`io.circe::circe-generic:0.12.0`
 import $ivy.`io.circe::circe-parser:0.12.0`
+import $ivy.`org.typelevel::cats-effect:2.1.0`
 
+import cats.implicits._
+import cats.effect.Sync
 import io.circe._
 import io.circe.generic.semiauto._
 import io.circe.parser._
@@ -29,35 +32,36 @@ object Builder {
 
   private val targetDir = home/".cache"/"dotf"
 
-  private val hostname = %%("hostname").out.string
+  private def hostname[F[_]: Sync] = Sync[F].delay(%%("hostname").out.string)
 
-  private def readJson(file: os.Path) = {
-    val f = new File(file.toString)
-    val c = scala.io.Source.fromFile(f).getLines.mkString
-    parse(c)
-  }
+  private def readJson[F[_]: Sync](file: os.Path): F[Json] = for {
+    f <- Sync[F].pure(new File(file.toString))
+    c <- Sync[F].delay(scala.io.Source.fromFile(f).getLines.mkString)
+    r <- Sync[F].fromEither(parse(c))
+  } yield r
 
-  private def readString(file: os.Path): String = {
+  private def readString[F[_]: Sync](file: os.Path): F[String] = Sync[F].delay {
     val f = new File(file.toString)
     scala.io.Source.fromFile(f).getLines.mkString("\n")
   }
 
-  private def getGroups(file: os.Path) = for {
+  private def getGroups[F[_]: Sync](file: os.Path): F[Seq[Group]] = for {
     a <- readJson(file)
-    b <- a.as[Seq[Group]]
+    b <- Sync[F].fromEither(a.as[Seq[Group]])
   } yield b
 
-  private def matchesHost(grp: Group): Boolean = grp.hostFilter match {
-    case Some(f) => f.r.findFirstMatchIn(hostname).isDefined
+  private def matchesHost(host: String)(grp: Group): Boolean = grp.hostFilter match {
+    case Some(f) => f.r.findFirstMatchIn(host).isDefined
     case _ => true
   }
 
-  private def groups(): Seq[Group] = for {
-    grp <- getGroups(skelDir/"links.json").toOption.getOrElse(Seq.empty)
-    if matchesHost(grp)
-  } yield grp
+  private def groups[F[_]: Sync]: F[Seq[Group]] = for {
+    hn <- hostname[F]
+    gs <- getGroups(skelDir/"links.json")
+    rs <- gs.filter(matchesHost(hn)).pure[F]
+  } yield rs
 
-  private def writeFile(path: os.Path, contents: String): Unit = {
+  private def writeFile[F[_]: Sync](path: os.Path, contents: String): F[Unit] = Sync[F].delay {
     val f = new File(path.toString)
 
     if (!f.exists()) {
@@ -69,14 +73,15 @@ object Builder {
     pw.close()
   }
 
-  def genHomepage(): Unit = {
-    val header = readString(skelDir/"head.html")
-    val footer = readString(skelDir/"tail.html")
-    val links = groups.foldLeft("")(genLinks)
+  def genHomepage[F[_]: Sync]: F[Unit] = for {
+    header <- readString(skelDir/"head.html")
+    footer <- readString(skelDir/"tail.html")
+    styles <- readString(skelDir/"homepage.css")
+    links  <- groups.map(_.foldLeft("")(genLinks))
 
-    writeFile(targetDir/"homepage.html", header ++ "\n" ++ links ++ footer)
-    writeFile(targetDir/"homepage.css", readString(skelDir/"homepage.css"))
-  }
+    _ <- writeFile(targetDir/"homepage.html", header ++ "\n" ++ links ++ footer)
+    _ <- writeFile(targetDir/"homepage.css", styles)
+  } yield ()
 
   private def genLinks(s: String, g: Group): String = {
     val links = g.links.map(l => s"""<a class="bookmark" href="${l.link}" target="_blank">${l.name}</a>""")

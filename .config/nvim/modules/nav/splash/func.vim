@@ -54,6 +54,7 @@ function! g:Dotf_build_startify_lists() abort
   let tasks = map(s:load_tasks(g:dotf_tasks_file), {i, v -> {'idx': i, 'topic': v.topic}})
 
   for item in tasks
+    let tx = s:tasks(item.idx)
     call add(output, {'type': {-> s:tasks(item.idx)}, 'header': ['   Tasks: ' . item.topic]})
   endfor
 

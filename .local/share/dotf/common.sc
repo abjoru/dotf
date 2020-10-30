@@ -1,231 +1,101 @@
 import ammonite.ops._
 import Console._
-import scala.util.Try
 import scala.io.Source
+import scala.util.Try
 
-import $ivy.`io.circe::circe-yaml:0.12.0`
+import $ivy.`org.typelevel::cats-effect:2.1.0`
+import $ivy.`io.circe::circe-yaml:0.13.0`
 
+import $file.pkg, pkg._
 import $file.cfg, cfg.Cfg
 
 import io.circe._
 import io.circe.yaml.parser
 
-object Const {
+import cats.implicits._
+import cats.effect.Sync
 
+object DotF {
   implicit val ws = home
 
-  val dotfDir = home/".dotf"
+  val dotfGitDir = home/".dotf"
+  val dotfConfigDir = home/".config"/"dotf"
 
-  /** Returns a sequence of paths managed by git. */
-  def managedFiles(): Seq[os.Path] = {
-    val cmd = %%("git", s"--git-dir=${dotfDir.toString}", s"--work-tree=${ws.toString}", "ls-files")
-    cmd.out.lines.map(l => os.Path(s"${home.toString}/$l")).toSeq
+  def managedFiles[F[_]: Sync]: F[Seq[os.Path]] = Sync[F].delay {
+    val cmd = %%("git", s"--git-dir=${dotfGitDir.toString}", s"--work-tree=${ws.toString}", "ls-files")
+    cmd.out.lines.map(l => os.Path(s"${home.toString}/${l}")).toSeq
   }
 
-  def unmanagedDirs(): Seq[os.Path] = 
-    home.toIO.listFiles().filter(_.isDirectory()).map(os.Path(_))
+  def unmanagedDirs[F[_]: Sync]: F[Seq[os.Path]] =
+    Sync[F].delay(home.toIO.listFiles().filter(_.isDirectory()).map(os.Path(_)))
 
-  def customInstallers(): Seq[os.Path] = managedFiles().filter(_.last == "install.sh")
+  def customInstallers[F[_]: Sync]: F[Seq[os.Path]] = 
+    managedFiles[F].map(_.filter(_.last == "install.sh"))
 
-  /** Returns a sequence of managed `Pkg`s. */
-  def pkgAll(): Seq[Pkg] = for {
-    path <- managedFiles().filter(_.ext == "pkg")
-    file = Source.fromFile(path.toString).reader()
-    json <- parser.parse(file).toOption.flatMap(_.asArray).getOrElse(Seq.empty)
-    obj <- json.asObject
-  } yield Pkg(path, obj)
+  def allPackages[F[_]: Sync]: F[Seq[Pkg]] = for {
+    pkgs <- managedFiles[F].map(_.filter(_.ext == "pkg"))
+    objs <- pkgs.map(mkPkg[F]).toList.sequence
+  } yield objs.flatten
 
-  def pkgs(): Seq[Pkg] = {
-    val c = Cfg.load
-    val filterIgnored = pkgAll().filterNot(_.isIgnored)
+  def packages[F[_]: Sync]: F[Seq[Pkg]] = for {
+    cfg <- Cfg.load[F]
+    fx1 <- allPackages[F].map(_.filterNot(_.isIgnored))
+    fx2 <- fx1.filter(byHeadlessValue(cfg)).pure[F]
+  } yield fx2
 
-    filterIgnored.filter { pkg =>
-      if (c.headless) pkg.isHeadless == true
-      else true
-    }
+  private def mkPkg[F[_]: Sync](path: os.Path): F[Seq[Pkg]] = for {
+    s <- pkgSystem[F]
+    f <- Source.fromFile(path.toString).reader().pure[F]
+    j <- parser.parse(f).liftTo[F]
+  } yield j.asArray.map(_.flatMap(buildPkg(path, s)).toList).getOrElse(List.empty)
+  
+  private def buildPkg(path: os.Path, s: PkgSys)(data: Json): Option[Pkg] = data.asObject match {
+    case Some(obj) => Some(Pkg(path, obj, s))
+    case None => None
+  }
+
+  private def byHeadlessValue(c: Cfg)(pkg: Pkg): Boolean = 
+    if (c.headless) pkg.isHeadless == true
+    else true
+
+  private def which[F[_]: Sync](bin: String): F[Boolean] = 
+    Sync[F].delay(Try(%%("which", bin).exitCode == 0).isSuccess)
+
+  /** Find the target package system if supported. */
+  def pkgSystem[F[_]: Sync]: F[PkgSys] = System.getProperty("os.name", "generic").toLowerCase match {
+    case s if s.contains("linux") =>
+      val tuple = for {
+        apt <- which[F]("apt")
+        pac <- which[F]("pacman")
+      } yield (apt -> pac)
+
+      tuple.flatMap {
+        case (true, _) => Sync[F].pure(Apt)
+        case (_, true) => Sync[F].pure(Pacman)
+        case _ => Sync[F].raiseError(new Exception("Unable to determine package system for linux!"))
+      }
+
+     case s if s.contains("mac") => 
+       which[F]("brew").flatMap {
+         case true => Sync[F].pure(Homebrew)
+         case false => Sync[F].raiseError(new Exception("Missing Homebrew install!"))
+       }
+            
+    case _ => Sync[F].raiseError(new Exception("Unsupported OS!"))
   }
 
 }
 
 object Printer {
   /** Prints the given `msg` in terminal green. */
-  def ok(msg: String): Unit = println(s"${GREEN}${msg}${RESET}")
+  def ok[F[_]: Sync](msg: String): F[Unit] = Sync[F].delay(println(s"${GREEN}${msg}${RESET}"))
 
   /** Prints the given `msg` in terminal red. */
-  def err(msg: String): Unit = println(s"${RED}${msg}${RESET}")
+  def err[F[_]: Sync](msg: String): F[Unit] = Sync[F].delay(println(s"${RED}${msg}${RESET}"))
 
   /** Prints the given `msg` in terminal yellow. */
-  def warn(msg: String): Unit = println(s"${YELLOW}${msg}${RESET}")
+  def warn[F[_]: Sync](msg: String): F[Unit] = Sync[F].delay(println(s"${YELLOW}${msg}${RESET}"))
 
   /** Prints the given `msg` in terminal cyan. */
-  def info(msg: String): Unit = println(s"${CYAN}${msg}${RESET}")
-}
-
-sealed abstract class PkgSys(val name: String)
-
-case object Apt extends PkgSys("apt")
-case object Pacman extends PkgSys("pacman")
-case object Homebrew extends PkgSys("brew")
-
-object Mode extends Enumeration {
-  type M = Value
-  val Dry, Install = Value
-
-  def apply(s: String): M = s match {
-    case "dry" => Dry
-    case "install" => Install
-    case other => throw new Exception(s"Invalid mode: $other")
-  }
-}
-
-object OS {
-
-  private implicit val wd = home
-
-  /** Find the target package system if supported. */
-  lazy val pkgSystem: Option[PkgSys] = System.getProperty("os.name", "generic").toLowerCase match {
-    case s if s.contains("linux") && which("apt")     => Some(Apt)
-    case s if s.contains("linux") && which("pacman")  => Some(Pacman)
-    case s if s.contains("mac") && which("brew")      => Some(Homebrew)
-    case _                                            => None
-  }
-
-  def update(mode: Mode.M): Unit = (mode, pkgSystem) match {
-    case (Mode.Dry, Some(Homebrew)) => println("brew upgrade")
-    case (Mode.Install, Some(Homebrew)) => try %("brew", "upgrade") catch {
-      case _: Throwable => Printer.err("Non-zero exit code from: brew upgrade")
-    }
-
-    case (Mode.Dry, Some(Apt)) => println("sudo apt update\nsudo apt upgrade")
-    case (Mode.Install, Some(Apt)) => try {
-      %sudo("apt", "update")
-      %sudo("apt", "upgrade")
-    } catch { case _: Throwable => Printer.err("Non-zero exit code from: sudo apt update && sudo apt upgrade") }
-
-    case (Mode.Dry, Some(Pacman)) => println("sudo pacman -Syyu")
-    case (Mode.Install, Some(Pacman)) => try %sudo("pacman", "-Syyu") catch {
-      case _: Throwable => Printer.err("Non-zero exit code from: sudo pacman -Syyu")
-    }
-
-    case _ => Printer.warn("Unsupported package system!")
-  }
-
-  def install(mode: Mode.M, pkgs: Pkg*): Unit = (mode, pkgSystem) match {
-    case (Mode.Dry, Some(Homebrew)) =>
-      val (casks, normals) = pkgs.partition(_.isCask)
-      if (normals.nonEmpty) println(s"brew install ${normals.map(_.name).mkString(" ")}")
-      if (casks.nonEmpty) println(s"brew cask install ${casks.map(_.name).mkString(" ")}")
-    case (Mode.Install, Some(Homebrew)) =>
-      val (casks, normals) = pkgs.partition(_.isCask)
-      if (normals.nonEmpty) try %("brew", "install", normals.map(_.name)) catch {
-        case _: Throwable => Printer.err(s"Non-zero exit code from: brew install ${normals.map(_.name)}")
-      }
-      if (casks.nonEmpty) try %("brew", "cask", "install", casks.map(_.name)) catch {
-        case _: Throwable => Printer.err(s"Non-zero exit code from: brew cask install ${casks.map(_.name)}")
-      }
-
-    case (Mode.Dry, Some(Apt)) =>
-      val (snaps, apt) = pkgs.partition(_.isSnap)
-      if (apt.nonEmpty) println(s"sudo apt install ${apt.map(_.name).mkString(" ")}")
-      snaps.foreach(s => println(s"sudo snap install ${s.name} ${s.snapChannel.mkString(" ")}"))
-    case (Mode.Install, Some(Apt)) =>
-      val (snaps, apt) = pkgs.partition(_.isSnap)
-      if (apt.nonEmpty) try %sudo("apt", "install", apt.map(_.name)) catch {
-        case _: Throwable => Printer.err(s"Non-zero exit code from: sudo apt install ${apt.map(_.name)}")
-      }
-      snaps.foreach { s =>
-        try %sudo("snap", "install", s.name, s.snapChannel) catch {
-          case _: Throwable => Printer.err(s"Non-zero exit code from: sudo snap install ${s.name} ${s.snapChannel.mkString(" ")}")
-        }
-      }
-
-    case (Mode.Dry, Some(Pacman)) =>
-      val (aur, normals) = pkgs.partition(_.isAur)
-      if (normals.nonEmpty) println(s"sudo pacman -S ${normals.map(_.name).mkString(" ")}")
-      if (aur.nonEmpty) println(s"yay -S ${aur.map(_.name).mkString(" ")}")
-    case (Mode.Install, Some(Pacman)) =>
-      val (aur, normals) = pkgs.partition(_.isAur)
-      try {
-	if (normals.nonEmpty) %sudo("pacman", "--noconfirm", "-S", normals.map(_.name)) 
-      } catch {
-        case _: Throwable => Printer.err(s"Non-zero exit code from: sudo pacman -S ${normals.map(_.name)}")
-      }
-      try {
-        if (aur.nonEmpty) {
-          %("bash", (home/".local"/"share"/"dotf"/"os"/"aur.sh").toString)
-          %("yay", "--noconfirm", "-S", aur.map(_.name))
-        }
-      } catch { 
-        case _: Throwable => Printer.err(s"Non-zero exit code from AUR install or yay -S ${aur.map(_.name)}") 
-      }
-
-    case _ => Printer.warn("Unsupported package system!")
-  }
-
-  def run(mode: Mode.M, scripts: os.Path*): Unit = mode match {
-    case Mode.Dry => scripts.foreach(s => println(s"bash ${s.toString}"))
-    case Mode.Install => scripts.foreach { s =>
-      try %("bash", s.toString) catch {
-        case _: Throwable => Printer.err(s"Non-zero exit code from: bash ${s.toString}")
-      }
-    }
-  }
-
-  private def which(bin: String): Boolean = 
-    Try(%%("which", bin).exitCode == 0).isSuccess
-
-}
-
-/** Defines an OS dependent package descriptor.
-  *
-  * @param data package Json node
-  */
-final case class Pkg(path: os.Path, data: JsonObject) {
-  private val root = data.toList.head
-
-  private def rootField[T: Decoder](name: String): Option[T] = 
-    root._2.hcursor.downField(name).as[T].toOption
-
-  private def field[T: Decoder](name: String): Option[T] = for {
-    os <- OS.pkgSystem.flatMap(v => rootField[Json](v.name))
-    fd <- os.hcursor.downField(name).as[T].toOption
-  } yield fd
-
-  /** Name of the package as determined by the pkg system. */
-  def name: String = field[String]("name").getOrElse(root._1)
-
-  /** Warning message to display for the target pkg system. (i.e. note) */
-  def warn: Option[String] = field[String]("warn").map(w => s"${name}: $w")
-
-  /** Tests if the given package is set to be ignored for the target pkg system. */
-  def isIgnored: Boolean = field[Boolean]("ignore").getOrElse(false)
-
-  /** Tests if this pkg is in Homebrew cask. */
-  def isCask: Boolean = field[Boolean]("cask").getOrElse(false)
-
-  def isAur: Boolean = field[Boolean]("aur").getOrElse(false)
-
-  def isSnap: Boolean = snapChannel.nonEmpty
-
-  def snapChannel: List[String] = field[String]("snap").map(_.split(" ").toList).getOrElse(List.empty)
-
-  /** Tests if this pkg requires special instructions and cannot be batched. */
-  def isSpecial: Boolean = preInstallScripts.nonEmpty || postInstallScripts.nonEmpty
-
-  /** Tests if this pkg is for headless installs (default: true) */
-  def isHeadless: Boolean = rootField[Boolean]("headless").getOrElse(true)
-
-  /** Gets the path to the optional pre-install scripts. */
-  def preInstallScripts: Seq[os.Path] = {
-    val maybeGlobalScript = rootField[String]("preinstall").map(n => path/up/n)
-    val maybePkgScript = field[String]("preinstall").map(n => path/up/n)
-    Seq(maybeGlobalScript, maybePkgScript).flatten
-  }
-
-  /** Gets the path to the optional post-install scripts. */
-  def postInstallScripts: Seq[os.Path] = {
-    val maybeGlobalScript = rootField[String]("postinstall").map(n => path/up/n)
-    val maybePkgScript = field[String]("postinstall").map(n => path/up/n)
-    Seq(maybeGlobalScript, maybePkgScript).flatten
-  }
+  def info[F[_]: Sync](msg: String): F[Unit] = Sync[F].delay(println(s"${CYAN}${msg}${RESET}"))
 }

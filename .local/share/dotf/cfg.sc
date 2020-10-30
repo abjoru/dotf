@@ -1,11 +1,10 @@
-import scala.io.Source
 import ammonite.ops._
 
-import Console._
-import java.io.File
+import $ivy.`org.typelevel::cats-effect:2.1.0`
 
-import scala.util.{Try, Success, Failure}
-import scala.collection.JavaConverters._
+import cats.implicits._
+import cats.effect.Sync
+import scala.io.Source
 
 final case class Cfg(
   headless: Boolean,
@@ -18,28 +17,22 @@ object Cfg {
 
   val cfgPath = home/".config"/"dotf"/"dotf.cfg"
 
-  def load: Cfg = internalLoad match {
-    case Success(c) => c
-    case Failure(err) =>
-      println(s"${RED}Unable to load/parse ${cfgPath.toString()}: ${err.getMessage()}${RESET}")
-      empty
+  def load[F[_]: Sync]: F[Cfg] = for {
+    lines <- Sync[F].delay(Source.fromFile(cfgPath.toString).getLines())
+    splits <- lines.map(v => v.split("=").toList).pure[F]
+    mapped <- mkMap(splits).pure[F]
+    maybe <- mkCfg(mapped).getOrElse(empty).pure[F]
+  } yield maybe
+
+
+  private def mkMap(xs: Iterator[List[String]]) = xs.foldLeft(Map.empty[String, String]) {
+    case (acc, f :: s :: Nil) => acc + (f.trim -> s.trim)
+    case (acc, _) => acc
   }
 
-  private def internalLoad: Try[Cfg] = Try {
-    val lines = Source.fromFile(cfgPath.toString()).getLines()
-    val splits = lines.map(v => v.split("="))
-    val mapValues = splits.foldLeft(Map.empty[String, String]) {
-      case (acc, arr) if arr.size == 2 => 
-        acc + (arr(0).trim -> arr(1).trim)
-      case (acc, _) => acc
-    }
-
-    val maybeResult = for {
-      headless <- mapValues.get("headless").map(_.toBoolean)
-      mappings <- mapValues.get("xmobarrc").map(_.split(",").map(_.trim))
-    } yield Cfg(headless, mappings.toList)
-
-    maybeResult.getOrElse(empty)
-  }
+  private def mkCfg(m: Map[String, String]): Option[Cfg] = for {
+    headless <- m.get("headless").map(_.toBoolean)
+    mappings <- m.get("xmobarrc").map(_.split(",").map(_.trim))
+  } yield Cfg(headless, mappings.toList)
 
 }

@@ -1,62 +1,44 @@
 import ammonite.ops._
 import ammonite.ops.ImplicitWd._
 
+import $ivy.`org.typelevel::cats-effect:2.1.0`
+
+import cats.implicits._
+import cats.effect.IO
+
 import $file.common, common._
 import $file.builder, builder._
+import $file.pkg, pkg._
+import $file.algebra, algebra.Algebra
 
 @main
-def main(mode: String = "install", verbose: Boolean = false): Unit = {
-  val m = Mode(mode)
-  val pkgs = filteredPkgs()
-  val cust = Const.customInstallers()
+def main(mode: String = "install", verbose: Boolean = false): Unit = 
+  run(mode).unsafeRunSync()
 
-  // Regenerate homepage
-  Builder.genHomepage()
+private def run(mode: String): IO[Unit] = for {
+  dry  <- (mode != "install").pure[IO]
+  sys  <- DotF.pkgSystem[IO]
+  alg  <- Algebra[IO](sys).pure[IO]
+  pkgs <- DotF.packages[IO].flatMap(filterPkgs(alg))
+  cust <- DotF.customInstallers[IO]
+  _    <- Builder.genHomepage[IO]
+  _    <- Algebra.runScripts[IO](dry, cust)
+  _    <- installUpdates(dry, pkgs, alg)
+} yield ()
 
-  // Custom installers
-  OS.run(m, cust: _*)
-
-  if (pkgs.size == 0) {
-    Printer.ok("System is up to date!")
-  } else {
-    OS.update(m)
-    OS.run(m, pkgs.flatMap(_.preInstallScripts): _*)
-    OS.install(m, pkgs: _*)
-    OS.run(m, pkgs.flatMap(_.postInstallScripts): _*)
-  }
+private def installUpdates(dry: Boolean, pkgs: Seq[Pkg], alg: Algebra[IO]): IO[Unit] = {
+  if (pkgs.size == 0) Printer.ok[IO]("System is up to date!")
+  else for {
+    _ <- alg.update(dry)(home)
+    _ <- Algebra.runScripts[IO](dry, pkgs.flatMap(_.preInstallScripts))
+    _ <- alg.install(dry, pkgs)(home)
+    _ <- Algebra.runScripts[IO](dry, pkgs.flatMap(_.postInstallScripts))
+  } yield ()
 }
 
-private def filteredPkgs(): Seq[Pkg] = {
-  val pkgs = Const.pkgs()
+private def filterPkgs(alg: Algebra[IO])(pkgs: Seq[Pkg]): IO[Seq[Pkg]] = {
+  val warnIo = pkgs.flatMap(_.warn).map(s => Printer.warn[IO](s)).toList.sequence
+  val namesIo = alg.listInstalledPkgNames(home)
 
-  // Always print warnings until physically removed!
-  pkgs.flatMap(_.warn).foreach(w => Printer.warn(w))
-
-  OS.pkgSystem match {
-    case Some(Homebrew) =>
-      val installed = %%("brew", "list").out.lines.foldLeft(Seq.empty[String]) {
-        case (acc, line) => acc ++ line.split("\\s+")
-      }
-      val casks = %%("brew", "cask", "list").out.lines.foldLeft(Seq.empty[String]) {
-        case (acc, line) => acc ++ line.split("\\s+")
-      }
-
-      val all = installed ++ casks
-      pkgs.filterNot(p => all.contains(p.name))
-
-    case Some(Apt) =>
-      val installed = %%("apt", "list", "--installed").out.lines.foldLeft(Seq.empty[String]) {
-        case (acc, line) => acc :+ line.takeWhile(_ != '/')
-      }
-
-      pkgs.filterNot(p => installed.contains(p.name))
-
-    case Some(Pacman) =>
-      val installed = %%("pacman", "-Q").out.lines.foldLeft(Seq.empty[String]) {
-        case (acc, line) => acc :+ line.split("\\s+")(0)
-      }
-
-      pkgs.filterNot(p => installed.contains(p.name))
-    case _ => pkgs
-  }
+  warnIo *> namesIo.map(n => pkgs.filterNot(p => n.contains(p.name)))
 }
