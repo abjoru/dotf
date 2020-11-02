@@ -26,13 +26,11 @@ object Group {
 
 object Builder {
 
-  implicit private val ws = home
-
   private val skelDir = home/".local"/"share"/"dotf"/"skel"
 
   private val targetDir = home/".cache"/"dotf"
 
-  private def hostname[F[_]: Sync] = Sync[F].delay(%%("hostname").out.string)
+  private def hostname[F[_]: Sync](implicit ws: os.Path) = Sync[F].delay(%%("hostname").out.string)
 
   private def readJson[F[_]: Sync](file: os.Path): F[Json] = for {
     f <- Sync[F].pure(new File(file.toString))
@@ -55,7 +53,7 @@ object Builder {
     case _ => true
   }
 
-  private def groups[F[_]: Sync]: F[Seq[Group]] = for {
+  private def groups[F[_]: Sync](implicit ws: os.Path): F[Seq[Group]] = for {
     hn <- hostname[F]
     gs <- getGroups(skelDir/"links.json")
     rs <- gs.filter(matchesHost(hn)).pure[F]
@@ -73,7 +71,7 @@ object Builder {
     pw.close()
   }
 
-  def genHomepage[F[_]: Sync]: F[Unit] = for {
+  def genHomepage[F[_]: Sync](implicit ws: os.Path): F[Unit] = for {
     header <- readString(skelDir/"head.html")
     footer <- readString(skelDir/"tail.html")
     styles <- readString(skelDir/"homepage.css")

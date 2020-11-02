@@ -30,3 +30,6 @@ myGridConfig colorizer = (buildDefaultGSConfig myColorizer)
 spawnSelected' :: [(String, String)] -> X ()
 spawnSelected' lst = gridselect conf lst >>= flip whenJust spawn
   where conf = def
+
+spawnSelectedIO :: IO [(String, String)] -> X ()
+spawnSelectedIO lst = io lst >>= spawnSelected'

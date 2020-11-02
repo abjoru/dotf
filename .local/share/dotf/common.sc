@@ -16,12 +16,11 @@ import cats.implicits._
 import cats.effect.Sync
 
 object DotF {
-  implicit val ws = home
 
   val dotfGitDir = home/".dotf"
   val dotfConfigDir = home/".config"/"dotf"
 
-  def managedFiles[F[_]: Sync]: F[Seq[os.Path]] = Sync[F].delay {
+  def managedFiles[F[_]: Sync](implicit ws: os.Path): F[Seq[os.Path]] = Sync[F].delay {
     val cmd = %%("git", s"--git-dir=${dotfGitDir.toString}", s"--work-tree=${ws.toString}", "ls-files")
     cmd.out.lines.map(l => os.Path(s"${home.toString}/${l}")).toSeq
   }
@@ -29,40 +28,38 @@ object DotF {
   def unmanagedDirs[F[_]: Sync]: F[Seq[os.Path]] =
     Sync[F].delay(home.toIO.listFiles().filter(_.isDirectory()).map(os.Path(_)))
 
-  def customInstallers[F[_]: Sync]: F[Seq[os.Path]] = 
+  def customInstallers[F[_]: Sync](implicit ws: os.Path): F[Seq[os.Path]] = 
     managedFiles[F].map(_.filter(_.last == "install.sh"))
 
-  def allPackages[F[_]: Sync]: F[Seq[Pkg]] = for {
+  def allPackages[F[_]: Sync](implicit ws: os.Path): F[Seq[Pkg]] = for {
     pkgs <- managedFiles[F].map(_.filter(_.ext == "pkg"))
     objs <- pkgs.map(mkPkg[F]).toList.sequence
   } yield objs.flatten
 
-  def packages[F[_]: Sync]: F[Seq[Pkg]] = for {
+  def packages[F[_]: Sync](implicit ws: os.Path): F[Seq[Pkg]] = for {
     cfg <- Cfg.load[F]
     fx1 <- allPackages[F].map(_.filterNot(_.isIgnored))
     fx2 <- fx1.filter(byHeadlessValue(cfg)).pure[F]
   } yield fx2
 
-  private def mkPkg[F[_]: Sync](path: os.Path): F[Seq[Pkg]] = for {
+  private def mkPkg[F[_]: Sync](path: os.Path)(implicit ws: os.Path): F[Seq[Pkg]] = for {
     s <- pkgSystem[F]
     f <- Source.fromFile(path.toString).reader().pure[F]
     j <- parser.parse(f).liftTo[F]
   } yield j.asArray.map(_.flatMap(buildPkg(path, s)).toList).getOrElse(List.empty)
   
-  private def buildPkg(path: os.Path, s: PkgSys)(data: Json): Option[Pkg] = data.asObject match {
-    case Some(obj) => Some(Pkg(path, obj, s))
-    case None => None
-  }
+  private def buildPkg(path: os.Path, s: PkgSys)(data: Json): Option[Pkg] = 
+    data.asObject.map(obj => Pkg(path, obj, s))
 
   private def byHeadlessValue(c: Cfg)(pkg: Pkg): Boolean = 
     if (c.headless) pkg.isHeadless == true
     else true
 
-  private def which[F[_]: Sync](bin: String): F[Boolean] = 
+  private def which[F[_]: Sync](bin: String)(implicit ws: os.Path): F[Boolean] = 
     Sync[F].delay(Try(%%("which", bin).exitCode == 0).isSuccess)
 
   /** Find the target package system if supported. */
-  def pkgSystem[F[_]: Sync]: F[PkgSys] = System.getProperty("os.name", "generic").toLowerCase match {
+  def pkgSystem[F[_]: Sync](implicit ws: os.Path): F[PkgSys] = System.getProperty("os.name", "generic").toLowerCase match {
     case s if s.contains("linux") =>
       val tuple = for {
         apt <- which[F]("apt")
@@ -80,7 +77,6 @@ object DotF {
          case true => Sync[F].pure(Homebrew)
          case false => Sync[F].raiseError(new Exception("Missing Homebrew install!"))
        }
-            
     case _ => Sync[F].raiseError(new Exception("Unsupported OS!"))
   }
 

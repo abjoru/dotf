@@ -1,6 +1,4 @@
-module Blueberry.Utils (
-  sanitizeName, listGames
-) where
+module Blueberry.Utils (sanitizeName, listGames) where
 
 import Control.Applicative
 import Control.Monad
@@ -15,6 +13,10 @@ import Data.Ini
 
 import XMonad
 import qualified XMonad.Actions.TreeSelect as TS
+
+-----------------------
+-- Utility Functions --
+-----------------------
 
 -- Sanitize a name such that any characters like '-_"' have 
 -- either been removed or replaced with space.
@@ -32,7 +34,7 @@ maybeLauncher = find (\a -> ".sh" == takeExtension a)
 -- Combine game dir with launcher file if any
 mkEntry :: FilePath -> Maybe FilePath -> Maybe (String, FilePath)
 mkEntry a (Just b)  = Just (sanitizeName $ takeBaseName a, b)
-mkEntry a Nothing = Nothing
+mkEntry a Nothing   = Nothing
 
 -- Convert game folder into a pair (name, launcher)
 processGame :: FilePath -> IO (Maybe (String, FilePath))
@@ -45,10 +47,10 @@ listGames p = do
   exists <- doesDirectoryExist p
   if exists
     then do
-      files <- listSubDirs p
+      files      <- listSubDirs p
       maybeGames <- sequence $ map processGame files
-      return $ catMaybes maybeGames
-    else return []
+      pure $ catMaybes maybeGames
+    else pure []
 
 -- List directory contents as absolute paths
 listAbsDir :: FilePath -> IO [FilePath]

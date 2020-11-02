@@ -1,4 +1,4 @@
-module Blueberry.KeyBindings where
+module Blueberry.KeyBindings (myKeys) where
 
 import Blueberry.Variables
 import Blueberry.Prompts
@@ -42,34 +42,28 @@ import XMonad.Util.Run (safeSpawn)
 ------------------------------------------------------------------------
 -- KEYBINDINGS (using XMonad.Util.EZConfig)
 ------------------------------------------------------------------------
-myKeys :: [([Char], X ())]
-myKeys =
-  -- Xmonad
+
+-- XMonad Controls (win-ctrl/shift-?)
+bXMonad :: [([Char], X ())]
+bXMonad = 
   [ ("M-C-r", spawn "xmonad --recompile")               -- Recompiles xmonad
   , ("M-S-r", spawn "xmonad --restart")                 -- Restarts xmonad
   , ("M-S-q", io exitSuccess)                           -- Quits xmonad
+  , ("M-<Return>", spawn myTerminal)                    -- Open preferred terminal
+  ]
 
-  -- Prompts
-  , ("M-S-<Return>", shellPrompt myXPConfig)            -- Shell prompt
+-- Prompts (win-shift-?)
+bPrompts :: [([Char], X ())]
+bPrompts = [ ("M-S-<Return>", shellPrompt myXPConfig) ] -- Shell prompt
 
-  -- Windows
-  , ("M-S-c", kill1)                                    -- Kill the currently focused client
+-- Window controls (win-shift-?)
+bWindows :: [([Char], X ())]
+bWindows =
+  [ ("M-S-c", kill1)                                    -- Kill the currently focused client
   , ("M-S-a", killAll)                                  -- Kill all the windows on current workspace
-
-  -- Floating windows
   , ("M-<Delete>", withFocused $ windows . W.sink)      -- Push floating window back to tile
   , ("M-S-<Delete>", sinkAll)                           -- Push all floating windows back to tile
 
-  -- Grid Select
-  , ("C-g a", spawnSelected' myAppGrid)                 -- grid select favourite apps
-  , ("C-g c", spawnSelected' myConfigGrid)              -- grid select useful config files
-  , ("C-g t", goToSelected $ myGridConfig myColorizer)  -- goto selected
-  , ("C-g b", bringSelected $ myGridConfig myColorizer) -- bring selected
-
-  -- TreeSelect
-  , ("C-t t", treeSelectAction tsDefaultConfig)
-
-  -- Window navigation
   , ("M-m", windows W.focusMaster)                      -- Move focus to the master window
   , ("M-j", windows W.focusDown)                        -- Move focus to the next window
   , ("M-k", windows W.focusUp)                          -- Move focus to the prev window
@@ -94,9 +88,22 @@ myKeys =
   , ("M-C-<Down>", sendMessage (DecreaseDown 10))       -- Decrease size of focused window down
   , ("M-C-<Right>", sendMessage (DecreaseRight 10))     -- Decrease size of focused window right
   , ("M-C-<Left>", sendMessage (DecreaseLeft 10))       -- Decrease size of focused window left
+  ]
 
-  -- Layouts
-  , ("M-<Tab>", sendMessage NextLayout)                                 -- Switch to next layout
+bGridSelect :: [([Char], X ())]
+bGridSelect =
+  [ ("C-g a", spawnSelected' myAppGrid)                 -- grid select favourite apps
+  , ("C-g c", spawnSelected' myConfigGrid)              -- grid select useful config files
+  , ("C-g t", goToSelected $ myGridConfig myColorizer)  -- goto selected
+  , ("C-g b", bringSelected $ myGridConfig myColorizer) -- bring selected
+  ]
+
+bTreeSelect :: [([Char], X ())]
+bTreeSelect = [ ("C-t t", treeSelectAction tsDefaultConfig) ]
+
+bLayouts :: [([Char], X ())]
+bLayouts =
+  [ ("M-<Tab>", sendMessage NextLayout)                                 -- Switch to next layout
   , ("M-S-<Space>", sendMessage ToggleStruts)                           -- Toggles struts
   , ("M-S-n", sendMessage $ MT.Toggle NOBORDERS)                        -- Toggles noborder
   , ("M-<KP_Multiply>", sendMessage (IncMasterN 1))     -- Increase number of clients in the master pane
@@ -108,22 +115,19 @@ myKeys =
   , ("M-l", sendMessage Expand)
   , ("M-C-j", sendMessage MirrorShrink)
   , ("M-C-k", sendMessage MirrorExpand)
+  ]
 
-  -- Workspaces
-  , ("M-.", nextScreen)                                                 -- Switch focus to next monitor
+bWorkspaces :: [([Char], X ())]
+bWorkspaces =
+  [ ("M-.", nextScreen)                                                 -- Switch focus to next monitor
   , ("M-,", prevScreen)                                                 -- Switch focus to prev monitor
   , ("M-S-<KP_Add>", shiftTo Next nonNSP >> moveTo Next nonNSP)         -- Shifts focused window to next workspace
   , ("M-S-<KP_Subtract>", shiftTo Prev nonNSP >> moveTo Prev nonNSP)    -- Shifts focused window to prev workspace
+  ] where nonNSP = WSIs (return (\ws -> W.tag ws /= "nsp"))
 
-  -- Scratchpads
-  --, ("M-C-<Return>", namedScratchpadAction myScratchPads "terminal")
-  --, ("M-C-c", namedScratchpadAction myScratchPads "cmus")
-
-  -- Open My Preffered Terminal.
-  , ("M-<Return>", spawn myTerminal)
-
-  -- My Applications (Super+Alt+Key)
-  , ("M-M1-a", spawn (myTerminal ++ " -e ncpamixer"))
+bApplications :: [([Char], X ())]
+bApplications =
+  [ ("M-M1-a", spawn (myTerminal ++ " -e ncpamixer"))
   , ("M-M1-b", spawn ("surf www.youtube.com"))
   , ("M-M1-c", spawn (myTerminal ++ " -e cmus"))
   , ("M-M1-e", spawn (myTerminal ++ " -e neomutt"))
@@ -137,9 +141,11 @@ myKeys =
   , ("M-M1-r", spawn (myTerminal ++ " -e rtv"))
   , ("M-M1-w", spawn (myTerminal ++ " -e wopr report.xml"))
   , ("M-M1-y", spawn (myTerminal ++ " -e youtube-viewer"))
+  ]
 
-  -- Multimedia Keys
-  , ("<XF86AudioPlay>", spawn "cmus toggle")
+bMultimediaKeys :: [([Char], X ())]
+bMultimediaKeys =
+  [ ("<XF86AudioPlay>", spawn "cmus toggle")
   , ("<XF86AudioPrev>", spawn "cmus prev")
   , ("<XF86AudioNext>", spawn "cmus next")
   --, ("<XF86AudioMute>", spawn "amixer set Master toggle") -- Bug prevents it from toggling correctly in 12.04
@@ -152,10 +158,22 @@ myKeys =
   , ("<XF86Calculator>", runOrRaise "gcalctool" (resource =? "gcalctool"))
   , ("<XF86Eject>", spawn "toggleeject")
   , ("<Print>", spawn "scrotd 0")
-  ] 
+  ]
+
+---------------------
+-- All Keybindings --
+---------------------
+
+myKeys :: [([Char], X ())]
+myKeys = bXMonad
+  ++ bPrompts
+  ++ bWindows
+  ++ bGridSelect
+  ++ bTreeSelect
+  ++ bLayouts
+  ++ bWorkspaces
+  ++ bApplications
+  ++ bMultimediaKeys
   -- Appending search engines to keybinding list
   ++ [("M-s " ++ k, S.promptSearch myXPConfig f) | (k,f) <- searchList ]
   ++ [("M-p " ++ k, f myXPConfig) | (k,f) <- promptList ]
-  -- Appending named scratchpads to keybinding list
-    where nonNSP                = WSIs (return (\ws -> W.tag ws /= "nsp"))
-          nonEmptyNonNSP        = WSIs (return (\ws -> isJust (W.stack ws) && W.tag ws /= "nsp"))

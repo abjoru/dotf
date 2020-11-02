@@ -1,6 +1,5 @@
 import ammonite.ops._
 
-
 import $ivy.`io.circe::circe-yaml:0.13.0`
 
 import io.circe._

@@ -2,6 +2,9 @@ module Blueberry.Variables where
 
 import Blueberry.Palette
 
+import System.Directory (getHomeDirectory, getXdgDirectory, XdgDirectory(XdgConfig))
+import System.FilePath
+
 import XMonad
 import XMonad.Hooks.DynamicLog (dynamicLogWithPP, wrap, PP(..))
 import qualified XMonad.Actions.Search as S
@@ -17,7 +20,6 @@ myModMask = mod4Mask
 -- sets default terminal
 myTerminal :: [Char]
 myTerminal = "alacritty" 
---myTerminal = "termonad"
 
 -- sets default browser for tree select
 myBrowser :: String
@@ -39,15 +41,25 @@ myNormColor = pBG0
 myFocusColor :: [Char]
 myFocusColor = pFG1
 
-myGamesFolder :: [Char]
-myGamesFolder = "/home/abjoru/Games"
-
 -- setting this for use in xprompts
 altMask :: KeyMask
 altMask = mod1Mask
 
 windowCount :: X (Maybe String)
 windowCount = gets $ Just . show . length . W.integrate' . W.stack . W.workspace . W.current . windowset
+
+------------------------------------------------------------------------
+-- Folder Variables
+------------------------------------------------------------------------
+
+-- Game folder
+myGamesFolder :: IO FilePath
+myGamesFolder = fmap (\x -> x </> "Games") getHomeDirectory
+
+-- Config folders
+configDirDotf, configDirXmobar :: IO FilePath
+configDirDotf   = getXdgDirectory XdgConfig "dotf"
+configDirXmobar = getXdgDirectory XdgConfig "xmobar"
 
 ------------------------------------------------------------------------
 -- Search Variables
@@ -98,10 +110,9 @@ myApplications = [ ("QuteBrowser", "qutebrowser", "Simple VIM-like web browser")
                  ]
 
 myConfigs :: [(String, String, String)]
-myConfigs = [ ("xmonad", myEditor ++ "/home/abjoru/.config/xmonad/xmonad.hs", "xmonad config")
-            , ("polybar", myEditor ++ "/home/abjoru/.config/polybar/config", "Polybar config file")
-            , ("zshrc", myEditor ++ "/home/abjoru/.config/zsh/config.zsh", "zsh config")
-            , ("nvim", myEditor ++ "/home/abjoru/.config/nvim/init.vim", "NeoVim main config file")
+myConfigs = [ ("xmonad", myEditor ++ "~/.config/xmonad/xmonad.hs", "xmonad config")
+            , ("zshrc", myEditor ++ "~/.config/zsh/config.zsh", "zsh config")
+            , ("nvim", myEditor ++ "~/.config/nvim/init.vim", "NeoVim main config file")
             ]
 
 myAppGrid :: [(String, String)]
