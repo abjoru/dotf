@@ -10,7 +10,9 @@ import io.circe._
 import io.circe.generic.semiauto._
 import io.circe.parser._
 
-import java.io.File
+import scala.io.Source
+
+import java.io.{File, PrintWriter}
 
 final case class Link(name: String, link: String)
 
@@ -33,19 +35,19 @@ object Builder {
   private def hostname[F[_]: Sync](implicit ws: os.Path) = Sync[F].delay(%%("hostname").out.string)
 
   private def readJson[F[_]: Sync](file: os.Path): F[Json] = for {
-    f <- Sync[F].pure(new File(file.toString))
-    c <- Sync[F].delay(scala.io.Source.fromFile(f).getLines.mkString)
-    r <- Sync[F].fromEither(parse(c))
+    f <- new File(file.toString).pure[F]
+    c <- Sync[F].delay(Source.fromFile(f).getLines.mkString)
+    r <- parse(c).liftTo[F]
   } yield r
 
-  private def readString[F[_]: Sync](file: os.Path): F[String] = Sync[F].delay {
-    val f = new File(file.toString)
-    scala.io.Source.fromFile(f).getLines.mkString("\n")
-  }
+  private def readString[F[_]: Sync](file: os.Path): F[String] = for {
+    f <- Sync[F].pure(new File(file.toString))
+    r <- Sync[F].delay(Source.fromFile(f).getLines.mkString("\n"))
+  } yield r
 
   private def getGroups[F[_]: Sync](file: os.Path): F[Seq[Group]] = for {
     a <- readJson(file)
-    b <- Sync[F].fromEither(a.as[Seq[Group]])
+    b <- a.as[Seq[Group]].liftTo[F]
   } yield b
 
   private def matchesHost(host: String)(grp: Group): Boolean = grp.hostFilter match {
@@ -66,7 +68,7 @@ object Builder {
       f.getParentFile().mkdirs()
     } else f.delete()
 
-    val pw = new java.io.PrintWriter(f)
+    val pw = new PrintWriter(f)
     pw.write(contents)
     pw.close()
   }

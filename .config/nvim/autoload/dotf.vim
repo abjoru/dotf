@@ -24,6 +24,10 @@ let g:dotf_nav_tree_width = get(g:, 'dotf_nav_tree_width', 45)
 " Airline tabline on/off switch
 let g:dotf_ui_statusbar_tabline_enabled = get(g:, 'dotf_ui_statusbar_tabline_enabled', 1)
 
+""""""""""
+" Locals "
+""""""""""
+
 " Local logger instance
 let s:LOG = DotF#logger#derive('bootstrap')
 " Utils API

@@ -6,14 +6,14 @@ function! DotF#install#run() abort
   let has_python = s:UTILS.has_python()
 
   if has_python ==? 0
-    call s:LOG.error('IMPORTANT! Neovim could not find support for python, which means')
-    call s:LOG.error('some modules may not work. To fix this, install the neovim python')
-    call s:LOG.error('package. I.e. `pip install neovim` etc')
+    echoerr 'IMPORTANT! Neovim could not find support for python, which means'
+    echoerr 'some modules may not work. To fix this, install the neovim python'
+    echoerr 'package. I.e. `pip install neovim` etc'
+  else
+    call DotF#plug#download()
+    call DotF#plug#install()
+  
+    call s:LOG.info('-- Installation complete, please restart Neovim! --')
+    :quitall
   endif
-
-  call DotF#plug#download()
-  call DotF#plug#install()
-
-  call s:LOG.info('-- Installation complete, please restart Neovim! --')
-  :quitall
 endfunction
