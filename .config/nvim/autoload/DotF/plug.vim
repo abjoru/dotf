@@ -56,3 +56,14 @@ function! s:newScratchBufferNo() abort
   setlocal nobuflisted buftype=nofile bufhidden=wipe noswapfile
   return bufnr('%')
 endfunction
+
+if !exists('g:dotf_buffer_output_functions_defined')
+  let g:dotf_buffer_output_functions_defined = 1
+
+  function! s:append_to_buffer(jobid, data, event) dict
+    if a:event ==? 'stdout' || a:event ==? 'stderr'
+      let self.out += a:data
+      call nvim_buf_set_lines(self.buf, 0, -1, v:true, self.out)
+    endif
+  endfunction
+endif
