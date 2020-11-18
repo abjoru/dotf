@@ -1,5 +1,5 @@
 DotF Neovim:
-  ☐ Make projects with its own task file take precedence in start screen @priority(high)
+  ✓ Make projects with its own task file take precedence in start screen @priority(high) @done(2020-11-18 09:27) @project(DotF Neovim)
   ☐ Fix listing tasks in nvim
   ☐ Remove cache module in favor of api type
   ☐ Change devicons colors to match gruvbox theme @priority(low)

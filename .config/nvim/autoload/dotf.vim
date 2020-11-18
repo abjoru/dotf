@@ -6,6 +6,7 @@
 
 " Global Paths
 let g:home_dir = $HOME
+let g:curr_dir = getcwd()
 let g:cache_dir = expand(resolve(g:home_dir . '/.cache/nvim'))
 let g:config_dir = expand(resolve(g:home_dir . '/.config/nvim'))
 let g:modules_dir = expand(resolve(g:config_dir . '/modules'))

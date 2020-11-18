@@ -1,3 +1,5 @@
+let s:LOG = DotF#logger#derive('splash')
+
 function! s:git_modified() abort
   let files = systemlist('git ls-files -m 2>/dev/null')
   return map(files, {v -> {'line': v, 'path': v}})
@@ -43,7 +45,23 @@ function! s:tasks(index) abort
   return data[a:index].tasks
 endfunction
 
+function! s:findfile() abort
+  let file = ''
+  let targets = split(globpath(g:curr_dir, '*.todo'), '\n')
+
+  if len(targets) == 1
+    let file = targets[0]
+  else
+    let file = g:dotf_tasks_file
+  endif
+
+  return file
+endfunction
+
 function! g:Dotf_build_startify_lists() abort
+  let taskFile = s:findfile()
+  call s:LOG.info('Task file is ' . taskFile)
+
   let output = [
     \ { 'type': 'files', 'header': ['   MRU'] },
     \ { 'type': 'dir', 'header': ['   MRU ' . getcwd()] },
@@ -51,7 +69,7 @@ function! g:Dotf_build_startify_lists() abort
     \ { 'type': {-> s:git_untracked()}, 'header': ['   GIT Untracked'] }
     \ ]
 
-  let tasks = map(s:load_tasks(g:dotf_tasks_file), {i, v -> {'idx': i, 'topic': v.topic}})
+  let tasks = map(s:load_tasks(taskFile), {i, v -> {'idx': i, 'topic': v.topic}})
 
   for item in tasks
     let tx = s:tasks(item.idx)
