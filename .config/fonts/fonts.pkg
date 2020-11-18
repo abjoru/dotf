@@ -2,7 +2,7 @@
     apt:
       ignore: true
     brew:
-      name: font-ubuntumono-nerd-font
+      name: font-ubuntu-mono-nerd-font
       cask: true
     pacman:
       name: nerd-fonts-ubuntu-mono
@@ -11,7 +11,7 @@
     apt:
       ignore: true
     brew:
-      name: font-terminessttf-nerd-font
+      name: font-terminess-ttf-nerd-font
       cask: true
     pacman:
       name: nerd-fonts-terminus
@@ -20,7 +20,7 @@
     apt:
       ignore: true
     brew:
-      name: font-robotomono-nerd-font
+      name: font-roboto-mono-nerd-font
       cask: true
     pacman:
       name: nerd-fonts-roboto-mono

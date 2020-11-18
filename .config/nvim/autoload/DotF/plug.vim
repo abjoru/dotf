@@ -12,7 +12,8 @@ function! DotF#plug#download() abort
   if empty(glob(s:plug_file))
     call s:LOG.info('Downloading plug.vim...')
     if has('nvim')
-      let data = {'out': [], 'buf': g:scratch_buffer_no}
+      let buffnr = s:newScratchBufferNo()
+      let data = {'out': [], 'buf': buffnr}
       let l:job_opt = {
         \ 'on_stdout': function('s:append_to_buffer', data),
         \ 'on_stderr': function('s:append_to_buffer', data),
@@ -48,4 +49,10 @@ function! DotF#plug#install() abort
   call s:LOG.info('Installing all plugins via vim-plug')
   :PlugInstall! --sync
   call s:LOG.info('All plugins installed')
+endfunction
+
+function! s:newScratchBufferNo() abort
+  rightbelow new
+  setlocal nobuflisted buftype=nofile bufhidden=wipe noswapfile
+  return bufnr('%')
 endfunction
