@@ -1,4 +1,4 @@
-module Blueberry.Utils (sanitizeName, listGames) where
+module Blueberry.Utils (listGames) where
 
 import Control.Applicative
 import Control.Monad
@@ -11,21 +11,30 @@ import Data.List (find)
 import Data.Maybe (catMaybes)
 import Data.Ini
 
+import Text.Regex.Posix
+
 import XMonad
 import qualified XMonad.Actions.TreeSelect as TS
+
+-----------
+-- RegEx --
+-----------
+
+-- Standard RegEx Context
+type NameMatch = (String, String, String, [String])
+
+-- Group name only of parent directory
+nameRx = "^(.*)[_-]v?[0-9].*$"
 
 -----------------------
 -- Utility Functions --
 -----------------------
 
--- Sanitize a name such that any characters like '-_"' have 
--- either been removed or replaced with space.
-sanitizeName :: String -> String
-sanitizeName ('-':xs)   = ' ' : sanitizeName xs
-sanitizeName ('_':xs)   = ' ' : sanitizeName xs
-sanitizeName ('"':xs)   = sanitizeName xs
-sanitizeName (x:xs)     = x : sanitizeName xs
-sanitizeName []         = ""
+-- Run name regex on the given string and return the matched substring
+gameName :: String -> String
+gameName s = 
+  let (_, _, _, [name]) = s =~ nameRx :: NameMatch
+   in name
 
 -- Attempt to extract game launcher script from contents
 maybeLauncher :: [FilePath] -> Maybe FilePath
@@ -33,7 +42,7 @@ maybeLauncher = find (\a -> ".sh" == takeExtension a)
 
 -- Combine game dir with launcher file if any
 mkEntry :: FilePath -> Maybe FilePath -> Maybe (String, FilePath)
-mkEntry a (Just b)  = Just (sanitizeName $ takeBaseName a, b)
+mkEntry a (Just b)  = Just (gameName $ takeBaseName a, b)
 mkEntry a Nothing   = Nothing
 
 -- Convert game folder into a pair (name, launcher)
@@ -41,7 +50,8 @@ processGame :: FilePath -> IO (Maybe (String, FilePath))
 processGame p = mkEntry p <$> maybeLauncher <$> listAbsDir p
 
 -- List games in the given directory if it exists
--- TODO filter out subfolders only
+-- Input path is the folder holding games
+-- Rules: Game folders must have a '.sh' launcher to qualify
 listGames :: FilePath -> IO [(String, FilePath)]
 listGames p = do
   exists <- doesDirectoryExist p

@@ -1,9 +1,6 @@
 DotF Neovim:
+  ☐ Make projects with its own task file take precedence in start screen @priority(high)
   ☐ Fix listing tasks in nvim
   ☐ Remove cache module in favor of api type
   ☐ Change devicons colors to match gruvbox theme @priority(low)
   ☐ Make dynamic xmobar config play nicer with values (if num screens > cfgs)
-  ✓ New command: list tracked/untracked for some parent directory only @done(2020-10-30 11:11) @project(DotF Neovim)
-  ✓ Move mapping command implementations to api @done(2020-10-22 16:42) @project(DotF Neovim)
-  ✓ Update `master` branch and kill off machine specific ones @done(2020-10-30 00:56) @project(DotF Installer)
-  ✓ XMonad: integrate with dotf.cfg for multi-monitor support @done(2020-10-30 00:56) @project(DotF Installer)
