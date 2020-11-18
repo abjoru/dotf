@@ -1,3 +1,4 @@
+let s:FS = DotF#api#import('fs')
 let s:LOG = DotF#logger#derive('splash')
 
 function! s:git_modified() abort
@@ -47,7 +48,7 @@ endfunction
 
 function! s:findfile() abort
   let file = ''
-  let targets = split(globpath(g:curr_dir, '*.todo'), '\n')
+  let targets = s:FS.find(g:curr_dir, '*.todo')
 
   if len(targets) == 1
     let file = targets[0]
