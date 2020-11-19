@@ -1,5 +1,3 @@
-let s:LIST = DotF#api#import('list')
-
 let g:haskell = [
 \'',
 \'     ############(    **///////*//*                                           ',

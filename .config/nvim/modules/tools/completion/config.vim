@@ -38,6 +38,9 @@ let g:coc_global_extensions = get(g:, 'coc_global_extensions', [
       \'coc-git'
       \])
 
+"let g:lmap.x = get(g:lmap, 'x', { 'name': 'metals'})
+DfLMap 'x', 'Metals'
+
 " TextEdit might fail if hidden is not set
 set hidden
 
@@ -102,11 +105,11 @@ nmap <silent> K :call <SID>show_documentation()<CR>
 autocmd CursorHold * silent call CocActionAsync('highlight')
 
 " remap for rename current word
-nmap <leader>rn <Plug>(coc-rename)
+nmap <localleader>rn <Plug>(coc-rename)
 
 " remap for format selected regions
-xmap <leader>f <Plug>(coc-format-selected)
-nmap <leader>f <Plug>(coc-format-selected)
+xmap <localleader>f <Plug>(coc-format-selected)
+nmap <localleader>f <Plug>(coc-format-selected)
 
 augroup mygroup
   autocmd!
@@ -118,13 +121,13 @@ augroup END
 
 " remap for do codeAction of selected region, ex: `<leader>aap` for current
 " paragraph.
-xmap <leader>a <Plug>(coc-codeaction-selected)
-nmap <leader>a <Plug>(coc-codeaction-selected)
+xmap <localleader>a <Plug>(coc-codeaction-selected)
+nmap <localleader>a <Plug>(coc-codeaction-selected)
 
 " remap for do codeAction of current line
-nmap <leader>ac <Plug>(coc-codeaction)
+nmap <localleader>ac <Plug>(coc-codeaction)
 " fix autofix problem of current line
-nmap <leader>qf <Plug>(coc-fix-current)
+nmap <localleader>qf <Plug>(coc-fix-current)
 
 " use `:Format` to format current buffer
 command! -nargs=0 Format :call CocAction('format')
@@ -138,10 +141,13 @@ set statusline^=%{coc$status()}%{get(b:,'coc_current_function','')}
 
 " show all diagnostics
 "nnoremap <silent> <space>a :<C-u>CocList diagnostics<cr>
+DfNMap 'xa', 'list-diagnostics', '<C-u>CocList diagnostics'
 " manage extensions
 "nnoremap <silent> <space>e :<C-u>CocList extensions<cr>
+DfNMap 'xe', 'list-extensions', '<C-u>CocList extensions'
 " show commands
 "nnoremap <silent> <space>c :<C-u>CocList commands<cr>
+DfNMap 'xc', 'list-commands', '<C-u>CocList commands'
 " find symbol of current document
 "nnoremap <silent> <space>o :<C-u>CocList outline<cr>
 " search workspace symbols

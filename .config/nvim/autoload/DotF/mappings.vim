@@ -1,3 +1,15 @@
+"""""""""""""""""
+" Doc Functions "
+"""""""""""""""""
+
+function! DotF#mappings#lmap(key, name) abort
+  execute 'let g:lmap.' . a:key . ' = get(g:lmap, "' . a:key . '", {"name": "' . a:name . '"})'
+endfunction
+
+function! DotF#mappings#llmap(key, name) abort
+  execute 'let g:llmap.' . a:key . ' = get(g:llmap, "' . a:key . '", {"name": "' . a:name . '"})'
+endfunction
+
 """""""""""""""""""""
 " Mapping Functions "
 """""""""""""""""""""

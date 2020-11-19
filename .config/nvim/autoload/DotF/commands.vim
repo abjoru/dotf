@@ -68,6 +68,9 @@ function! DotF#commands#load() abort
   " Mapping commands "
   """"""""""""""""""""
 
+  command! -nargs=+ -bar DfLMap call DotF#mappings#lmap(<args>)
+  command! -nargs=+ -bar DfLLMap call DotF#mappings#llmap(<args>)
+
   command! -nargs=+ -bar DfBind call DotF#mappings#buf_bind(<args>)
   command! -nargs=+ -bar DfMap call DotF#mappings#buf_map(<args>)
   command! -nargs=+ -bar DfNMap call DotF#mappings#buf_nmap(<args>)
