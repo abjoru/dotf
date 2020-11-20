@@ -69,44 +69,6 @@ set incsearch           " search as chars are entered
 set ignorecase          " ignore case in searches
 set smartcase           " unless casing in query
 
-""""""""""""
-" Mappings "
-""""""""""""
-
-" move more sensibly when line wrapping enabled
-nmap k gk
-nmap j gj
-
-" switch windows with CTRL
-nnoremap <C-J> <C-W><C-J>
-nnoremap <C-K> <C-W><C-K>
-nnoremap <C-L> <C-W><C-L>
-nnoremap <C-H> <C-W><C-H>
-
-" move blocks of code
-vnoremap < <gv
-vnoremap > >gv
-
-" enable hlsearch on start
-nnoremap / :set hlsearch<cr>/
-" clear search highlight on 'spc spc'
-nnoremap <leader><leader> :noh<CR>
-let g:llmap['/'] = [':noh', 'Clear highlights']
-
-" Clipboard management
-vnoremap <localleader>y "+y
-nnoremap <localleader>yy "+yg_
-nnoremap <localleader>y "+y
-
-nnoremap <localleader>p "+p
-nnoremap <localleader>pp "+P
-vnoremap <localleader>p "+p
-vnoremap <localleader>pp "+P
-
-" Comment boxes
-autocmd FileType vim vnoremap <buffer> ,cc !boxes -f ~/.config/nvim/cfg/boxes -d vim-box<CR>
-autocmd FileType scala vnoremap <buffer> ,cc !boxes -f ~/.config/nvim/cfg/boxes -d scala<CR>
-
 """"""""""""""
 " File types "
 """"""""""""""

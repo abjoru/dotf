@@ -11,8 +11,8 @@ let g:open_in_insert_mode = 1
 " avoid `No write since last change` messages when toggling (?)
 "set autowriteall
 
-let g:lmap['!'] = ['DfTerminalCmd', 'shell-cmd']
-DfNMap '!', 'shell-cmd', 'DfTerminalCmd'
+"let g:lmap['!'] = ['DfTerminalCmd', 'shell-cmd']
+"DfNMap '!', 'shell-cmd', 'DfTerminalCmd'
 
 if has('nvim')
   " make terminal split nav behave like normal

@@ -7,4 +7,6 @@ let g:airline#extensions#tabline#left_sep = ' '
 let g:airline#extensions#tabline#left_alt_sep = '|'
 
 nnoremap <silent> <LocalLeader>[ :call TabBufP()<CR>
+let g:llmap['['] = 'Previous tab'
 nnoremap <silent> <LocalLeader>] :call TabBufN()<CR>
+let g:llmap[']'] = 'Next tab'

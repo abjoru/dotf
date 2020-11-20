@@ -29,6 +29,9 @@ let g:startify_custom_header = g:haskell "+ startify#fortune#boxed()
 
 let g:startify_lists = g:Dotf_build_startify_lists()
 
+" Don't change to dir of file!
+let g:startify_change_to_dir = 0
+
 augroup fixStartify
   au!
   au User Startified nmap <buffer> k k

@@ -16,11 +16,9 @@ function! s:dotf_preinstall()
 
   " create default vim-leader-guide map, etc
   let g:lmap = get(g:, 'lmap', {})
-  let g:lmap.m = get(g:lmap, 'm', {'name': 'major-mode-cmd'})
 
   " create default localleader map
-  let g:llmap = {}
-
+  let g:llmap = get(g:, 'llmap', {})
 
   " reset nerdcommenter key mappings
   let g:NERDCreateDefaultMappings = get(g:, 'NERDCreateDefaultMappings', 0)
@@ -41,6 +39,9 @@ function! g:Dotf_postinit()
   " configure vim-leader-guide
   if exists('g:loaded_leaderGuide_vim')
     call s:LOG.warn('Configure vim-leader-guide')
+
+    " Match all keys in a sequence
+    let g:leaderGuide_match_whole = 1
 
     " cleanup displayed key bindings
     function! s:dotf_displayfunc()

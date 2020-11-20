@@ -102,6 +102,7 @@ function! s:source_module(module_name) abort
   let pkgSourceFile = g:modules_dir . '/' . a:module_name . '/packages.vim'
   let funcSourceFile = g:modules_dir . '/' . a:module_name . '/func.vim'
   let confSourceFile = g:modules_dir . '/' . a:module_name . '/config.vim'
+  let mapSourceFile = g:modules_dir . '/' . a:module_name . '/mappings.vim'
 
   " Source package defintions
   if filereadable(pkgSourceFile)
@@ -119,6 +120,12 @@ function! s:source_module(module_name) abort
   if filereadable(confSourceFile)
     call s:LOG.info('Sourcing configurations for ' . a:module_name)
     call s:UTILS.source(confSourceFile)
+  endif
+
+  " Source mappings definitions
+  if filereadable(mapSourceFile)
+    call s:LOG.info('Sourcing mappings for ' . a:module_name)
+    call s:UTILS.source(mapSourceFile)
   endif
 endfunction
 

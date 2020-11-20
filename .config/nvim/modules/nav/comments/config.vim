@@ -1,18 +1,3 @@
-" remove default mappings
-let g:NERDCreateDefaultMappings = 1
-
-let g:lmap.c = {'name': 'Comments'}
-
-let g:lmap.c.l = 'comment-or-uncomment-lines'
-nmap <leader>cl gcc
-vmap <leader>cl gc
-
-let g:lmap.c.y = 'copy-and-comment-lines'
-nmap <leader>cy yygcc
-vmap <leader>cy ygvgc
-
-DfMap 'cc', 'comment-or-uncomment-lines-inverted', 'DfInvertToggleComment'
-
 " add spaces after comment delimiters by default
 let g:NERDSpaceDelims = 1
 

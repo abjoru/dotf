@@ -38,8 +38,8 @@ let g:coc_global_extensions = get(g:, 'coc_global_extensions', [
       \'coc-git'
       \])
 
-"let g:lmap.x = get(g:lmap, 'x', { 'name': 'metals'})
-DfLMap 'x', 'Metals'
+DfLMap 'm', 'Metals'
+DfLLMap 'q', 'Quick'
 
 " TextEdit might fail if hidden is not set
 set hidden
@@ -106,10 +106,12 @@ autocmd CursorHold * silent call CocActionAsync('highlight')
 
 " remap for rename current word
 nmap <localleader>rn <Plug>(coc-rename)
+let g:llmap['rn'] = 'Rename word'
 
 " remap for format selected regions
 xmap <localleader>f <Plug>(coc-format-selected)
 nmap <localleader>f <Plug>(coc-format-selected)
+let g:llmap.f = 'Format selected'
 
 augroup mygroup
   autocmd!
@@ -123,11 +125,15 @@ augroup END
 " paragraph.
 xmap <localleader>a <Plug>(coc-codeaction-selected)
 nmap <localleader>a <Plug>(coc-codeaction-selected)
+let g:llmap.a = 'Code action for selected'
 
 " remap for do codeAction of current line
 nmap <localleader>ac <Plug>(coc-codeaction)
+let g:llmap['ac'] = 'Code action for current line'
+
 " fix autofix problem of current line
 nmap <localleader>qf <Plug>(coc-fix-current)
+let g:llmap.q.f = 'QuickFix current'
 
 " use `:Format` to format current buffer
 command! -nargs=0 Format :call CocAction('format')
@@ -140,18 +146,17 @@ command! -nargs=? Fold :call CocAction('fold', <f-args>)
 set statusline^=%{coc$status()}%{get(b:,'coc_current_function','')}
 
 " show all diagnostics
-"nnoremap <silent> <space>a :<C-u>CocList diagnostics<cr>
-DfNMap 'xa', 'list-diagnostics', '<C-u>CocList diagnostics'
+DfNMap 'ma', 'list-diagnostics', '<C-u>CocList diagnostics'
 " manage extensions
-"nnoremap <silent> <space>e :<C-u>CocList extensions<cr>
-DfNMap 'xe', 'list-extensions', '<C-u>CocList extensions'
+DfNMap 'me', 'list-extensions', '<C-u>CocList extensions'
 " show commands
-"nnoremap <silent> <space>c :<C-u>CocList commands<cr>
-DfNMap 'xc', 'list-commands', '<C-u>CocList commands'
+DfNMap 'mc', 'list-commands', '<C-u>CocList commands'
 " find symbol of current document
 "nnoremap <silent> <space>o :<C-u>CocList outline<cr>
+DfNMap 'mo', 'list-outline', '<C-u>CocList outline'
 " search workspace symbols
 "nnoremap <silent> <space>s :<C-u>CocList -I symbols<cr>
+DfNMap 'ms', 'list-symbols', '<C-u>CocList -I symbols'
 " do default action for next item
 "nnoremap <silent> <space>j :<C-u>CocNext<CR>
 " do default action for previous item.
