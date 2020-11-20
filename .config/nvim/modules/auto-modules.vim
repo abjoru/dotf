@@ -41,7 +41,7 @@ function! g:Dotf_postinit()
     call s:LOG.warn('Configure vim-leader-guide')
 
     " Match all keys in a sequence
-    let g:leaderGuide_match_whole = 1
+    "let g:leaderGuide_match_whole = 1
 
     " cleanup displayed key bindings
     function! s:dotf_displayfunc()
