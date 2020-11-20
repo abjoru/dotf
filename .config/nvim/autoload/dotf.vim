@@ -40,6 +40,10 @@ let s:MODULES = DotF#modules#instance()
 """""""""""""""""
 
 function! dotf#initialize()
+  " Base settings
+  let settings = g:modules_dir . '/settings.vim'
+  call s:UTILS.source(settings)
+
   " Load DotF command API
   call DotF#commands#load()
 endfunction
