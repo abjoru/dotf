@@ -1,5 +1,6 @@
 DotF Neovim:
-  ☐ Make startify not switch WD on selection! @priority(high)
+  ☐ Fix coc actions 'rn' and 'qf' in leader guide
+  ✓ Make startify not switch WD on selection! @priority(high) @done(2020-11-20 10:57) @project(DotF Neovim)
   ✓ Make projects with its own task file take precedence in start screen @priority(high) @done(2020-11-18 09:27) @project(DotF Neovim)
   ☐ Fix listing tasks in nvim
   ☐ Remove cache module in favor of api type

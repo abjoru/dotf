@@ -64,22 +64,6 @@ function! DotF#commands#load() abort
   " use in init.vim to configure tab indentation
   command! -nargs=+ -bar DfTabIndent call s:set_tab_indentation(<args>)
 
-  """"""""""""""""""""
-  " Mapping commands "
-  """"""""""""""""""""
-
-  command! -nargs=+ -bar DfLMap call DotF#mappings#lmap(<args>)
-  command! -nargs=+ -bar DfLLMap call DotF#mappings#llmap(<args>)
-
-  command! -nargs=+ -bar DfBind call DotF#mappings#buf_bind(<args>)
-  command! -nargs=+ -bar DfMap call DotF#mappings#buf_map(<args>)
-  command! -nargs=+ -bar DfNMap call DotF#mappings#buf_nmap(<args>)
-  command! -nargs=+ -bar DfVMap call DotF#mappings#buf_vmap(<args>)
-
-  command! -nargs=+ -bar DfFileTypeBind call DotF#mappings#ft_bind(<args>)
-  command! -nargs=+ -bar DfFileTypeMap call DotF#mappings#ft_map(<args>)
-  command! -nargs=+ -bar DfFileTypeNMap call DotF#mappings#ft_nmap(<args>)
-
 endfunction
 
 """""""""""""""""""""""""""

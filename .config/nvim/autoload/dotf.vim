@@ -17,6 +17,7 @@ let g:dotf_tasks_file = get(g:, 'dotf_tasks_file', g:config_dir . '/dotf.todo')
 
 " Defines leader key (default: <Space>)
 let g:dotf_leader_key = get(g:, 'dotf_leader_key', '<Space>')
+let g:dotf_local_leader_key = get(g:, 'dotf_local_leader_key', '\')
 
 " NERDTree width configuration
 let g:dotf_nav_tree_width = get(g:, 'dotf_nav_tree_width', 45)
@@ -141,6 +142,10 @@ endfunction
 " Get the configured leader key.
 function! dotf#get_leader_key()
   return g:dotf_leader_key
+endfunction
+
+function! dotf#get_local_leader_key()
+  return g:dotf_local_leader_key
 endfunction
 
 ""

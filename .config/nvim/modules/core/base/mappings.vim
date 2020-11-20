@@ -17,7 +17,7 @@ nnoremap / :set hlsearch<cr>/
 
 " Clear search highlight
 nnoremap <leader><leader> :noh<CR>
-let g:llmap['\'] = 'Highlight off'
+let g:lmap['\'] = 'Highlight off'
 
 " Yank clipboard management
 vnoremap <localleader>y "+y

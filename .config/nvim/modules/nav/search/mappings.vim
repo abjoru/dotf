@@ -1,13 +1,20 @@
 let g:lmap.f = get(g:lmap, 'f', { 'name': 'Files' })
 
-DfNMap 'ff', 'Find file', 'Files'
-DfNMap 'fb', 'Find buffer', 'Buffers'
-DfNMap 'fl', 'Find line', 'Lines'
+nnoremap <leader>ff :Files<CR>
+let g:lmap.f.f = 'Find file'
+
+nnoremap <leader>fb :Buffers<CR>
+let g:lmap.f.b = 'Find buffer'
+
+nnoremap <leader>fl :Lines<CR>
+let g:lmap.f.l = 'Find line'
 
 if executable('rg')
-  DfNMap 'fg', 'RipGrep', 'Rg'
+  nnoremap <leader>fg :Rg<CR>
+  let g:lmap.f.g = 'RipGrep'
 endif
 
 if DotF#modules#is_enabled('scm/git')
-  DfNMap 'fG', 'GitGrep', 'GGrep'
+  nnoremap <leader>fG :GGrep<CR>
+  let g:lmap.f.G = 'GitGrep'
 endif

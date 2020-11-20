@@ -1,8 +1,19 @@
 let g:lmap.g = get(g:lmap, 'g', { 'name': 'Git' })
 
-DfNMap 'gc', 'Commit', 'Gcommit'
-DfNMap 'gp', 'Push current branch', 'PushToCurrentBranch'
-DfNMap 'gs', 'Status', 'Gstatus'
-DfNMap 'gl', 'Log', 'Commits!'
-DfNMap 'gL', 'Log current file', 'BCommits!'
-DfNMap 'gd', 'Git diff-tool', 'Gdiff'
+nnoremap <leader>gc :Gcommit<CR>
+let g:lmap.g.c = 'Commit'
+
+nnoremap <leader>gp :PushToCurrentBranch<CR>
+let g:lmap.g.p = 'Push current branch'
+
+nnoremap <leader>gs :Gstatus<CR>
+let g:lmap.g.s = 'Status'
+
+nnoremap <leader>gl :Commits!<CR>
+let g:lmap.g.l = 'Log'
+
+nnoremap <leader>gL :BCommits!<CR>
+let g:lmap.g.L = 'Log current file'
+
+nnoremap <leader>gd :Gdiff<CR>
+let g:lmap.g.d = 'Git diff-tool'

@@ -3,13 +3,19 @@ map <silent> <F2> :NERDTreeToggle<CR>
 
 let g:lmap.f = get(g:lmap, 'f', { 'name': 'Files' })
 
-DfNMap 'fr', 'Tree reveal', 'NERDTreeFind'
-DfNMap 'fs', 'Save buffer', ':w'
-DfNMap 'fn', 'Tree sync', 'SyncNERDTree'
+nnoremap <leader>fr :NERDTreeFind<CR>
+let g:lmap.f.r = 'Tree reveal'
 
-let g:lmap.f.e = get(g:lmap.f, 'e', { 'name': 'dotf' })
+nnoremap <leader>fs :w<CR>
+let g:lmap.f.s = 'Save buffer'
 
-DfNMap 'fed', 'Find dotfile', 'e $MYVIMRC'
-DfNMap 'fem', 'Find dotf-modules', 'e $HOME/.config/nvim/modules'
-DfNMap 'feU', 'Update plugins', 'PlugUpdate!'
-DfNMap 'feC', 'Clean plugins', 'PlugClean!'
+nnoremap <leader>fn :SyncNERDTree<CR>
+let g:lmap.f.n = 'Tree sync'
+
+let g:lmap.f.e = get(g:lmap.f, 'e', { 'name': 'DotF' })
+
+nnoremap <leader>fed :e $MYVIMRC<CR>
+let g:lmap.f.e.d = 'Open vimrc'
+
+nnoremap <leader>fem :e $HOME/.config/nvim/modules/auto-modules.vim<CR>
+let g:lmap.f.e.m = 'Open auto-modules.vim'
