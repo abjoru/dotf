@@ -37,5 +37,5 @@ Config { font    = "xft:Mononoki Nerd Font:pixelsize=15:antialias=true:hinting=t
                     ]
        , sepChar = "%"
        , alignSep = "}{"
-       , template = " <icon=haskell_20.xpm/> <fc=#666666>|</fc> %UnsafeStdinReader% }{ <fc=#fabd2f>%cpunk% </fc><fc=#666666>| </fc><fc=#fabd2f>%cpu% </fc><fc=#666666>| </fc><fc=#fb4934>%memory% </fc><fc=#666666>| </fc><fc=#83a598>%disku% </fc><fc=#666666>| </fc><fc=#b8bb26>%enp38s0% </fc><fc=#666666>| </fc><action=`alacritty -e sudo pacman -Syu` button=1><fc=#d3869b> %updates% </fc></action><fc=#666666>| </fc><fc=#8ec07c>%date% </fc><fc=#666666>|</fc>%trayerpad% "
+       , template = " <icon=haskell_20.xpm/> <fc=#666666>|</fc> %UnsafeStdinReader% }{ <fc=#fabd2f>%cpunk% </fc><fc=#666666>| </fc><fc=#fabd2f>%cpu% </fc><fc=#666666>| </fc><fc=#fb4934>%memory% </fc><fc=#666666>| </fc><fc=#83a598>%disku% </fc><fc=#666666>| </fc><fc=#b8bb26>%enp38s0% </fc><fc=#666666>| </fc><action=`alacritty -e sudo pacman -Syu` button=1><fc=#d65d0e> %updates% </fc></action><fc=#666666>| </fc><fc=#8ec07c>%date% </fc><fc=#666666>|</fc>%trayerpad% "
        }

@@ -2,6 +2,24 @@
 -- install xmobar with these flags: --flags="with_alsa" --flags="with_mpd" --flags="with_xft"  OR --flags="all_extensions"
 -- you can find weather location codes here: http://weather.noaa.gov/index.html
 
+sep :: String
+sep = " <fc=#666666>|</fc> "
+
+icon :: String
+icon = " <icon=haskell_20.xpm/>"
+
+wm :: String
+wm = "%UnsafeStdinReader% }{ "
+
+cpk :: String
+cpk = "<fc=#fabd2f>%cpunk%</fc>
+
+osi :: String
+osi = "<fc=#fb4934> %uname%</fc>"
+
+ts :: String
+ts = "<fc=#8ec07c>%date%</fc>"
+
 Config { font    = "xft:Mononoki Nerd Font:pixelsize=12:antialias=true:hinting=true"
        , additionalFonts = [ "xft:FontAwesome:pixelsize=13" ]
        , bgColor = "#282828"
@@ -25,5 +43,6 @@ Config { font    = "xft:Mononoki Nerd Font:pixelsize=12:antialias=true:hinting=t
                     ]
        , sepChar = "%"
        , alignSep = "}{"
-       , template = " <icon=haskell_20.xpm/> <fc=#666666>|</fc> %UnsafeStdinReader% }{ <fc=#fabd2f>%cpunk% </fc><fc=#666666>| </fc><fc=#fabd2f> %uname% </fc><fc=#666666>| </fc><fc=#8ec07c>%date% </fc>"
+       --, template = " <icon=haskell_20.xpm/> <fc=#666666>|</fc> %UnsafeStdinReader% }{ <fc=#fabd2f>%cpunk% </fc><fc=#666666>| </fc><fc=#fabd2f> %uname% </fc><fc=#666666>| </fc><fc=#8ec07c>%date% </fc>"
+       , template = icon ++ sep ++ wm ++ cpk ++ sep ++ osi ++ sep ++ ts
        }
