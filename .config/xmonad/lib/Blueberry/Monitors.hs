@@ -1,5 +1,5 @@
 {-# LANGUAGE OverloadedStrings #-}
-module Blueberry.Monitors (spawnXmobars, xmobarOutput) where
+module Blueberry.Monitors (spawnBerrybars, xmobarOutput) where
 
 import Blueberry.Variables (configDirDotf, configDirXmobar)
 
@@ -23,13 +23,9 @@ import Graphics.X11.Xinerama as X11
 -- on DotF global config. As of now, this pertains to having 
 -- different XMobar configs pr screen.
 
--- Create xmobar executable command string
-xmobarConfig :: Int -> FilePath -> String
-xmobarConfig i fp = "xmobar -x " ++ (show i) ++ " " ++ (show fp)
-
 -- Get X screen counts (i.e. num monitors)
-xmobarScreenCount :: IO Int
-xmobarScreenCount = do
+countScreens :: IO Int
+countScreens = do
   screens <- do
     dpy   <- openDisplay ""
     rects <- getScreenInfo dpy
@@ -37,30 +33,33 @@ xmobarScreenCount = do
     return rects
   pure $ length screens
 
--- Load xmobarrc config files from global config
-loadXmobarConfigs :: IO [T.Text]
-loadXmobarConfigs = do
-  file     <- fmap (\x -> x </> "dotf.cfg") configDirDotf
-  maybeIni <- readIniFile file
-  let res = maybeIni >>= lookupValue "XMonad" "xmobarrc"
-  case res of Left s  -> pure []
-              Right s -> pure $ map T.strip $ T.splitOn "," s
-
--- Get xmobar file paths
-xmobarConfigs :: IO [(Int, FilePath)]
-xmobarConfigs = do
-  cnt <- xmobarScreenCount
-  lst <- loadXmobarConfigs
-  dir <- configDirXmobar
-  let fs = map (\x -> dir </> T.unpack x) lst
-  pure $ zip [0..] $ take cnt fs
-
--- Spawn xmobar instances for all configs
-spawnXmobars :: IO [Handle]
-spawnXmobars = do
-  cfgs <- xmobarConfigs
-  mapM (\(y, x) -> spawnPipe $ xmobarConfig y x) cfgs
-
 -- Setup dynamicLogWithPP outputs
 xmobarOutput :: [Handle] -> String -> IO ()
 xmobarOutput ha x = mapM_ (\h -> hPutStrLn h x) ha
+
+-- Create blueberry-bars for each screen
+spawnBerrybars :: IO [Handle]
+spawnBerrybars = countScreens >>= spawnBerrybars'
+
+-- Tailor to screen setup...
+spawnBerrybars' :: Int -> IO [Handle]
+spawnBerrybars' 0 = fmap (\x -> [x]) (spawnPipe "/home/abjoru/.local/bin/blueberry-mobar single")
+spawnBerrybars' 1 = fmap (\x -> [x]) (spawnPipe "/home/abjoru/.local/bin/blueberry-mobar single")
+spawnBerrybars' 2 = do
+  let arg = [(0, "primary"), (1, "secondary")]
+  mapM (\(i, m) -> spawnPipe $ blueberryMobar i m) arg
+spawnBerrybars' 3 = do
+  let arg = [(0, "primary"), (1, "secondary"), (2, "other")]
+  mapM (\(i, m) -> spawnPipe $ blueberryMobar i m) arg
+spawnBerrybars' 4 = do
+  let arg = [(0, "primary"), (1, "other"), (2, "other"), (3, "secondary")]
+  mapM (\(i, m) -> spawnPipe $ blueberryMobar i m) arg
+spawnBerrybars' n = do
+  let idx = take n [0..]
+  let mon = ["primary", "secondary"] ++ (take (n - 2) (repeat "other"))
+  let arg = zip idx mon
+  mapM (\(i, m) -> spawnPipe $ blueberryMobar i m) arg
+
+-- Executable string for a blueberry-mobar
+blueberryMobar :: Int -> String -> String
+blueberryMobar i m = "/home/abjoru/.local/bin/blueberry-mobar -x " ++ (show i) ++ " " ++ m

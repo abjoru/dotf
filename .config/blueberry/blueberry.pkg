@@ -1,12 +1,12 @@
-- xmobar:
-    headless: false
-    brew:
-      ignore: true
 - trayer:
     headless: false
     brew:
       ignore: true
 - alsa-utils:
+    headless: false
+    brew:
+      ignore: true
+- stack:
     headless: false
     brew:
       ignore: true
