@@ -80,6 +80,7 @@ function! g:Dotf_postinit()
     execute 'nnoremap <silent> <Leader> :<c-u>LeaderGuide "' . l:leader_key . '"<CR>'
     execute 'vnoremap <silent> <Leader> :<c-u>LeaderGuideVisual "' . l:leader_key . '"<CR>'
     nnoremap <silent> <localleader> :<c-u>LeaderGuide '\'<CR>
+    nnoremap <silent> ? :<c-u>LeaderGuide ""<CR>
   endif
 
   if exists('g:loaded_webdevicons')
