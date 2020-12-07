@@ -39,7 +39,7 @@ development:
   - nodejs
   - boxes
 
-  pre-install: scripts/dev/preinstall.sh
+  #pre-install: scripts/dev/preinstall.sh
   post-install: scripts/dev/postinstall.sh
 
 desktop:
