@@ -5,6 +5,35 @@
 # Based on the article 'The best way to store your dotfiles: A bare Git repository':
 # https://www.atlassian.com/git/tutorials/dotfiles
 
+# Setup Dotf config
+HEADLESS="true"
+
+read -p "Does this system require GFX packages? (y/N) " res
+case $res in
+  [Yy]*) HEADLESS="false";;
+  [Nn]*) HEADLESS="true";;
+  *) ;;
+esac
+
+if [[ ! -d "$HOME/.config/dotf" ]]; then
+  mkdir -p $HOME/.config/dotf
+fi
+
+# Write config file
+cat > $HOME/.config/dotf/dotf.cfg << EOF
+###########################
+# DotF Main Configuration #
+###########################
+
+# Determines if this system requires any UI packages
+# such as XMonad. Defaults to 'true', meaning no UI
+# packages will be installed. This allows for server
+# installation (or OSX) of DotF.
+headless=$HEADLESS
+EOF
+
+exit 0
+
 # Grab GIT if we need to..
 if [ ! -x "$(command -v git)" ]; then
   if [[ "$OSTYPE" == "darwin"* ]]; then
@@ -51,12 +80,6 @@ if [[ ! -d "$HOME/.dotf" ]]; then
 
   config checkout
   config config status.showUntrackedFiles no
-fi
-
-# Create global config if needed
-if [ ! -f "$HOME/.config/dotf/dotf.cfg" ]; then
-  cp "$HOME/.config/dotf/example.dotf.cfg" "$HOME/.config/dotf/dotf.cfg"
-  echo "Created default global config in $HOME/.config/dotf/dotf.cfg"
 fi
 
 # Ask for Java install..

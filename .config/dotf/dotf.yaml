@@ -1,0 +1,35 @@
+###########
+# General #
+###########
+
+# UI or non-UI system
+headless: false
+
+###############
+# Directories #
+###############
+
+# Target dir for git pkg installs
+git-target-dir: ~/.local/share
+
+# Config directory for DotF
+dotf-config-dir: ~/.config/dotf
+
+# Git bare repo directory for dot-files
+dotf-repo-dir: ~/.dotf
+
+############
+# Homepage #
+############
+
+# Stylesheets
+homepage-css: ~/.config/dotf/homepage.css
+
+# Header part
+homepage-header: ~/.config/dotf/homepage-header.html
+
+# Footer part
+homepage-footer: ~/.config/dotf/homepage-footer.html
+
+# Links config
+homepage-links: ~/.config/dotf/homepage-links.yaml

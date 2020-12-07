@@ -1,0 +1,93 @@
+name: "Arch Packages"
+description: "Package config for Arch based systems"
+
+shell:
+  headless: true
+
+  packages:
+  - zsh
+  - zsh-completions
+  - zsh-syntax-highlighting
+  - zsh-autosuggestions
+  - neofetch
+  - bat
+  - fzf
+  - vifm
+
+fonts:
+  headless: true
+
+  packages:
+  - nerd-fonts-ubuntu-mono:
+    aur: true
+  - nerd-fonts-terminus:
+    aur: true
+  - nerd-fonts-roboto-mono:
+    aur: true
+  - nerd-fonts-mononoki:
+    aur: true
+  - ttf-weather-icons:
+    aur: true
+
+development:
+  headless: true
+
+  packages:
+  - tig
+  - neovim
+  - yarn
+  - nodejs
+  - boxes
+
+  pre-install: scripts/dev/preinstall.sh
+  post-install: scripts/dev/postinstall.sh
+
+desktop:
+  headless: false
+
+  packages:
+  - alacritty
+  - xterm
+  - xmonad
+  - xmonad-contrib
+  - picom
+  - dmenu
+  - nitrogen
+  - conky
+  - network-manager-applet
+  - volumeicon
+  - trayer
+  - alsa-utils
+
+  git:
+  - blueberry-mobar:
+    url: https://github.com/abjoru/blueberry-mobar.git
+    command: 'sh build.sh'
+
+  pre-install: scripts/desktop/preinstall.sh
+
+internet:
+  headless: false
+
+  packages:
+  - qutebrowser
+  - newsboat
+
+# TODO Delete me!
+dotf-testing:
+  headless: true
+
+  packages:
+  - tp-one
+  - tp-two:
+    aur: true
+
+  git:
+  - mymobar:
+    url: https://github.com/abjoru/mymobar.git
+    command: 'stack install'
+    #install: scripts/test/mymobar-install.sh
+
+  script: script/test/install.sh
+  pre-install: scripts/test/preinstall.sh
+  post-install: scripts/test/postinstall.sh

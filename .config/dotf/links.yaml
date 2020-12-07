@@ -1,0 +1,34 @@
+home:
+  name: 'Home'
+  host-filter: '^((?!fll).)*$'
+
+  links:
+    - unifi:
+      name: 'Unifi Controller'
+      url:  'http://unifi.ui.com'
+    - open-media-vault:
+      name: 'Open Media Vault'
+      url:  'http://10.0.0.88/'
+    - syno-rack:
+      name: 'Synology Rack'
+      url:  'http://10.0.0.101:5000'
+
+akamai:
+  name: 'Akamai'
+  host-filter: '^.*fll.*$'
+
+  links:
+    - git-source:
+      name: 'Git Source'
+      url:  'https://git.source.akamai.com/dashboard'
+    - jira:
+      name: 'Jira'
+      url:  'https://track.akamai.com/jira/secure/Dashboard.jspa'
+
+news:
+  name: 'News'
+
+  links:
+    - cnn:
+      name: 'CNN'
+      url:  'http://www.cnn.com'
