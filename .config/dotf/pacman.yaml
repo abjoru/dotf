@@ -48,8 +48,6 @@ desktop:
   packages:
   - alacritty
   - xterm
-  - xmonad
-  - xmonad-contrib
   - picom
   - dmenu
   - nitrogen
@@ -58,11 +56,13 @@ desktop:
   - volumeicon
   - trayer
   - alsa-utils
+  - stack-static:
+    aur: true
 
   git:
-  - blueberry-mobar:
-    url: https://github.com/abjoru/blueberry-mobar.git
-    command: 'sh build.sh'
+  - blueberry-monad:
+    url: https://github.com/abjoru/blueberry-monad.git
+    command: 'stack install'
 
   pre-install: scripts/desktop/preinstall.sh
 
@@ -72,22 +72,4 @@ internet:
   packages:
   - qutebrowser
   - newsboat
-
-# TODO Delete me!
-dotf-testing:
-  headless: true
-
-  packages:
-  - tp-one
-  - tp-two:
-    aur: true
-
-  git:
-  - mymobar:
-    url: https://github.com/abjoru/mymobar.git
-    command: 'stack install'
-    #install: scripts/test/mymobar-install.sh
-
-  script: script/test/install.sh
-  pre-install: scripts/test/preinstall.sh
-  post-install: scripts/test/postinstall.sh
+  - weechat

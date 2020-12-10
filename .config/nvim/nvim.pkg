@@ -1,9 +1,0 @@
-- neovim:
-    postinstall: 'postinstall.sh'
-- yarn:
-    apt:
-      preinstall: 'preinstall-apt.sh'
-- nodejs:
-    brew:
-      name: 'node'
-- boxes:

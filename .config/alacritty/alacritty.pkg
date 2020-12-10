@@ -1,5 +1,0 @@
-- alacritty:
-    apt:
-      preinstall: 'preinstall-apt.sh'
-    brew:
-      ignore: true

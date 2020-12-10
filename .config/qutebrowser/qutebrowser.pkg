@@ -1,5 +1,0 @@
-- qutebrowser:
-    headless: false
-    brew:
-      warn: 'Does not use XDG directories on OSX. Need to symlink or force!'
-      cask: true
