@@ -1,4 +1,4 @@
-home:
+- home:
   name: 'Home'
   host-filter: '^((?!fll).)*$'
 
@@ -25,7 +25,7 @@ home:
       name: 'Transmission'
       url:  'http://10.0.0.88:9091/transmission/web/'
 
-akamai:
+- akamai:
   name: 'Akamai'
   host-filter: '^.*fll.*$'
 
@@ -43,7 +43,7 @@ akamai:
       name: 'PLX Calendar'
       url:  'https://collaborate.akamai.com/confluence/calendar/calendarPage.action?spaceKey=SELO&calendarId=4325a319-aa68-40b9-b518-b687fa6e4d39'
 
-news:
+- news:
   name: 'News'
 
   links:
@@ -54,7 +54,7 @@ news:
       name: 'NPR'
       url:  'http://www.npr.org'
 
-tech:
+- tech:
   name: 'Tech'
 
   links:
@@ -77,7 +77,7 @@ tech:
       name: 'Learn you a Haskell'
       url:  'http://learnyouahaskell.com/chapters'
 
-3dprint:
+- 3dprint:
   name: '3D Printing'
 
   links:
@@ -91,7 +91,7 @@ tech:
       name: 'RenderHub'
       url:  'http://renderhub.com'
 
-shopping:
+- shopping:
   name: 'Shopping'
 
   links:
@@ -102,7 +102,7 @@ shopping:
       name: 'NewEgg'
       url:  'https://www.newegg.com'
 
-entertainment:
+- entertainment:
   name: 'Entertainment'
 
   links:

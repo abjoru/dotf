@@ -1,0 +1,81 @@
+      </div>
+    </div>
+
+  <script>
+    // Search on enter key event
+    document.getElementById("search-field").addEventListener("keydown", event => {
+      if (event.keyCode === 13) {
+	var term = document.getElementById("search-field").value;
+	document.getElementById('search-field').value = '';
+	document.getElementById('search-field').blur();
+	document.getElementById('search').style.display = 'none';
+	window.open("https://google.com/search?q=" + term);
+      }
+    });
+
+    // Get current time and format
+    getTime = () => {
+      let date = new Date(),
+          min = date.getMinutes(),
+          sec = date.getSeconds(),
+          hour = date.getHours();
+      
+      return "" +
+	(hour < 10 ? ("0" + hour) : hour) + ":" +
+	(min < 10 ? ("0" + min) : min) + ":" +
+	(sec < 10 ? ("0" + sec) : sec);
+    }
+
+    window.onload = () => {
+      let xhr = new XMLHttpRequest();
+      // request to open weather map
+      xhr.open('GET', 'http://api.openweathermap.org/data/2.5/weather?id=4174402&units=metric&appid=612dc5e09c077d4ab77c62f8157ed2b3');
+      xhr.onload = () => {
+	if (xhr.readyState === 4) {
+	  if (xhr.status === 200) {
+	    let json = JSON.parse(xhr.responseText);
+	    var desc = json.weather[0].main;
+	    console.log(json);
+	    document.getElementById("temp").innerHTML = json.main.temp.toFixed(0) + " &ordm;C";
+	    document.getElementById("weather-description").innerHTML = json.weather[0].description;
+
+	    // Draw weather icon: https://fontawesome.com/icons?d=gallery&q=cloud&m=free
+	    if (desc === 'Rain') {
+	      document.getElementById("weather-icon").innerHTML = '<i class="fas fa-cloud-rain"></i>';
+	    } else if (desc === 'Clouds') {
+	      document.getElementById("weather-icon").innerHTML = '<i class="fas fa-cloud"></i>';
+	    } else if (desc === 'Thunderstorm') {
+	      document.getElementById("weather-icon").innerHTML = '<i class="fas fa-bolt"></i>';
+	    } else if (desc === 'Clear') {
+	      document.getElementById("weather-icon").innerHTML = '<i class="fas fa-sun"></i>';
+	    } else {
+	      document.getElementById("weather-icon").innerHTML = "[" + desc + "]";
+	    }
+	  } else {
+	    console.log('error msg: ' + xhr.status);
+	  }
+	}
+      }
+
+      xhr.send();
+
+      // setup the clock
+      document.getElementById("clock").innerHTML = getTime();
+      setInterval( () => {
+      	document.getElementById("clock").innerHTML = getTime();
+      }, 100);
+    }
+
+    document.addEventListener("keydown", event => {
+      if (event.keyCode == 32) { // spacebar code to open search
+	document.getElementById('search').style.display = 'flex';
+	document.getElementById('search-field').focus();
+      } else if (event.keyCode == 27) { // ESC to close search
+	document.getElementById('search-field').value = '';
+	document.getElementById('search-field').blur();
+	document.getElementById('search').style.display = 'none';
+      }
+    });
+  </script>
+  </body>
+</html>

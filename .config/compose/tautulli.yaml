@@ -1,9 +1,10 @@
-jackett:
-  image: ghcr.io/linuxserver/jackett
+tautulli:
+  image: ghcr.io/linuxserver/tautulli
+  container_name: tautulli
   hostname: ${DOCKER_HOSTNAME}
+  network_mode: ${TAUTULLI_NETWORK_MODE}
   ports:
-    - ${JACKETT_PORT_9117}:9117
-  container_name: jackett
+    - ${TAUTULLI_PORT_8181}:8181
   environment:
     - PGID=${PGID}
     - PUID=${PUID}
@@ -16,8 +17,8 @@ jackett:
   restart: unless-stopped
   volumes:
     - /etc/localtime:/etc/localtime:ro
-    - ${DOCKER_CONF_DIR}/jackett:/config
+    - ${DOCKER_CONF_DIR}/tautulli:/config
+    - >-
+      ${DOCKER_CONF_DIR}/plex/Library/Application Support/Plex Media Server/Logs:/logs:ro
     - ${DOCKER_SHARED_DIR}:/shared
     - ${DOCKER_STORAGE_DIR}:/storage
-    - ${DOWNLOAD_DIR}:/data
-    - ${DOWNLOAD_DIR}:/downloads

@@ -14,6 +14,8 @@ shell:
   - fzf
   - vifm
 
+  post-install: scripts/shell/postinstall.sh
+
 fonts:
   headless: true
 

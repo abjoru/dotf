@@ -28,6 +28,14 @@ is_debian() {
   fi
 }
 
+is_linux() {
+  if [[ "$OSTYPE" == "linux-gnu"* ]]; then
+    true; return
+  else 
+    false; return
+  fi
+}
+
 is_darwin() {
   if [[ "$OSTYPE" == "darwin"* ]]; then
     true; return

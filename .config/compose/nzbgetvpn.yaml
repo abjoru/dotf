@@ -1,6 +1,6 @@
 nzbgetvpn:
   image: jshridha/docker-nzbgetvpn
-  hostname: ${DOCKERHOSTNAME}
+  hostname: ${DOCKER_HOSTNAME}
   ports:
     - ${NZBGETVPN_PORT_6789}:6789
     - ${NZBGETVPN_PORT_8118}:8118
@@ -22,14 +22,14 @@ nzbgetvpn:
   logging:
     driver: json-file
     options:
-      max-file: ${DOCKERLOGGING_MAXFILE}
-      max-size: ${DOCKERLOGGING_MAXSIZE}
+      max-file: ${DOCKER_LOGGING_MAXFILE}
+      max-size: ${DOCKER_LOGGING_MAXSIZE}
   restart: unless-stopped
   volumes:
     - /etc/localtime:/etc/localtime:ro
-    - ${DOCKERCONFDIR}/nzbgetvpn:/config
-    - ${DOCKERSHAREDDIR}:/shared
-    - ${DOCKERSTORAGEDIR}:/storage
-    - ${DOWNLOADSDIR}:/data
-    - ${DOWNLOADSDIR}:/downloads
+    - ${DOCKER_CONF_DIR}/nzbgetvpn:/config
+    - ${DOCKER_SHARED_DIR}:/shared
+    - ${DOCKER_STORAGE_DIR}:/storage
+    - ${DOWNLOAD_DIR}:/data
+    - ${DOWNLOAD_DIR}:/downloads
     - ${VPN_OVPNDIR}:/config/openvpn

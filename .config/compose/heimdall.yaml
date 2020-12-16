@@ -1,6 +1,6 @@
 heimdall:
   image: linuxserver/heimdall
-  hostname: ${DOCKERHOSTNAME}
+  hostname: ${DOCKER_HOSTNAME}
   ports:
     - ${HEIMDALL_PORT_443}:443
     - ${HEIMDALL_PORT_80}:80
@@ -12,11 +12,11 @@ heimdall:
   logging:
     driver: json-file
     options:
-      max-file: ${DOCKERLOGGING_MAXFILE}
-      max-size: ${DOCKERLOGGING_MAXSIZE}
+      max-file: ${DOCKER_LOGGING_MAXFILE}
+      max-size: ${DOCKER_LOGGING_MAXSIZE}
   restart: unless-stopped
   volumes:
     - /etc/localtime:/etc/localtime:ro
-    - ${DOCKERCONFDIR}/heimdall:/config
-    - ${DOCKERSHAREDDIR}:/shared
-    - ${DOCKERSTORAGEDIR}:/storage
+    - ${DOCKER_CONF_DIR}/heimdall:/config
+    - ${DOCKER_SHARED_DIR}:/shared
+    - ${DOCKER_STORAGE_DIR}:/storage

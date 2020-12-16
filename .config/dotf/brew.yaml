@@ -1,0 +1,36 @@
+name: "Homebrew Packages"
+description: "My standard package contents for OSX"
+
+shell:
+  packages:
+    - zsh-completions
+    - zsh-syntax-highlighting
+    - zsh-autosuggestions
+    - neofetch
+    - bat
+    - fzf
+    - vifm
+
+fonts:
+  packages:
+    - font-ubuntumono-nerd-font:
+      cask: true
+    - font-terminessttf-nerd-font:
+      cask: true
+    - font-robotomono-nerd-font:
+      cask: true
+    - font-mononoki-nerd-font:
+      cask: true
+
+development:
+  packages:
+    - tig
+    - neovim
+    - yarn
+    - node
+    - boxes
+
+  pip:
+    - neovim
+
+  post-install: scripts/dev/postinstall.sh

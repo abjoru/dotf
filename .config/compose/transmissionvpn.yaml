@@ -1,0 +1,47 @@
+transmissionvpn:
+  image: haugene/transmission-openvpn
+  hostname: ${DOCKER_HOSTNAME}
+  cap_add:
+    - NET_ADMIN
+  container_name: transmissionvpn
+  devices:
+    - /dev/net/tun
+  dns:
+    - ${NS1}
+    - ${NS2}
+  ports:
+    - ${TRANSMISSIONVPN_PORT_51413}:51413
+    - ${TRANSMISSIONVPN_PORT_51413}:51413/udp
+    - ${TRANSMISSIONVPN_PORT_6881}:6881
+    - ${TRANSMISSIONVPN_PORT_6881}:6881/udp
+    - ${TRANSMISSIONVPN_PORT_9091}:9091
+  network_mode: ${TRANSMISSIONVPN_NETWORK_MODE}
+  environment:
+    - CREATE_TUN_DEVICE=true
+    - LOCAL_NETWORK=${LAN_NETWORK}
+    - OPENVPN_OPTS=${VPN_OPTIONS}
+    - OPENVPN_PASSWORD=${VPN_PASS}
+    - OPENVPN_PROVIDER=${VPN_PROV}
+    - OPENVPN_USERNAME=${VPN_USER}
+    - OPENVPN_CONFIG=${VPN_CONFIG}
+    - PGID=${PGID}
+    - PUID=${PUID}
+    - TRANSMISSION_DOWNLOAD_DIR=${TRANSMISSIONVPN_DOWNLOAD_DIR}
+    - TRANSMISSION_HOME=/config
+    - TRANSMISSION_INCOMPLETE_DIR=${TRANSMISSIONVPN_INCOMPLETE_DIR}
+    - TRANSMISSION_WATCH_DIR=${TRANSMISSIONVPN_WATCH_DIR}
+    - TZ=${TZ}
+  logging:
+    driver: json-file
+    options:
+      max-file: ${DOCKER_LOGGING_MAXFILE}
+      max-size: ${DOCKER_LOGGING_MAXSIZE}
+  restart: unless-stopped
+  volumes:
+    - /etc/localtime:/etc/localtime:ro
+    - ${DOCKER_CONF_DIR}/transmissionvpn:/config
+    - ${DOCKER_STORAGE_DIR}:/storage
+    - ${DOCKER_SHARED_DIR}:/shared
+    - ${DOWNLOAD_DIR}:/data
+    - ${DOWNLOAD_DIR}:/downloads
+    - ${VPN_OVPNDIR}:/etc/openvpn/custom/

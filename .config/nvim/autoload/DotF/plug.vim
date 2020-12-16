@@ -11,6 +11,7 @@ let s:cache_file = expand(resolve(g:cache_dir . '/loaded-plugins.vim'))
 let s:plugUrl = 'https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim'
 
 " Download and install vim-plug
+" TODO Download of VimPlug moved to dev/postinstall.sh
 function! DotF#plug#download() abort
   if empty(glob(s:plug_file))
     call s:LOG.info('Downloading plug.vim...')
