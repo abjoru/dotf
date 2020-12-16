@@ -1,11 +1,16 @@
 #!/bin/bash
 
-# Directories
+###############
+# Directories #
+###############
+
 DATA=${XDG_DATA_HOME:-$HOME/.local/share}
 CACHE=${XDG_CACHE_HOME:-$HOME/.cache}
 CONFIG=${XDG_CONFIG_HOME:-$HOME/.config}
 
-# Functions
+#############
+# Functions #
+#############
 
 is_arch() {
   if [[ "$OSTYPE" == "linux-gnu"* && -x "$(command -v pacman)" ]]; then

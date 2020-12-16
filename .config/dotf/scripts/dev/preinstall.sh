@@ -1,7 +1,7 @@
 #!/bin/bash
 #
 # Pre install script for the dev bundle
-Source ${XDG_CONFIG_HOME:-$HOME/.config}/dotf/scripts/globals.sh
+source ${XDG_CONFIG_HOME:-$HOME/.config}/dotf/scripts/globals.sh
 
 # Debian only
 if is_debian; then

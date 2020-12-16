@@ -12,6 +12,18 @@ home:
     - syno-rack:
       name: 'Synology Rack'
       url:  'http://10.0.0.101:5000'
+    - plex-info:
+      name: 'Plex Info'
+      url:  'http://10.0.0.88:8181/home'
+    - sonarr:
+      name: 'Sonarr'
+      url:  'http://10.0.0.88:8989'
+    - nzbget:
+      name: 'NzbGet'
+      url:  'http://10.0.0.88:6789'
+    - transmission:
+      name: 'Transmission'
+      url:  'http://10.0.0.88:9091/transmission/web/'
 
 akamai:
   name: 'Akamai'
@@ -24,6 +36,12 @@ akamai:
     - jira:
       name: 'Jira'
       url:  'https://track.akamai.com/jira/secure/Dashboard.jspa'
+    - kibana:
+      name: 'Kibana'
+      url:  "https://search2.prolexic.com:5601/app/kibana#/dashboard/9254c3e0-0a33-11ea-a6f7-e179d67c84cd?_g=()&_a=(description:'',filters:!(('$state':(store:appState),meta:(alias:!n,disabled:!f,index:'xiphos-*',key:application.home,negate:!f,params:(query:xiphos_server_bottomhalf,type:phrase),type:phrase,value:xiphos_server_bottomhalf),query:(match:(application.home:(query:xiphos_server_bottomhalf,type:phrase))))),fullScreenMode:!f,options:(darkTheme:!t),panels:!((col:1,columns:!(location,host,message),id:'56e52250-36ad-11e9-97cf-d90f6f4254d4',panelIndex:3,row:5,size_x:12,size_y:5,sort:!('@timestamp',desc),type:search),(col:1,id:AWqSf95hStlmiGbHKQ0i,panelIndex:4,row:1,size_x:7,size_y:4,type:visualization),(col:8,id:AWqSgIA8StlmiGbHKQ3s,panelIndex:5,row:1,size_x:5,size_y:4,type:visualization)),query:(language:lucene,query:(query_string:(analyze_wildcard:!t,default_field:'*',query:'*'))),timeRestore:!f,title:'Xiphos%20Bottomhalf%20Logs',uiState:(P-5:(vis:(legendOpen:!f))),viewMode:view)"
+    - plxcal:
+      name: 'PLX Calendar'
+      url:  'https://collaborate.akamai.com/confluence/calendar/calendarPage.action?spaceKey=SELO&calendarId=4325a319-aa68-40b9-b518-b687fa6e4d39'
 
 news:
   name: 'News'
@@ -32,3 +50,62 @@ news:
     - cnn:
       name: 'CNN'
       url:  'http://www.cnn.com'
+    - npr:
+      name: 'NPR'
+      url:  'http://www.npr.org'
+
+tech:
+  name: 'Tech'
+
+  links:
+    - dotty:
+      name: 'Dotty'
+      url:  'https://dotty.epfl.ch/blog/index.html'
+    - scalatimes:
+      name: 'ScalaTimes'
+      url:  'https://scalatimes.com'
+    - github:
+      name: 'GitHub'
+      url:  'https://github.com'
+    - cnet:
+      name: 'CNET'
+      url:  'https://www.cnet.com/news/'
+    - learnhaskell:
+      name: 'Learn you a Haskell'
+      url:  'http://learnyouahaskell.com/chapters'
+
+3dprint:
+  name: '3D Printing'
+
+  links:
+    - thingiverse:
+      name: 'Thingiverse'
+      url:  'http://www.thingiverse.com'
+    - cults:
+      name: 'Cults3d'
+      url:  'http://cults3d.com'
+    - renderhub:
+      name: 'RenderHub'
+      url:  'http://renderhub.com'
+
+shopping:
+  name: 'Shopping'
+
+  links:
+    - amazon:
+      name: 'Amazon'
+      url:  'https://www.amazon.com'
+    - newegg:
+      name: 'NewEgg'
+      url:  'https://www.newegg.com'
+
+entertainment:
+  name: 'Entertainment'
+
+  links:
+    - youtube:
+      name: 'YouTube'
+      url:  'https://www.youtube.com'
+    - ign:
+      name: 'IGN'
+      url:  'https://www.ign.com'

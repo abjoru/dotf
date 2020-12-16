@@ -1,5 +1,5 @@
 name: "Arch Packages"
-description: "Package config for Arch based systems"
+description: "DotF package config for Arch based systems"
 
 shell:
   headless: true
@@ -39,12 +39,18 @@ development:
   - nodejs
   - boxes
 
-  #pre-install: scripts/dev/preinstall.sh
+  pip:
+  - neovim
+
+  git:
+  - haskell-lsp:
+    url: https://github.com/haskell/haskell-language-server
+    submodules: true
+    command: 'stack ./install.sh hls'
+
   post-install: scripts/dev/postinstall.sh
 
 desktop:
-  headless: false
-
   packages:
   - alacritty
   - xterm
@@ -67,8 +73,6 @@ desktop:
   pre-install: scripts/desktop/preinstall.sh
 
 internet:
-  headless: false
-
   packages:
   - qutebrowser
   - newsboat
