@@ -1,0 +1,22 @@
+heimdall:
+  image: linuxserver/heimdall
+  hostname: ${DOCKERHOSTNAME}
+  ports:
+    - ${HEIMDALL_PORT_443}:443
+    - ${HEIMDALL_PORT_80}:80
+  container_name: heimdall
+  environment:
+    - PGID=${PGID}
+    - PUID=${PUID}
+    - TZ=${TZ}
+  logging:
+    driver: json-file
+    options:
+      max-file: ${DOCKERLOGGING_MAXFILE}
+      max-size: ${DOCKERLOGGING_MAXSIZE}
+  restart: unless-stopped
+  volumes:
+    - /etc/localtime:/etc/localtime:ro
+    - ${DOCKERCONFDIR}/heimdall:/config
+    - ${DOCKERSHAREDDIR}:/shared
+    - ${DOCKERSTORAGEDIR}:/storage

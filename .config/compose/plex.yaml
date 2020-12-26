@@ -1,0 +1,38 @@
+plex:
+  image: linuxserver/plex
+  hostname: ${DOCKERHOSTNAME}
+  ports:
+    - ${PLEX_PORT_1900}:1900/udp
+    - ${PLEX_PORT_3005}:3005
+    - ${PLEX_PORT_32400}:32400
+    - ${PLEX_PORT_32410}:32410/udp
+    - ${PLEX_PORT_32412}:32412/udp
+    - ${PLEX_PORT_32413}:32413/udp
+    - ${PLEX_PORT_32414}:32414/udp
+    - ${PLEX_PORT_32469}:32469
+    - ${PLEX_PORT_33400}:33400
+    - ${PLEX_PORT_8324}:8324
+  container_name: plex
+  environment:
+    - PGID=${PGID}
+    - PLEX_CLAIM=${PLEX_CLAIM}
+    - PUID=${PUID}
+    - TZ=${TZ}
+    - VERSION=${PLEX_VERSION}
+  logging:
+    driver: json-file
+    options:
+      max-file: ${DOCKERLOGGING_MAXFILE}
+      max-size: ${DOCKERLOGGING_MAXSIZE}
+  restart: unless-stopped
+  volumes:
+    - /etc/localtime:/etc/localtime:ro
+    - ${DOCKERCONFDIR}/plex:/config
+    - ${DOCKERSHAREDDIR}:/shared
+    - ${DOCKERSTORAGEDIR}:/storage
+    - ${MEDIADIR_MOVIES}:/data/movies
+    - ${MEDIADIR_MOVIES}:/movies
+    - ${MEDIADIR_MUSIC}:/data/music
+    - ${MEDIADIR_MUSIC}:/music
+    - ${MEDIADIR_TV}:/data/tv
+    - ${MEDIADIR_TV}:/tv

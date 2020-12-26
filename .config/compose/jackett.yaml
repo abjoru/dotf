@@ -1,0 +1,23 @@
+jackett:
+  image: linuxserver/jackett
+  hostname: ${DOCKERHOSTNAME}
+  ports:
+    - ${JACKETT_PORT_9117}:9117
+  container_name: jackett
+  environment:
+    - PGID=${PGID}
+    - PUID=${PUID}
+    - TZ=${TZ}
+  logging:
+    driver: json-file
+    options:
+      max-file: ${DOCKERLOGGING_MAXFILE}
+      max-size: ${DOCKERLOGGING_MAXSIZE}
+  restart: unless-stopped
+  volumes:
+    - /etc/localtime:/etc/localtime:ro
+    - ${DOCKERCONFDIR}/jackett:/config
+    - ${DOCKERSHAREDDIR}:/shared
+    - ${DOCKERSTORAGEDIR}:/storage
+    - ${DOWNLOADSDIR}:/data
+    - ${DOWNLOADSDIR}:/downloads

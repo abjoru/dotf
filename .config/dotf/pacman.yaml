@@ -46,7 +46,7 @@ development:
   - haskell-lsp:
     url: https://github.com/haskell/haskell-language-server
     submodules: true
-    command: 'stack ./install.sh hls'
+    command: 'stack ./install.hs hls'
 
   post-install: scripts/dev/postinstall.sh
 
