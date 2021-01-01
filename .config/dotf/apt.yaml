@@ -1,0 +1,35 @@
+name: 'Debian Packages'
+description: 'DotF package config for Debian based systems'
+
+shell:
+  headless: true
+
+  packages:
+    - zsh
+    - neofetch
+    - bat
+    - fzf
+    - vifm
+
+  post-install: scripts/shell/postinstall.sh
+
+development:
+  headless: true
+
+  packages:
+    - tig
+    - neovim
+    - yarn
+    - nodejs
+    - boxes
+
+  pip:
+    - neovim
+
+  git:
+    - haskell-lsp:
+      url: https://github.com/haskell/haskell-language-server
+      submodules: true
+      command: 'stack ./install.hs hls'
+
+  post-install: scripts/dev/postinstall.sh
