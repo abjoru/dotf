@@ -1,7 +1,7 @@
 #!/bin/bash
 #
 # Post install scripts for the dev bundle
-source ${XDG_CONFIG_HOME:-$HOME/.config}/dotf/scripts/globals.sh
+. ${XDG_CONFIG_HOME:-$HOME/.config}/dotf/scripts/globals.sh
 
 # Write completion script for DotF
 dotf --zsh-completion-script `which dotf` >> $CONFIG/zsh/functions/_dotf

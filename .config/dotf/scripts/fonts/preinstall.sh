@@ -1,5 +1,5 @@
 #!/bin/bash
-source ${XDG_CONFIG_HOME:-$HOME/.config}/dotf/scripts/globals.sh
+. ${XDG_CONFIG_HOME:-$HOME/.config}/dotf/scripts/globals.sh
 
 if is_darwin; then
   # tap fonts

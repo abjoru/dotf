@@ -1,7 +1,7 @@
 #!/bin/bash
 #
 # Post install scripts for the dev bundle
-source ${XDG_CONFIG_HOME:-$HOME/.config}/dotf/scripts/globals.sh
+. ${XDG_CONFIG_HOME:-$HOME/.config}/dotf/scripts/globals.sh
 
 # Create XDG data dir for tig
 if [ ! -d "$DATA/tig" ]; then
