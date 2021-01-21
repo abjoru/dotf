@@ -45,3 +45,4 @@ transmissionvpn:
     - ${DOWNLOAD_DIR}:/data
     - ${DOWNLOAD_DIR}:/downloads
     - ${VPN_OVPNDIR}:/etc/openvpn/custom/
+    - ${VPN_OVPNDIR}/pia-creds.txt:/config/pia-creds.txt:ro

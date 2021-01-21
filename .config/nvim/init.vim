@@ -22,6 +22,7 @@ function! Modules()
   DfModule 'tools/expand'
   DfModule 'lang/base'
   DfModule 'lang/haskell'
+  DfModule 'lang/latex'
 
   " Extra Plugins
   DfPlugin 'morhetz/gruvbox'

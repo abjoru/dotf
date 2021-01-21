@@ -40,6 +40,8 @@ development:
   - yarn
   - nodejs
   - boxes
+  - coursier:
+    aur: true
 
   pip:
   - neovim
@@ -49,6 +51,9 @@ development:
     url: https://github.com/haskell/haskell-language-server
     submodules: true
     command: 'stack ./install.hs hls'
+  - packer-nvim:
+    url: https://github.com/wbthomason/packer.nvim
+    target: ~/.local/share/nvim/site/pack/packer/opt/packer.nvim
 
   post-install: scripts/dev/postinstall.sh
 
@@ -79,3 +84,5 @@ internet:
   - qutebrowser
   - newsboat
   - weechat
+  - pdfjs:
+    aur: true

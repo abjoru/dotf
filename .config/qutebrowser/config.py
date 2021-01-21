@@ -15,6 +15,7 @@ c.downloads.location.directory = '~/Downloads'
 c.statusbar.show = 'in-mode'
 c.tabs.show = 'multiple'
 c.confirm_quit = ['downloads']
+c.content.pdfjs = True
 
 c.url.searchengines = {
     'DEFAULT': 'https://www.google.com/search?hl=en&q={}',

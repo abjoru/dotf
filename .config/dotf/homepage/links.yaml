@@ -90,6 +90,9 @@
     - renderhub:
       name: 'RenderHub'
       url:  'http://renderhub.com'
+    - prusa:
+      name: 'Prusa3D'
+      url:  'https://www.prusa3d.com'
 
 - shopping:
   name: 'Shopping'
@@ -112,3 +115,17 @@
     - ign:
       name: 'IGN'
       url:  'https://www.ign.com'
+
+- cheatsheets:
+  name: 'CheatSheets'
+
+  links:
+    - blender:
+      name: 'Blender'
+      url:  'file:///home/abjoru/.local/share/cheatsheets/blender-v1.pdf'
+    - haskell:
+      name: 'Haskell'
+      url:  'file:///home/abjoru/.local/share/cheatsheets/haskell.pdf'
+    - xhaskell:
+      name: 'Min Haskell'
+      url:  'file:///home/abjoru/.local/share/cheatsheets/myhaskell.pdf'
