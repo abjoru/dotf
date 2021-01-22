@@ -11,14 +11,17 @@ dotf.before()
 
 cmd [[packadd packer.nvim]]
 require('packer').startup(function(use)
-  use {'airblade/vim-gitgutter'}
   use {'iamcco/markdown-preview.nvim', run = 'cd app && yarn install', cmd = 'MarkdownPreview'}
   use {'savq/paq-nvim', opt = true}
   use {'sheerun/vim-polyglot'}
-  use {'tpope/vim-fugitive'}
   use {'wbthomason/packer.nvim', opt = true}
   use {'windwp/nvim-autopairs'}
   use {'Yggdroot/indentLine'}
+
+  -- Git
+  use {'airblade/vim-gitgutter'}
+  use {'tpope/vim-fugitive'}
+  use {'junegunn/gv.vim'}
 
   -- LSP & Lang
   use {'neovim/nvim-lspconfig'}
