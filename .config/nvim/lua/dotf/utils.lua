@@ -1,12 +1,15 @@
 local M = {}
+local api = vim.api
 
-M.map = function(mode, lhs, rhs, opts)
+-- Create a new mapping for a given mode.
+function M.map(mode, lhs, rhs, opts)
   local options = {noremap = true, silent = true}
   if opts then options = vim.tbl_extend('force', options, opts) end
-  vim.api.nvim_set_keymap(mode, lhs, rhs, options)
+  api.nvim_set_keymap(mode, lhs, rhs, options)
 end
 
-M.opt = function(scope, key, value)
+-- Set an option on the given scope.
+function M.opt(scope, key, value)
   local scopes = {o = vim.o, b = vim.bo, w = vim.wo}
   scopes[scope][key] = value
   if scope ~= 'o' then
@@ -14,8 +17,9 @@ M.opt = function(scope, key, value)
   end
 end
 
-M.set = function(key, value)
-  vim.api.nvim_set_var(key, value)
+-- Set a variable.
+function M.set(key, value)
+  api.nvim_set_var(key, value)
 end
 
 return M
