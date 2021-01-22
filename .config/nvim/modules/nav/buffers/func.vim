@@ -1,4 +1,4 @@
-command! -nargs=1 -bar SwitchBuffer call s:switch_buffer(<args>)
+command! -nargs=3 -bar SwitchBuffer call s:switch_buffer(<args>)
 command! -nargs=1 -bar CloseBuffer call s:close_buffer(<args>)
 
 " activate a buffer by passing it the position in

@@ -98,6 +98,9 @@ function M.setup()
   utils.map('v', '<', '<gv')
   utils.map('v', '>', '>gv')
 
+  cmd 'vmap <expr> <UP> DVB_Drag("up")'
+  cmd 'vmap <expr> <DOWN> DVB_Drag("down")'
+
   -- clear search highlight
   utils.map('n', '<leader><leader>', ':noh<CR>')
 
@@ -113,10 +116,15 @@ function M.setup()
   utils.map('n', '<localleader>pp', '"+p')
 
   utils.map('', '<F2>', ':NvimTreeToggle<CR>')
-  utils.map('', '<C-s>', ':BufferPick<CR>')
-  utils.map('', '<A-<>', ':BufferPrevious<CR>')
-  utils.map('', '<A->>', ':BufferNext<CR>')
-  utils.map('', '<A-c>', ':BufferClose<CR>')
+
+  -- Tabbar
+  utils.map('', '<localleader>[', ':BufferPrevious<CR>')
+  utils.map('', '<localleader>]', ':BufferNext<CR>')
+  utils.map('n', '<leader>bs', ':BufferPick<CR>')
+  utils.map('n', '<leader>bd', ':bd<CR>')
+  utils.map('n', '<leader>bo', ':BufOnly<CR>')
+
+  -- Leader guide
   utils.map('', '<leader>', ':WhichKey \'<Space>\'<CR>')
   utils.map('', '?', ':WhichKey \'\'<CR>')
 
@@ -163,20 +171,29 @@ function M.setup()
   ------------------
 
   -- Root
-  fn['which_key#register']('', {
-    K = 'Show hover',
-    H = 'Toggle dotfiles in Tree',
-    a = 'Create node in Tree',
-    c = 'Copy node in Tree',
-    d = 'Delete node in Tree',
-    r = 'Rename/move node in Tree'
-  })
+  --fn['which_key#register']('', {
+    --K = 'Show hover',
+    --H = 'Toggle dotfiles in Tree',
+    --a = 'Create node in Tree',
+    --c = 'Copy node in Tree',
+    --d = 'Delete node in Tree',
+    --r = 'Rename/move node in Tree'
+  --})
 
   -- Leader
-  fn['which_key#register']('<leader>', {})
+  --fn['which_key#register']('<leader>', {
+    --g = {
+      --name = 'git',
+      --c = 'commit',
+      --s = 'status',
+      --l = 'log',
+      --L = 'current-file-log',
+      --d = 'diff-tool'
+    --}
+  --})
 
   -- Local leader
-  fn['which_key#register']('<localleader>', {})
+  --fn['which_key#register']('<localleader>', {})
 end
 
 return M

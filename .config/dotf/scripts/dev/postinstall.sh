@@ -16,7 +16,7 @@ curl -fLo $CONFIG/nvim/autoload/plug.vim --create-dirs \
 if [ ! -f "$CACHE/nvim/bootstrap.lock" ]; then
   mkdir -p $CACHE/nvim \
     && echo ">>> Launching nvim for plugin bootstrap" \
-    && nvim +PlugUpdate \ #+DfInstall \
+    && nvim --headless --cmd "let g:dotf_run_install=1" +PackerInstall +qall
     && echo ">>> Done!"
 else
   echo ">>> DotF neovim already installed!"

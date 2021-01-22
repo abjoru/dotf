@@ -71,8 +71,8 @@ local function standardMappings()
   utils.map('n', '<leader>fc', ':cclose<cr>')
   utils.map('n', '<leader>fn', ':cnext<cr>')
   utils.map('n', '<leader>fp', ':cprevious<cr>')
-  utils.map('n', '<leader>nn', ':NvimTreeToggle<CR>')
-  utils.map('n', '<leader>nf', ':NvimTreeFindFile<CR>')
+  --utils.map('n', '<leader>nn', ':NvimTreeToggle<CR>')
+  --utils.map('n', '<leader>nf', ':NvimTreeFindFile<CR>')
 end
 
 function M.setup()

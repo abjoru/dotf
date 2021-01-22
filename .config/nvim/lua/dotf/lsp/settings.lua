@@ -39,6 +39,9 @@ function M.setup()
   utils.map('i', '<Tab>', 'pumvisible() ? "\\<C-n>" : "\\<Tab>"', {expr = true})        -- tab nav next
   utils.map('i', '<CR>', 'pumvisible() ? "\\<C-y>" : "\\<C-g>u\\<CR>"', {expr = true})  -- select with enter
 
+  -- Comments
+  utils.map('n', '<leader>cc', ':NERDComment(1, "invert")')
+
   --------------
   -- Commands --
   --------------
