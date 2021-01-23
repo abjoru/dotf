@@ -95,7 +95,7 @@ function M.setup()
 
   -- Leaders
   g['mapleader'] = ' '
-  g['maplocalleader'] = '/'
+  g['maplocalleader'] = '\\'
 
   -- Network read/write settings
   g['netrw_gx'] = '<cWORD>'
