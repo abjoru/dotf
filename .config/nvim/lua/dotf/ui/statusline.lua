@@ -3,7 +3,7 @@ local gl = require('galaxyline')
 local gls = gl.section
 local palette = require('gruvbox.palette')
 
-gl.short_line_list = {'LuaTree', 'NvimTree', 'vista', 'startify', 'term', 'fugitive', 'fugitiveblame'}
+gl.short_line_list = {'LuaTree', 'NvimTree', 'nerdtree', 'vista', 'startify', 'term', 'fugitive', 'fugitiveblame'}
 
 local colors = {
   bg          = palette.dark1,

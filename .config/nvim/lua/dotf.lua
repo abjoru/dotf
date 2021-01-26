@@ -1,4 +1,5 @@
 local M = {}
+local cmd = vim.cmd
 
 -- Check if the installer flag has been set.
 -- We do not want to load plugin configs for

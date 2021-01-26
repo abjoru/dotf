@@ -30,6 +30,17 @@ local haskellLogo = {
   ''
 }
 
+local devicons_colors = {
+  Identifier = {'', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', ''},
+  Type = {'λ', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', ''},
+  String = {'', '', '', '', '', '', '﵂', '', '', '', '', '', ''},
+  Special = {'', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', ''},
+  Constant = {'', '', '', '', '', '', '', '', '', '', '', '', '', ''},
+  Operator = {'', '', '', '', '', '', '', '', '', '', '', ''},
+  Comment = {'', '', '', '', '', ''},
+  Normal = {'', '', '', '', '', '', '', '', '', '', '', '', '', '', '', ''}
+}
+
 function M.setup()
   
   ---------------------
@@ -37,6 +48,12 @@ function M.setup()
   ---------------------
 
   require('colorbuddy').colorscheme('gruvbox')
+
+  --utils.set_icon_colors(devicons_colors, {'nerdtree', 'startify'})
+  cmd [[highlight NERDTreeOpenable guifg=#b57614]]
+  cmd [[highlight NERDTreeClosable guifg=#b57614]]
+  cmd [[highlight NERDTreeDir gui=bold guifg=#fe8019]]
+
 
   --------------
   -- Settings --
@@ -51,34 +68,36 @@ function M.setup()
   utils.set('open_in_insert_mode', 1)
 
   -- Tree
-  utils.set('nvim_tree_width', 40)
-  utils.set('nvim_tree_git_hl', 1)
-  utils.set('nvim_tree_auto_open', 1)
-  utils.set('nvim_tree_follow', 1)
-  utils.set('nvim_tree_hide_dotfiles', 1)
-  utils.set('nvim_tree_indent_markers', 1)
-  utils.set('nvim_tree_bindings', {
-    edit            = {'<CR>', 'o'},
-    edit_vsplit     = '<C-v>',
-    edit_split      = '<C-x>',
-    edit_tab        = '<C-t>',
-    close_node      = {'<S-CR>', '<BS>'},
-    toggle_ignored  = 'I',
-    toggle_dotfiles = 'H',
-    refresh         = 'R',
-    preview         = '<Tab>',
-    cd              = '<C-]>',
-    create          = 'a',
-    remove          = 'd',
-    rename          = 'r',
-    cut             = 'x',
-    copy            = 'c',
-    paste           = 'p',
-    prev_git_item   = '[c',
-    next_git_item   = ']c',
-    dir_up          = '-',
-    close           = 'q'
-  })
+  utils.set('NERDTreeWinSize', 40)
+  utils.set('NERDTreeRespectWildIgnore', 1)
+  --utils.set('nvim_tree_width', 40)
+  --utils.set('nvim_tree_git_hl', 1)
+  --utils.set('nvim_tree_auto_open', 1)
+  --utils.set('nvim_tree_follow', 1)
+  --utils.set('nvim_tree_hide_dotfiles', 1)
+  --utils.set('nvim_tree_indent_markers', 1)
+  --utils.set('nvim_tree_bindings', {
+    --edit            = {'<CR>', 'o'},
+    --edit_vsplit     = '<C-v>',
+    --edit_split      = '<C-x>',
+    --edit_tab        = '<C-t>',
+    --close_node      = {'<S-CR>', '<BS>'},
+    --toggle_ignored  = 'I',
+    --toggle_dotfiles = 'H',
+    --refresh         = 'R',
+    --preview         = '<Tab>',
+    --cd              = '<C-]>',
+    --create          = 'a',
+    --remove          = 'd',
+    --rename          = 'r',
+    --cut             = 'x',
+    --copy            = 'c',
+    --paste           = 'p',
+    --prev_git_item   = '[c',
+    --next_git_item   = ']c',
+    --dir_up          = '-',
+    --close           = 'q'
+  --})
 
   --------------
   -- Mappings --
@@ -115,7 +134,9 @@ function M.setup()
   utils.map('v', '<localleader>pp', '"+p')
   utils.map('n', '<localleader>pp', '"+p')
 
-  utils.map('', '<F2>', ':NvimTreeToggle<CR>')
+  -- Tree
+  utils.map('', '<F2>', ':NERDTreeToggle<CR>')
+  utils.map('n', '<leader>fr', ':NERDTreeFind<CR>')
 
   -- Tabbar
   utils.map('', '<localleader>[', ':BufferPrevious<CR>')
@@ -162,9 +183,10 @@ function M.setup()
 
   -- Tree colors
   -- Ref: https://jonasjacek.github.io/colors/
-  cmd [[highlight NvimTreeFolderIcon guifg=darkorange3]]
-  cmd [[highlight NvimTreeGitDirty guifg=red3]]
-  cmd [[highlight NvimTreeIndentMarker guifg=darkorange3]]
+  --cmd [[highlight NvimTreeFolderIcon guifg=darkorange3]]
+  --cmd [[highlight NvimTreeGitDirty guifg=red3]]
+  --cmd [[highlight NvimTreeIndentMarker guifg=darkorange3]]
+  cmd [[autocmd VimEnter * NERDTree | wincmd p]]
 
   ------------------
   -- Leader Guide --

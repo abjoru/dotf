@@ -1,5 +1,4 @@
-local cmd = vim.cmd
-local dotf = require('dotf')
+local cmd = vim.cmd local dotf = require('dotf')
 
 dotf.before()
 
@@ -36,7 +35,12 @@ require('packer').startup(function(use)
 
   -- UI
   use {'kyazdani42/nvim-web-devicons'}
-  use {'kyazdani42/nvim-tree.lua'}
+  --use {'kyazdani42/nvim-tree.lua'}
+  use {'ryanoasis/vim-devicons'}
+  use {'scrooloose/nerdtree'}
+  use {'Xuyuanp/nerdtree-git-plugin'}
+  use {'tiagofumo/vim-nerdtree-syntax-highlight'}
+  use {'bryanmylee/vim-colorscheme-icons'}
   use {'romgrk/barbar.nvim'}
   use {'glepnir/galaxyline.nvim'}
   use {'npxbr/gruvbox.nvim', requires = {'tjdevries/colorbuddy.vim'}}
