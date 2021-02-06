@@ -2,6 +2,7 @@ local M = {}
 local fn = vim.fn
 local cmd = vim.cmd
 local utils = require('dotf/utils')
+local palette = require('gruvbox.palette')
 
 local haskellLogo = {
   '',
@@ -30,18 +31,8 @@ local haskellLogo = {
   ''
 }
 
-local devicons_colors = {
-  Identifier = {'', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', ''},
-  Type = {'λ', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', ''},
-  String = {'', '', '', '', '', '', '﵂', '', '', '', '', '', ''},
-  Special = {'', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', '', ''},
-  Constant = {'', '', '', '', '', '', '', '', '', '', '', '', '', ''},
-  Operator = {'', '', '', '', '', '', '', '', '', '', '', ''},
-  Comment = {'', '', '', '', '', ''},
-  Normal = {'', '', '', '', '', '', '', '', '', '', '', '', '', '', '', ''}
-}
-
 function M.setup()
+  print('ui/settings called...')
   
   ---------------------
   -- Colors & Themes --
@@ -49,19 +40,47 @@ function M.setup()
 
   require('colorbuddy').colorscheme('gruvbox')
 
-  --utils.set_icon_colors(devicons_colors, {'nerdtree', 'startify'})
-  cmd [[highlight NERDTreeOpenable guifg=#b57614]]
-  cmd [[highlight NERDTreeClosable guifg=#b57614]]
-  cmd [[highlight NERDTreeDir gui=bold guifg=#fe8019]]
+  require('dotf/ui/devicons').setup {
+    override = {
+      diropen = {
+        icon = '',
+        color = palette.bright_yellow,
+        name = "DirOpen"
+      };
+      dirclosed = {
+        icon = '',
+        color = palette.bright_yellow,
+        name = "DirClosed"
+      };
+      ['dirsymlink'] = {
+        icon = '',
+        color = palette.bright_yellow,
+        name = "DirSymlink"
+      }
+    }
+  }
 
+  cmd('hi NERDTreeOpenable guifg=' .. palette.light3)
+  cmd('hi NERDTreeClosable guifg=' .. palette.light4)
+  cmd('hi NERDTreeDir guifg=' .. palette.bright_orange)
 
   --------------
   -- Settings --
   --------------
 
   -- Startpage
-  utils.set('startify_custom_header', haskellLogo)
-  utils.set('startify_change_to_dir', 0)
+  utils.set('dashboard_custom_header', haskellLogo)
+  utils.set('dashboard_default_executive', 'fzf')
+  utils.set('indentLine_fileTypeExclude', {'dashboard'})
+  utils.set('dashboard_custom_shortcut', {
+      ['last_session'] = 'SPC l s',
+      ['find_history'] = 'SPC f h',
+      ['find_file']    = 'SPC f f',
+      ['new_file']     = 'SPC n f',
+      ['change_colorscheme'] = 'SPC c t',
+      ['find_word']          = 'SPC f w',
+      ['book_marks']         = 'SPC f b'
+    })
 
   -- Terminal
   utils.set('auto_start_insert', 0)
@@ -70,34 +89,6 @@ function M.setup()
   -- Tree
   utils.set('NERDTreeWinSize', 40)
   utils.set('NERDTreeRespectWildIgnore', 1)
-  --utils.set('nvim_tree_width', 40)
-  --utils.set('nvim_tree_git_hl', 1)
-  --utils.set('nvim_tree_auto_open', 1)
-  --utils.set('nvim_tree_follow', 1)
-  --utils.set('nvim_tree_hide_dotfiles', 1)
-  --utils.set('nvim_tree_indent_markers', 1)
-  --utils.set('nvim_tree_bindings', {
-    --edit            = {'<CR>', 'o'},
-    --edit_vsplit     = '<C-v>',
-    --edit_split      = '<C-x>',
-    --edit_tab        = '<C-t>',
-    --close_node      = {'<S-CR>', '<BS>'},
-    --toggle_ignored  = 'I',
-    --toggle_dotfiles = 'H',
-    --refresh         = 'R',
-    --preview         = '<Tab>',
-    --cd              = '<C-]>',
-    --create          = 'a',
-    --remove          = 'd',
-    --rename          = 'r',
-    --cut             = 'x',
-    --copy            = 'c',
-    --paste           = 'p',
-    --prev_git_item   = '[c',
-    --next_git_item   = ']c',
-    --dir_up          = '-',
-    --close           = 'q'
-  --})
 
   --------------
   -- Mappings --
@@ -188,34 +179,6 @@ function M.setup()
   --cmd [[highlight NvimTreeIndentMarker guifg=darkorange3]]
   cmd [[autocmd VimEnter * NERDTree | wincmd p]]
 
-  ------------------
-  -- Leader Guide --
-  ------------------
-
-  -- Root
-  --fn['which_key#register']('', {
-    --K = 'Show hover',
-    --H = 'Toggle dotfiles in Tree',
-    --a = 'Create node in Tree',
-    --c = 'Copy node in Tree',
-    --d = 'Delete node in Tree',
-    --r = 'Rename/move node in Tree'
-  --})
-
-  -- Leader
-  --fn['which_key#register']('<leader>', {
-    --g = {
-      --name = 'git',
-      --c = 'commit',
-      --s = 'status',
-      --l = 'log',
-      --L = 'current-file-log',
-      --d = 'diff-tool'
-    --}
-  --})
-
-  -- Local leader
-  --fn['which_key#register']('<localleader>', {})
 end
 
 return M

@@ -39,8 +39,8 @@ local function uiSettings()
   utils.opt('o', 'updatetime', 300)
   utils.opt('o', 'showmatch', true)
   utils.opt('o', 'laststatus', 2)
-  utils.opt('o', 'completeopt', 'menuone,noinsert,noselect')
-
+  --utils.opt('o', 'completeopt', 'menuone,noinsert,noselect')
+  cmd [[set completeopt=menuone,noinsert,noselect]]
   vim.o.path = vim.o.path .. '**'
 end
 
