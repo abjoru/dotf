@@ -54,7 +54,6 @@ function M.setup()
   cmd [[highlight NERDTreeClosable guifg=#b57614]]
   cmd [[highlight NERDTreeDir gui=bold guifg=#fe8019]]
 
-
   --------------
   -- Settings --
   --------------

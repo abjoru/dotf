@@ -1,1 +1,0 @@
-DfAddPlugin 'mariappan/dragvisuals.vim'
