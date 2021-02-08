@@ -12,6 +12,22 @@ function M.setup()
   -- Settings --
   --------------
 
+  --cmb [[set completeopt=menuone,noinsert,noselect]]
+  utils.set('completion_enable_snippet', 'vim-vsnip')
+  utils.set('completion_matching_strategy_list', {'exact', 'substring', 'fuzzy'})
+  utils.set('completion_matching_smart_case', 1)
+  utils.set('completion_trigger_on_delete', 1)
+  utils.set('completion_enable_auto_popup', 1)
+  utils.set('completion_auto_change_source', 1)
+  utils.set('completion_chain_complete_list', {
+      {['complete_items'] = {'lsp'}},
+      {['complete_items'] = {'snippet'}},
+      {['complete_items'] = {'buffers'}},
+      {mode = '<c-p>'},
+      {mode = '<c-n>'}
+    })
+  
+
   --------------
   -- Mappings --
   --------------
@@ -26,7 +42,7 @@ function M.setup()
 
   -- TODO evaluate these and remap if neccessary
   utils.map('n', '<leader>rn', '<cmd>lua vim.lsp.buf.rename()<CR>')
-  --utils.map('n', '<leader>f', '<cmd>lua vim.lsp.buf.formatting()<CR>', {nowait = true})
+  utils.map('n', ',f', '<cmd>lua vim.lsp.buf.formatting()<CR>', {nowait = true})
   utils.map('n', '<leader>ca', '<cmd>lua vim.lsp.buf.code_action()<CR>')
   utils.map('n', '<leader>ws', '<cmd>lua require"metals".worksheet_hover()<CR>')
   utils.map('n', '<leader>a', '<cmd>lua require"metals".open_all_diagnostics()<CR>')
@@ -36,8 +52,9 @@ function M.setup()
 
   -- Completion
   utils.map('i', '<S-Tab>', 'pumvisible() ? "\\<C-p>" : "\\<Tab>"', {expr = true})      -- shift-tab nav prev
-  utils.map('i', '<Tab>', 'pumvisible() ? "\\<C-n>" : "\\<Tab>"', {expr = true})        -- tab nav next
+  utils.map('i', '<Tab>', 'pumvisible() ? "\\<C-n>" : "\\<Tab>"', {expr = true})        -- tab nav next fg
   utils.map('i', '<CR>', 'pumvisible() ? "\\<C-y>" : "\\<C-g>u\\<CR>"', {expr = true})  -- select with enter
+  cmd [[imap <silent> <c-p> <Plug>(completion_trigger)]]
 
   -- Comments
   utils.map('n', '<leader>cc', ':NERDComment(1, "invert")')
@@ -62,6 +79,8 @@ function M.setup()
   cmd [[autocmd CursorMoved <buffer> lua vim.lsp.buf.clear_references()]]
   cmd [[augroup end]]
 
+  cmd [[autocmd BufEnter * lua require'completion'.on_attach()]]
+
   cmd [[hi! link LspReferenceText CursorColumn]]
   cmd [[hi! link LspReferenceRead CursorColumn]]
   cmd [[hi! link LspReferenceWrite CursorColumn]]
@@ -81,9 +100,13 @@ function M.setup()
   local capabilities = vim.lsp.protocol.make_client_capabilities()
   capabilities.textDocument.completion.completionItem.snippetSupport = true
 
+  local onAttach = function(client, bufnr)
+    completion.on_attach()
+  end
+
   lsp_config.util.default_config = vim.tbl_extend('force', lsp_config.util.default_config, {
     handlers = {['textDocument/publishDiagnostics'] = shared_diagnostic_settings},
-    on_attach = completion.on_attach,
+    on_attach = onAttach,
     capabilities = capabilities
   })
 
@@ -94,27 +117,35 @@ function M.setup()
     excludedPackages = {'akka.actor.typed.javadsl', 'com.github.swagger.akka.javadsl'}
   }
 
-  metals_config.on_attach = function() completion.on_attach(); end
+  metals_config.on_attach = onAttach
+    --function() completion.on_attach(); end
   metals_config.init_options.statusBarProvider = 'on'
   metals_config.handlers['textDocument/publishDiagnostics'] = shared_diagnostic_settings
   metals_config.capabilities = capabilities
 
   -- Others
-  lsp_config.hls.setup {}
-  lsp_config.dockerls.setup {}
-  lsp_config.html.setup {}
-  lsp_config.jsonls.setup {
-    commands = {
-      Format = {
-        function()
-          vim.lsp.buf.range_formatting({}, {0, 0}, {fn.line('$'), 0})
-        end
-      }
+  local servers = {'hls', 'vimls'}
+  for _, lsp in ipairs(servers) do
+    lsp_config[lsp].setup {
+      on_attach = onAttach
     }
-  }
-  lsp_config.tsserver.setup {}
-  lsp_config.yamlls.setup {}
-  lsp_config.racket_langserver.setup {}
+  end
+
+  --lsp_config.hls.setup {}
+  --lsp_config.dockerls.setup {}
+  --lsp_config.html.setup {}
+  --lsp_config.jsonls.setup {
+    --commands = {
+      --Format = {
+        --function()
+          --vim.lsp.buf.range_formatting({}, {0, 0}, {fn.line('$'), 0})
+        --end
+      --}
+    --}
+  --}
+  --lsp_config.tsserver.setup {}
+  --lsp_config.yamlls.setup {}
+  --lsp_config.racket_langserver.setup {}
 
   ----------------------
   -- Treesitter Setup --
