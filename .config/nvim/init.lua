@@ -52,23 +52,18 @@ require('packer').startup(function(use)
   use {'junegunn/fzf.vim'}
 
   -- UI
-  --use {'kyazdani42/nvim-tree.lua'}
   use {'preservim/nerdtree'}
   use {'Xuyuanp/nerdtree-git-plugin'}
   use {'romgrk/barbar.nvim'}
   use {'glepnir/galaxyline.nvim'}
-  --use {'npxbr/gruvbox.nvim', requires = {'tjdevries/colorbuddy.vim'}}
-  use {'~/Development/GitHub/gruvbox.nvim', requires = {'tjdevries/colorbuddy.vim'}}
+  use {'abjoru/gruvbox.nvim', requires = {'tjdevries/colorbuddy.vim'}}
   use {'liuchengxu/vim-which-key'}
   use {'norcalli/nvim-colorizer.lua'}
-  --use {'mhinz/vim-startify'}
   use {'glepnir/dashboard-nvim'}
   use {'caenrique/nvim-toggle-terminal'}
   use {'schickling/vim-bufonly'}
   use {'mariappan/dragvisuals.vim'}
-  --use {'ryanoasis/vim-devicons'}
   use {'abjoru/nvim-web-devicons'}
-  --use {'tiagofumo/vim-nerdtree-syntax-highlight'}
 
   -- Other
   use {'tpope/vim-scriptease'}
