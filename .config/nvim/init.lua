@@ -45,7 +45,10 @@ require('packer').startup(function(use)
   use {'preservim/nerdcommenter'}
   use {'windwp/nvim-autopairs'}
   use {'Yggdroot/indentLine'}
-  use {'iamcco/markdown-preview.nvim', run = 'cd app && yarn install', cmd = 'MarkdownPreview'}
+  use {'tjdevries/nlua.nvim', requires = {
+    {'euclidianAce/BetterLua.vim'}
+  }}
+  --use {'iamcco/markdown-preview.nvim', run = 'cd app && yarn install', cmd = 'MarkdownPreview'}
 
   -- Search
   use {'junegunn/fzf'}

@@ -131,6 +131,14 @@ function M.setup()
     }
   end
 
+  require('nlua.lsp.nvim').setup(lsp_config, {
+    on_attach = onAttach,
+    globals = {
+      -- Colorbuddy
+      "Color", "c", "Group", "g", "s"
+    }
+  })
+
   --lsp_config.hls.setup {}
   --lsp_config.dockerls.setup {}
   --lsp_config.html.setup {}

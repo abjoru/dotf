@@ -36,24 +36,17 @@ development:
 
   packages:
   - tig
-  - neovim
-  - yarn
-  - nodejs
   - boxes
+  - neovim-nightly-bin:
+    aur: true
   - coursier:
     aur: true
-
-  pip:
-  - neovim
 
   git:
   - haskell-lsp:
     url: https://github.com/haskell/haskell-language-server
     submodules: true
     command: 'stack ./install.hs hls'
-  - packer-nvim:
-    url: https://github.com/wbthomason/packer.nvim
-    target: ~/.local/share/nvim/site/pack/packer/opt/packer.nvim
 
   post-install: scripts/dev/postinstall.sh
 
