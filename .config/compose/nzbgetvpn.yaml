@@ -32,4 +32,5 @@ nzbgetvpn:
     - ${DOCKER_STORAGE_DIR}:/storage
     - ${DOWNLOAD_DIR}:/data
     - ${DOWNLOAD_DIR}:/downloads
-    - ${VPN_OVPNDIR}:/config/openvpn
+    - ${VPN_OVPNDIR}/default.ovpn:/config/openvpn/default.ovpn:ro
+    - ${VPN_OVPNDIR}/pia-creds.txt:/config/pia-creds.txt:ro

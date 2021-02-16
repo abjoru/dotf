@@ -36,13 +36,11 @@ development:
 
   packages:
   - tig
-  - neovim
-  - yarn
-  - nodejs
   - boxes
-
-  pip:
-  - neovim
+  - neovim-nightly-bin:
+    aur: true
+  - coursier:
+    aur: true
 
   git:
   - haskell-lsp:
@@ -79,3 +77,5 @@ internet:
   - qutebrowser
   - newsboat
   - weechat
+  - pdfjs:
+    aur: true

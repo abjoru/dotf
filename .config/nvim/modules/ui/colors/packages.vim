@@ -1,1 +1,0 @@
-DfAddPlugin 'chrisbra/colorizer'
