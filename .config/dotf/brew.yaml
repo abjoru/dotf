@@ -11,6 +11,8 @@ shell:
     - fzf
     - vifm
 
+  post-install: scripts/shell/postinstall.sh
+
 fonts:
   packages:
     - font-ubuntumono-nerd-font:
@@ -25,12 +27,16 @@ fonts:
 development:
   packages:
     - tig
-    - neovim
-    - yarn
-    - node
     - boxes
+    - jenv
+    - coursier
+    - neovim:
+      head: true
 
-  pip:
-    - neovim
+  git:
+    - haskell-lsp:
+      url: https://github.com/haskell/haskell-language-server
+      submodules: true
+      command: 'stack ./install.hs hls'
 
   post-install: scripts/dev/postinstall.sh
