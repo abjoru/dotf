@@ -31,6 +31,9 @@ function M.after()
   if not is_install() then
     require('dotf/ui/statusline').setup()
   end
+
+  --cmd('autocmd BufWritePre *.scala :Format')
+  cmd('autocmd BufWritePre *.hs :Format')
 end
 
 return M

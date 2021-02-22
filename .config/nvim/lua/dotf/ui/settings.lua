@@ -87,7 +87,7 @@ function M.setup()
   utils.set('open_in_insert_mode', 1)
 
   -- Tree
-  utils.set('NERDTreeWinSize', 40)
+  utils.set('NERDTreeWinSize', 60)
   utils.set('NERDTreeRespectWildIgnore', 1)
 
   --------------

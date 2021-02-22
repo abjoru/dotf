@@ -139,7 +139,13 @@ function M.setup()
     }
   })
 
-  --lsp_config.hls.setup {}
+  lsp_config.hls.setup {
+    settings = {
+      haskell = {
+        formattingProvider = 'stylish-haskell'
+      }
+    }
+  }
   --lsp_config.dockerls.setup {}
   --lsp_config.html.setup {}
   --lsp_config.jsonls.setup {
