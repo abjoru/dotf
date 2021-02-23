@@ -19,7 +19,10 @@ else
 fi
 
 # Update shell to ZSH
-# TODO Check shell and only change if not zsh!
 if is_linux; then
-  chsh -s /usr/bin/zsh
+  if [[ $SHELL = /usr/bin/zsh ]]; then
+    echo "Already using ZSH, will not change shell..."
+  else
+    chsh -s /usr/bin/zsh
+  fi
 fi
