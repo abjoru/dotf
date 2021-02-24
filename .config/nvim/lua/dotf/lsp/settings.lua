@@ -102,6 +102,11 @@ function M.setup()
 
   local onAttach = function(client, bufnr)
     completion.on_attach()
+
+    -- format on save for selected buffers
+    vim.api.nvim_command[[autocmd BufWritePre *.scala lua vim.lsp.buf.formatting_sync(nil, 1000)]]
+    vim.api.nvim_command[[autocmd BufWritePre *.sbt lua vim.lsp.buf.formatting_sync(nil, 1000)]]
+    vim.api.nvim_command[[autocmd BufWritePre *.hs lua vim.lsp.buf.formatting_sync(nil, 1000)]]
   end
 
   lsp_config.util.default_config = vim.tbl_extend('force', lsp_config.util.default_config, {
