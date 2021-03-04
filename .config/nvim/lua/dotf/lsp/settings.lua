@@ -26,7 +26,6 @@ function M.setup()
       {mode = '<c-p>'},
       {mode = '<c-n>'}
     })
-  
 
   --------------
   -- Mappings --
@@ -89,8 +88,22 @@ function M.setup()
   -- LSP Config --
   ----------------
 
+  local system_name
+
+  if fn.has("mac") == 1 then
+    system_name = "macOS"
+  elseif fn.has("unix") == 1 then
+    system_name = "Linux"
+  else
+    print("Unsupported system for sumneko")
+  end
+
   fn.sign_define('LspDiagnosticsSignError', {text = '✘', texthl = 'LspDiagnosticsDefaultError'})
   fn.sign_define('LspDiagnosticsSignWarning', {text = '', texthl = 'LspDiagnosticsDefaultWarning'})
+
+  -- set sumneko lua paths
+  local sumneko_root_path = fn.expand('~') .. '/.local/share/lua-lsp'
+  local sumneko_binary = sumneko_root_path .. '/bin/' .. system_name .. '/lua-language-server'
 
   local shared_diagnostic_settings = vim.lsp.with(
     vim.lsp.diagnostic.on_publish_diagnostics,
@@ -105,6 +118,7 @@ function M.setup()
 
     -- format on save for selected buffers
     vim.api.nvim_command[[autocmd BufWritePre *.scala lua vim.lsp.buf.formatting_sync(nil, 1000)]]
+    --vim.api.nvim_command[[autocmd BufWritePre *.scala lua require('metals').organize_imports()]]
     vim.api.nvim_command[[autocmd BufWritePre *.sbt lua vim.lsp.buf.formatting_sync(nil, 1000)]]
     vim.api.nvim_command[[autocmd BufWritePre *.hs lua vim.lsp.buf.formatting_sync(nil, 1000)]]
   end
@@ -136,13 +150,13 @@ function M.setup()
     }
   end
 
-  require('nlua.lsp.nvim').setup(lsp_config, {
-    on_attach = onAttach,
-    globals = {
-      -- Colorbuddy
-      "Color", "c", "Group", "g", "s"
-    }
-  })
+  --require('nlua.lsp.nvim').setup(lsp_config, {
+    --on_attach = onAttach,
+    --globals = {
+      ---- Colorbuddy
+      --"Color", "c", "Group", "g", "s"
+    --}
+  --})
 
   lsp_config.hls.setup {
     settings = {
@@ -151,6 +165,28 @@ function M.setup()
       }
     }
   }
+
+  lsp_config.sumneko_lua.setup {
+    cmd = {sumneko_binary, "-E", sumneko_root_path .. '/main.lua'};
+    settings = {
+      Lua = {
+        runtime = {
+          version = 'LuaJIT',
+          path = vim.split(package.path, ';')
+        },
+        diagnostics = {
+          globals = {'vim'}
+        },
+        workspace = {
+          library = {
+            [fn.expand('$VIMRUNTIME/lua')] = true,
+            [fn.expand('$VIMRUNTIME/lua/vim/lsp')] = true
+          }
+        }
+      }
+    }
+  }
+
   --lsp_config.dockerls.setup {}
   --lsp_config.html.setup {}
   --lsp_config.jsonls.setup {

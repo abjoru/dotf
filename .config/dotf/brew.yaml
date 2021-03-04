@@ -30,6 +30,7 @@ development:
     - boxes
     - jenv
     - coursier
+    - ninja
     - neovim:
       head: true
 
@@ -38,5 +39,9 @@ development:
       url: https://github.com/haskell/haskell-language-server
       submodules: true
       command: 'stack ./install.hs hls'
+    - lua-lsp:
+      url: https://github.com/sumneko/lua-language-server
+      submodules: true
+      install: scripts/dev/lua-lsp-install.sh
 
   post-install: scripts/dev/postinstall.sh
