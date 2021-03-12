@@ -4,6 +4,7 @@
 # Directories #
 ###############
 
+BIN=$HOME/.local/bin
 DATA=${XDG_DATA_HOME:-$HOME/.local/share}
 CACHE=${XDG_CACHE_HOME:-$HOME/.cache}
 CONFIG=${XDG_CONFIG_HOME:-$HOME/.config}

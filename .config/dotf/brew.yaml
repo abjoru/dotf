@@ -43,5 +43,8 @@ development:
       url: https://github.com/sumneko/lua-language-server
       submodules: true
       install: scripts/dev/lua-lsp-install.sh
+    - sbt-extras:
+      url: https://github.com/paulp/sbt-extras
+      install: scripts/dev/sbt-extras-install.sh
 
   post-install: scripts/dev/postinstall.sh
