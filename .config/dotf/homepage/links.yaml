@@ -45,6 +45,9 @@
     - plxcal:
       name: 'PLX Calendar'
       url:  'https://collaborate.akamai.com/confluence/calendar/calendarPage.action?spaceKey=SELO&calendarId=4325a319-aa68-40b9-b518-b687fa6e4d39'
+    - timeoff:
+      name: 'TimeOff'
+      url:  'https://atot.akamai.com/atot/'
 
 - news:
   name: 'News'
