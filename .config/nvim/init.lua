@@ -55,8 +55,10 @@ require('packer').startup(function(use)
   use {'junegunn/fzf.vim'}
 
   -- UI
-  use {'preservim/nerdtree'}
-  use {'Xuyuanp/nerdtree-git-plugin'}
+  use {'kyazdani42/nvim-web-devicons'}
+  use {'kyazdani42/nvim-tree.lua'}
+  --use {'preservim/nerdtree'}
+  --use {'Xuyuanp/nerdtree-git-plugin'}
   use {'romgrk/barbar.nvim'}
   use {'glepnir/galaxyline.nvim'}
   use {'abjoru/gruvbox.nvim', requires = {'tjdevries/colorbuddy.vim'}}
@@ -66,7 +68,7 @@ require('packer').startup(function(use)
   use {'caenrique/nvim-toggle-terminal'}
   use {'schickling/vim-bufonly'}
   use {'mariappan/dragvisuals.vim'}
-  use {'abjoru/nvim-web-devicons'}
+  --use {'abjoru/nvim-web-devicons'}
 
   -- Other
   use {'tpope/vim-scriptease'}

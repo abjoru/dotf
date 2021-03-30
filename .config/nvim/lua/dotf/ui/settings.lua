@@ -40,29 +40,29 @@ function M.setup()
 
   require('colorbuddy').colorscheme('gruvbox')
 
-  require('dotf/ui/devicons').setup {
-    override = {
-      diropen = {
-        icon = '',
-        color = palette.bright_yellow,
-        name = "DirOpen"
-      };
-      dirclosed = {
-        icon = '',
-        color = palette.bright_yellow,
-        name = "DirClosed"
-      };
-      ['dirsymlink'] = {
-        icon = '',
-        color = palette.bright_yellow,
-        name = "DirSymlink"
-      }
-    }
-  }
+  --require('dotf/ui/devicons').setup {
+    --override = {
+      --diropen = {
+        --icon = '',
+        --color = palette.bright_yellow,
+        --name = "DirOpen"
+      --};
+      --dirclosed = {
+        --icon = '',
+        --color = palette.bright_yellow,
+        --name = "DirClosed"
+      --};
+      --['dirsymlink'] = {
+        --icon = '',
+        --color = palette.bright_yellow,
+        --name = "DirSymlink"
+      --}
+    --}
+  --}
 
-  cmd('hi NERDTreeOpenable guifg=' .. palette.light3)
-  cmd('hi NERDTreeClosable guifg=' .. palette.light4)
-  cmd('hi NERDTreeDir guifg=' .. palette.bright_orange)
+  --cmd('hi NERDTreeOpenable guifg=' .. palette.light3)
+  --cmd('hi NERDTreeClosable guifg=' .. palette.light4)
+  --cmd('hi NERDTreeDir guifg=' .. palette.bright_orange)
 
   --------------
   -- Settings --
@@ -87,8 +87,35 @@ function M.setup()
   utils.set('open_in_insert_mode', 1)
 
   -- Tree
-  utils.set('NERDTreeWinSize', 60)
-  utils.set('NERDTreeRespectWildIgnore', 1)
+  --utils.set('NERDTreeWinSize', 60)
+  --utils.set('NERDTreeRespectWildIgnore', 1)
+  utils.set('nvim_tree_auto_open', 1)
+  utils.set('nvim_tree_auto_close', 1)
+  utils.set('nvim_tree_width', 60)
+  --utils.set('nvim_tree_ignore', ['.git'])
+  utils.set('nvim_tree_git_hl', 1)
+  utils.set('nvim_tree_hide_dotfiles', 1)
+  utils.set('nvim_tree_indent_markers', 1)
+  utils.set('nvim_tree_group_empty', 1)
+  --utils.set('nvim_tree_icons', {
+    --'default': '',
+    --'symlink': '',
+    --'git': {
+      --'unstaged': "✗",
+      --'staged': "✓",
+      --'unmerged': "",
+      --'renamed': "➜",
+      --'untracked': "★"
+    --},
+    --'folder': {
+      --'default': "",
+      --'open': "",
+      --'empty': "",
+      --'empty_open': "",
+      --'symlink': "",
+      --'symlink_open': "",
+    --}
+  --})
 
   --------------
   -- Mappings --
@@ -126,8 +153,8 @@ function M.setup()
   utils.map('n', '<localleader>pp', '"+p')
 
   -- Tree
-  utils.map('', '<F2>', ':NERDTreeToggle<CR>')
-  utils.map('n', '<leader>fr', ':NERDTreeFind<CR>')
+  utils.map('', '<F2>', ':NvimTreeToggle<CR>')
+  utils.map('n', '<leader>fr', ':NvimTreeFindFile<CR>')
 
   -- Tabbar
   utils.map('', '<localleader>[', ':BufferPrevious<CR>')
@@ -174,10 +201,10 @@ function M.setup()
 
   -- Tree colors
   -- Ref: https://jonasjacek.github.io/colors/
-  --cmd [[highlight NvimTreeFolderIcon guifg=darkorange3]]
-  --cmd [[highlight NvimTreeGitDirty guifg=red3]]
-  --cmd [[highlight NvimTreeIndentMarker guifg=darkorange3]]
-  cmd [[autocmd VimEnter * NERDTree | wincmd p]]
+  cmd [[highlight NvimTreeFolderIcon guifg=darkorange3]]
+  cmd [[highlight NvimTreeGitDirty guifg=red3]]
+  cmd [[highlight NvimTreeIndentMarker guifg=darkorange3]]
+  --cmd [[autocmd VimEnter * NERDTree | wincmd p]]
 
 end
 
