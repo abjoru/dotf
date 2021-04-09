@@ -27,6 +27,8 @@ function M.setup()
       {mode = '<c-n>'}
     })
 
+  utils.set('asmsyntax', 'nasm')
+
   --------------
   -- Mappings --
   --------------

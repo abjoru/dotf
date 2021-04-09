@@ -84,7 +84,7 @@
       url:  'http://learnyouahaskell.com/chapters'
 
 - 3dprint:
-  name: '3D Printing'
+  name: '3D Stuff'
 
   links:
     - thingiverse:
@@ -96,9 +96,18 @@
     - renderhub:
       name: 'RenderHub'
       url:  'http://renderhub.com'
+    - maximo:
+      name: 'Maximo'
+      url:  'https://www.mixamo.com'
+    - epicmarket:
+      name: 'Epic Marketplace'
+      url:  'https://www.unrealengine.com/marketplace/en-US/store?lang=en-US'
     - prusa:
       name: 'Prusa3D'
-      url:  'https://www.prusa3d.com'
+      url:  'https://www.prusa2d.com'
+    - blender-cloud:
+      name: 'Blender Cloud'
+      url:  'https://cloud.blender.org/welcome/'
 
 - shopping:
   name: 'Shopping'
