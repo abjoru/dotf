@@ -29,7 +29,7 @@ development:
     - tig
     - boxes
     - jenv
-    - coursier
+    - coursier/formulas/coursier
     - ninja
     - neovim:
       head: true
