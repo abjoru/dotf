@@ -30,9 +30,9 @@ plex:
     - ${DOCKERCONFDIR}/plex:/config
     - ${DOCKERSHAREDDIR}:/shared
     - ${DOCKERSTORAGEDIR}:/storage
-    - ${MEDIADIR_MOVIES}:/data/movies
-    - ${MEDIADIR_MOVIES}:/movies
-    - ${MEDIADIR_MUSIC}:/data/music
-    - ${MEDIADIR_MUSIC}:/music
-    - ${MEDIADIR_TV}:/data/tv
-    - ${MEDIADIR_TV}:/tv
+    - ${MEDIA_MOVIES}:/data/movies
+    - ${MEDIA_MOVIES}:/movies
+    - ${MEDIA_MUSIC}:/data/music
+    - ${MEDIA_MUSIC}:/music
+    - ${MEDIA_TV}:/data/tv
+    - ${MEDIA_TV}:/tv
