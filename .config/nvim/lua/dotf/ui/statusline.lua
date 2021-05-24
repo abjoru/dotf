@@ -1,24 +1,24 @@
 local M = {}
 local gl = require('galaxyline')
 local gls = gl.section
-local palette = require('gruvbox.palette')
+--local palette = require('gruvbox.palette')
 
 gl.short_line_list = {'LuaTree', 'NvimTree', 'nerdtree', 'vista', 'startify', 'term', 'fugitive', 'fugitiveblame'}
 
 local colors = {
-  bg          = palette.dark1,
-  fg          = palette.light1,
-  section_bg  = palette.dark2,
-  blue        = palette.bright_blue,
-  green       = palette.bright_green,
-  purple      = palette.bright_purple,
-  orange      = palette.bright_orange,
-  yellow      = palette.bright_yellow,
-  red1        = palette.bright_red,
-  red2        = palette.neutral_red,
-  gray1       = palette.light2,
-  gray2       = palette.light3,
-  gray3       = palette.light4,
+  bg          = "#3c3836", --palette.dark1,
+  fg          = "#ebdbb2", --palette.light1,
+  section_bg  = "#504945", --palette.dark2,
+  blue        = "#83a598", --palette.bright_blue,
+  green       = "#b8bb26", --palette.bright_green,
+  purple      = "#d3869b", --palette.bright_purple,
+  orange      = "#fe8019", --palette.bright_orange,
+  yellow      = "#fabd2f", --palette.bright_yellow,
+  red1        = "#fb4934", --palette.bright_red,
+  red2        = "#cc241d", --palette.neutral_red,
+  gray1       = "#d5c4a1", --palette.light2,
+  gray2       = "#bdae93", --palette.light3,
+  gray3       = "#a89984", --palette.light4,
 }
 
 local mode_name = function()

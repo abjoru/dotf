@@ -61,7 +61,8 @@ require('packer').startup(function(use)
   --use {'Xuyuanp/nerdtree-git-plugin'}
   use {'romgrk/barbar.nvim'}
   use {'glepnir/galaxyline.nvim'}
-  use {'abjoru/gruvbox.nvim', requires = {'tjdevries/colorbuddy.vim'}}
+  --use {'npxbr/gruvbox.nvim', requires = {'tjdevries/colorbuddy.vim'}}
+  use {'npxbr/gruvbox.nvim', requires = {'rktjmp/lush.nvim'}}
   use {'liuchengxu/vim-which-key'}
   use {'norcalli/nvim-colorizer.lua'}
   use {'glepnir/dashboard-nvim'}

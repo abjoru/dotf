@@ -2,7 +2,7 @@ local M = {}
 local fn = vim.fn
 local cmd = vim.cmd
 local utils = require('dotf/utils')
-local palette = require('gruvbox.palette')
+--local palette = require('gruvbox.palette')
 
 local haskellLogo = {
   '',
@@ -38,7 +38,9 @@ function M.setup()
   -- Colors & Themes --
   ---------------------
 
-  require('colorbuddy').colorscheme('gruvbox')
+  --require('colorbuddy').colorscheme('gruvbox')
+  vim.o.background = "dark"
+  vim.cmd([[colorscheme gruvbox]])
 
   --require('dotf/ui/devicons').setup {
     --override = {
