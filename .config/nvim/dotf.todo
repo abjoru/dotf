@@ -1,8 +1,0 @@
-DotF Neovim:
-  ☐ Fix coc actions 'rn' and 'qf' in leader guide
-  ✓ Make startify not switch WD on selection! @priority(high) @done(2020-11-20 10:57) @project(DotF Neovim)
-  ✓ Make projects with its own task file take precedence in start screen @priority(high) @done(2020-11-18 09:27) @project(DotF Neovim)
-  ☐ Fix listing tasks in nvim @priority(high)
-  ☐ Remove cache module in favor of api type
-  ☐ Change devicons colors to match gruvbox theme @priority(low)
-  ☐ Make dynamic xmobar config play nicer with values (if num screens > cfgs)

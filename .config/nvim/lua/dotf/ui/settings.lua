@@ -2,7 +2,6 @@ local M = {}
 local fn = vim.fn
 local cmd = vim.cmd
 local utils = require('dotf/utils')
---local palette = require('gruvbox.palette')
 
 local haskellLogo = {
   '',
@@ -32,39 +31,34 @@ local haskellLogo = {
 }
 
 function M.setup()
-  print('ui/settings called...')
+
+  -------------
+  -- Plugins --
+  -------------
+
+  require('dotf.ui.compe').setup()
+  require('dotf.ui.telescope').setup()
   
   ---------------------
   -- Colors & Themes --
   ---------------------
 
   --require('colorbuddy').colorscheme('gruvbox')
-  vim.o.background = "dark"
-  vim.cmd([[colorscheme gruvbox]])
+  --vim.o.background = "dark"
+  --vim.cmd([[colorscheme gruvbox]])
 
-  --require('dotf/ui/devicons').setup {
-    --override = {
-      --diropen = {
-        --icon = '',
-        --color = palette.bright_yellow,
-        --name = "DirOpen"
-      --};
-      --dirclosed = {
-        --icon = '',
-        --color = palette.bright_yellow,
-        --name = "DirClosed"
-      --};
-      --['dirsymlink'] = {
-        --icon = '',
-        --color = palette.bright_yellow,
-        --name = "DirSymlink"
-      --}
-    --}
-  --}
+  cmd("colorscheme onedark")
+  -- TODO make sure this works later
+  -- TODO I can't get this to work as expected
+  cmd([[highlight LspDiagnosticsUnderlineWarning guifg=None]])
+  --cmd([[highlight LspDiagnosticsUnderlineWarning guifg=None"]])
 
-  --cmd('hi NERDTreeOpenable guifg=' .. palette.light3)
-  --cmd('hi NERDTreeClosable guifg=' .. palette.light4)
-  --cmd('hi NERDTreeDir guifg=' .. palette.bright_orange)
+  -- Needed to esnure float background doesn't get odd highlighting
+  -- https://github.com/joshdick/onedark.vim#onedarkset_highlight
+  cmd([[augroup colorset]])
+  cmd([[autocmd!]])
+  cmd([[autocmd ColorScheme * call onedark#set_highlight("Normal", { "fg": { "gui": "#ABB2BF", "cterm": "145", "cterm16" : "7" } })]])
+  cmd([[augroup END]])
 
   --------------
   -- Settings --
@@ -89,9 +83,7 @@ function M.setup()
   utils.set('open_in_insert_mode', 1)
 
   -- Tree
-  --utils.set('NERDTreeWinSize', 60)
-  --utils.set('NERDTreeRespectWildIgnore', 1)
-  utils.set('nvim_tree_auto_open', 1)
+  utils.set('nvim_tree_auto_open', 0)
   utils.set('nvim_tree_auto_close', 1)
   utils.set('nvim_tree_width', 60)
   --utils.set('nvim_tree_ignore', ['.git'])
@@ -166,8 +158,8 @@ function M.setup()
   utils.map('n', '<leader>bo', ':BufOnly<CR>')
 
   -- Leader guide
-  utils.map('', '<leader>', ':WhichKey \'<Space>\'<CR>')
-  utils.map('', '?', ':WhichKey \'\'<CR>')
+  --utils.map('', '<leader>', ':WhichKey \'<Space>\'<CR>')
+  --utils.map('', '?', ':WhichKey \'\'<CR>')
 
   -- Terminal
   utils.map('', '<F3>', ':ToggleTerminal<CR>')
@@ -208,6 +200,12 @@ function M.setup()
   cmd [[highlight NvimTreeIndentMarker guifg=darkorange3]]
   --cmd [[autocmd VimEnter * NERDTree | wincmd p]]
 
+  -- buffers
+  cmd([[autocmd FileType * setlocal formatoptions-=c formatoptions-=r formatoptions-=o]])
+  cmd([[autocmd FileType markdown setlocal textwidth=80]])
+  cmd([[autocmd BufEnter *.js call matchadd('ColorColumn', '\%81v', 100)]])
+  cmd([[autocmd BufReadPost,BufNewFile *.md,*.txt,COMMIT_EDITMSG set wrap linebreak nolist spell spelllang=en_us complete+=kspell]])
+  cmd([[autocmd BufReadPost,BufNewFile .html,*.txt,*.md,*.adoc set spell spelllang=en_us]])
 end
 
 return M

@@ -1,64 +1,106 @@
 local M = {}
+local g = vim.g
 local fn = vim.fn
 local cmd = vim.cmd
-local utils = require('dotf/utils')
+local map = require('dotf/utils').map
 local lsp_config = require('lspconfig')
-local metals = require('metals')
-local completion = require('completion')
 
 function M.setup()
+
+  -------------
+  -- Plugins --
+  -------------
+
+  require('nvim-autopairs').setup()
+  require('nvim-treesitter.configs').setup({
+    playground = { enable = true },
+    query_linter = {
+      enable = true,
+      use_virtual_text = true,
+      lint_events = { "BufWrite", "CursorHold" },
+    },
+    ensure_installed = "maintained",
+    highlight = { enable = true },
+  })
+  require('lspsaga').init_lsp_saga({
+    server_filetype_map = { metals = { "sbt", "scala" }},
+    code_action_prompt = { virtual_text = false },
+  })
 
   --------------
   -- Settings --
   --------------
 
-  --cmb [[set completeopt=menuone,noinsert,noselect]]
-  utils.set('completion_enable_snippet', 'vim-vsnip')
-  utils.set('completion_matching_strategy_list', {'exact', 'substring', 'fuzzy'})
-  utils.set('completion_matching_smart_case', 1)
-  utils.set('completion_trigger_on_delete', 1)
-  utils.set('completion_enable_auto_popup', 1)
-  utils.set('completion_auto_change_source', 1)
-  utils.set('completion_chain_complete_list', {
-      {['complete_items'] = {'lsp'}},
-      {['complete_items'] = {'snippet'}},
-      {['complete_items'] = {'buffers'}},
-      {mode = '<c-p>'},
-      {mode = '<c-n>'}
-    })
+  g["vim_markdown_conceal"] = 0
+  g["vim_markdown_conceal_code_blocks"] = 0
+  g["metals_server_version"] = "0.10.3+23-3512dbc6-SNAPSHOT"
 
-  utils.set('asmsyntax', 'nasm')
+  --utils.set('completion_enable_snippet', 'vim-vsnip')
+  --utils.set('completion_matching_strategy_list', {'exact', 'substring', 'fuzzy'})
+  --utils.set('completion_matching_smart_case', 1)
+  --utils.set('completion_trigger_on_delete', 1)
+  --utils.set('completion_enable_auto_popup', 1)
+  --utils.set('completion_auto_change_source', 1)
+  --utils.set('completion_chain_complete_list', {
+      --{['complete_items'] = {'lsp'}},
+      --{['complete_items'] = {'snippet'}},
+      --{['complete_items'] = {'buffers'}},
+      --{mode = '<c-p>'},
+      --{mode = '<c-n>'}
+    --})
+
+  --utils.set('asmsyntax', 'nasm')
 
   --------------
   -- Mappings --
   --------------
 
-  -- LSP
-  utils.map('n', 'K', '<cmd>lua vim.lsp.buf.hover()<CR>')
-  utils.map('n', 'gd', '<cmd>lua vim.lsp.buf.definition()<CR>')
-  utils.map('n', 'gi', '<cmd>lua vim.lsp.buf.implementation()<CR>')
-  utils.map('n', 'gr', '<cmd>lua vim.lsp.buf.references()<CR>')
-  utils.map('n', 'gs', '<cmd>lua vim.lsp.buf.document_symbol()<CR>')
-  utils.map('n', 'gw', '<cmd>lua vim.lsp.buf.workspace_symbol()<CR>')
+  -- telescope
+  map("n", "<leader>ff", [[<cmd>lua require("telescope.builtin").find_files()<CR>]])
+  map("n", "<leader>fg", [[<cmd>lua require("telescope.builtin").live_grep()<CR>]])
+  map("n", "<leader>fb", [[<cmd>lua require("telescope.builtin").buffers()<CR>]])
+  map("n", "<leader>fd", [[<cmd>lua require("telescope.builtin").file_browser()<CR>]])
 
-  -- TODO evaluate these and remap if neccessary
-  utils.map('n', '<leader>rn', '<cmd>lua vim.lsp.buf.rename()<CR>')
-  utils.map('n', ',f', '<cmd>lua vim.lsp.buf.formatting()<CR>', {nowait = true})
-  utils.map('n', '<leader>ca', '<cmd>lua vim.lsp.buf.code_action()<CR>')
-  utils.map('n', '<leader>ws', '<cmd>lua require"metals".worksheet_hover()<CR>')
-  utils.map('n', '<leader>a', '<cmd>lua require"metals".open_all_diagnostics()<CR>')
-  utils.map('n', '<leader>d', '<cmd>lua vim.lsp.diagnostic.set_loclist()<CR>') -- buffer diagnostics only
-  utils.map('n', '[c', '<cmd>lua vim.lsp.diagnostic.goto_prev { wrap = false }<CR>')
-  utils.map('n', ']c', '<cmd>lua vim.lsp.diagnostic.goto_next { wrap = false }<CR>')
+  -- LSP
+  map('n', "K", [[<cmd>lua require("lspsaga.hover").render_hover_doc()<CR>]])
+  map('n', 'gd', [[<cmd>lua vim.lsp.buf.definition()<CR>]])
+  map('n', 'gi', [[<cmd>lua vim.lsp.buf.implementation()<CR>]])
+  map('n', 'gr', [[<cmd>lua vim.lsp.buf.references()<CR>]])
+  map('n', "gs", [[<cmd>lua require("telescope.builtin").lsp_document_symbols()<CR>]])
+  map('n', "gw", [[<cmd>lua lsp_workspace_symbols()<CR>]])
+
+  map('n', "<leader>rn", [[<cmd>lua require("lspsaga.rename").rename()<CR>]])
+  map('n', "<leader>ca", [[<cmd>lua require("lspsaga.codeaction").code_action()<CR>]])
+  map('v', "<leader>ca", [[<cmd>lua require("lspsaga.codeaction").range_code_action()<CR>]])
+  map('n', "<leader>ws", [[<cmd>lua require("metals").worksheet_hover()<CR>]])
+  map('n', '<localleader>f', [[<cmd>lua vim.lsp.buf.formatting()<CR>]], {nowait = true})
+
+  map("n", "<leader>tt", [[<cmd>lua require("metals.tvp").toggle_tree_view()<CR>]])
+  map("n", "<leader>td", [[<cmd>lua require("metals.tvp").debug_tree()<CR>]])
+  map("n", "<leader>tr", [[<cmd>lua require("metals.tvp").reveal_in_tree()<CR>]])
+
+  map('n', '<leader>a', [[<cmd>lua require("metals").open_all_diagnostics()<CR>]])
+  map('n', '<leader>d', [[<cmd>lua vim.lsp.diagnostic.set_loclist()<CR>]]) -- buffer diagnostics only
+  map("n", "]c", [[<cmd>lua require("lspsaga.diagnostic").lsp_jump_diagnostic_next()<CR>]])
+  map("n", "[c", [[<cmd>lua require("lspsaga.diagnostic").lsp_jump_diagnostic_prev()<CR>]])
+  map("n", "<leader>ln", [[<cmd>lua vim.lsp.diagnostic.get_line_diagnostics()<CR>]])
 
   -- Completion
-  utils.map('i', '<S-Tab>', 'pumvisible() ? "\\<C-p>" : "\\<Tab>"', {expr = true})      -- shift-tab nav prev
-  utils.map('i', '<Tab>', 'pumvisible() ? "\\<C-n>" : "\\<Tab>"', {expr = true})        -- tab nav next fg
-  utils.map('i', '<CR>', 'pumvisible() ? "\\<C-y>" : "\\<C-g>u\\<CR>"', {expr = true})  -- select with enter
-  cmd [[imap <silent> <c-p> <Plug>(completion_trigger)]]
+  map('i', '<S-Tab>', 'pumvisible() ? "\\<C-p>" : "\\<Tab>"', {expr = true})      -- shift-tab nav prev
+  map('i', '<Tab>', 'pumvisible() ? "\\<C-n>" : "\\<Tab>"', {expr = true})        -- tab nav next fg
+  map('i', '<CR>', 'pumvisible() ? "\\<C-y>" : "\\<C-g>u\\<CR>"', {expr = true})  -- select with enter
+  --cmd [[imap <silent> <c-p> <Plug>(completion_trigger)]]
+
+  -- nvim-dap
+  map("n", "<leader>dc", [[<cmd>lua require("dap").continue()<CR>]])
+  map("n", "<leader>dr", [[<cmd>lua require("dap").repl.toggle()<CR>]])
+  map("n", "<leader>ds", [[<cmd>lua require("dap.ui.variables").scopes()<CR>]])
+  map("n", "<leader>dtb", [[<cmd>lua require("dap").toggle_breakpoint()<CR>]])
+  map("n", "<leader>dso", [[<cmd>lua require("dap").step_over()<CR>]])
+  map("n", "<leader>dsi", [[<cmd>lua require("dap").step_into()<CR>]])
 
   -- Comments
-  utils.map('n', '<leader>cc', ':NERDComment(1, "invert")')
+  map('n', '<leader>cc', ':NERDComment(1, "invert")')
 
   --------------
   -- Commands --
@@ -75,119 +117,106 @@ function M.setup()
   cmd [[autocmd!]]
   cmd [[autocmd FileType scala setlocal omnifunc=v:lua.vim.lsp.omnifunc]]
   cmd [[autocmd FileType scala,sbt lua require("metals").initialize_or_attach(metals_config)]]
-  cmd [[autocmd CursorHold  <buffer> lua vim.lsp.buf.document_highlight()]]
-  cmd [[autocmd CursorHoldI <buffer> lua vim.lsp.buf.document_highlight()]]
-  cmd [[autocmd CursorMoved <buffer> lua vim.lsp.buf.clear_references()]]
+  --cmd [[autocmd CursorHold  <buffer> lua vim.lsp.buf.document_highlight()]]
+  --cmd [[autocmd CursorHoldI <buffer> lua vim.lsp.buf.document_highlight()]]
+  --cmd [[autocmd CursorMoved <buffer> lua vim.lsp.buf.clear_references()]]
   cmd [[augroup end]]
 
-  cmd [[autocmd BufEnter * lua require'completion'.on_attach()]]
+  --cmd [[autocmd BufEnter * lua require'completion'.on_attach()]]
 
   cmd [[hi! link LspReferenceText CursorColumn]]
   cmd [[hi! link LspReferenceRead CursorColumn]]
   cmd [[hi! link LspReferenceWrite CursorColumn]]
 
+  cmd([[hi! link LspSagaFinderSelection CursorColumn]])
+  cmd([[hi! link LspSagaDocTruncateLine LspSagaHoverBorder]])
+
+  cmd([[command! Format lua vim.lsp.buf.formatting()]])
+
   ----------------
   -- LSP Config --
   ----------------
 
-  local system_name
-
-  if fn.has("mac") == 1 then
-    system_name = "macOS"
-  elseif fn.has("unix") == 1 then
-    system_name = "Linux"
-  else
-    print("Unsupported system for sumneko")
-  end
-
   fn.sign_define('LspDiagnosticsSignError', {text = '✘', texthl = 'LspDiagnosticsDefaultError'})
   fn.sign_define('LspDiagnosticsSignWarning', {text = '', texthl = 'LspDiagnosticsDefaultWarning'})
+  fn.sign_define("LspDiagnosticsSignInformation", { text = "▬" })
+  fn.sign_define("LspDiagnosticsSignHint", { text = "▬" })
 
-  -- set sumneko lua paths
-  local sumneko_root_path = fn.expand('~') .. '/.local/share/lua-lsp'
-  local sumneko_binary = sumneko_root_path .. '/bin/' .. system_name .. '/lua-language-server'
-
-  local shared_diagnostic_settings = vim.lsp.with(
-    vim.lsp.diagnostic.on_publish_diagnostics,
-    {virtual_text = {prefix = '', truncated = true}}
-  )
-
+  local shared_diagnostic_settings = vim.lsp.with(vim.lsp.diagnostic.on_publish_diagnostics, { virtual_text = false })
+  --local lsp_config = require("lspconfig")
   local capabilities = vim.lsp.protocol.make_client_capabilities()
   capabilities.textDocument.completion.completionItem.snippetSupport = true
 
-  local onAttach = function(client, bufnr)
-    completion.on_attach()
-
-    -- format on save for selected buffers
-    vim.api.nvim_command[[autocmd BufWritePre *.scala lua vim.lsp.buf.formatting_sync(nil, 1000)]]
-    --vim.api.nvim_command[[autocmd BufWritePre *.scala lua require('metals').organize_imports()]]
-    vim.api.nvim_command[[autocmd BufWritePre *.sbt lua vim.lsp.buf.formatting_sync(nil, 1000)]]
-    vim.api.nvim_command[[autocmd BufWritePre *.hs lua vim.lsp.buf.formatting_sync(nil, 1000)]]
-  end
-
-  lsp_config.util.default_config = vim.tbl_extend('force', lsp_config.util.default_config, {
-    handlers = {['textDocument/publishDiagnostics'] = shared_diagnostic_settings},
-    on_attach = onAttach,
-    capabilities = capabilities
+  lsp_config.util.default_config = vim.tbl_extend("force", lsp_config.util.default_config, {
+    handlers = {
+      ["textDocument/publishDiagnostics"] = shared_diagnostic_settings,
+    },
+    capabilities = capabilities,
   })
 
-  -- Metals
-  metals_config = metals.bare_config
-  metals_config.settings = {
-    showImplicitArguments = true,
-    excludedPackages = {'akka.actor.typed.javadsl', 'com.github.swagger.akka.javadsl'}
-  }
+  metals_config = require("metals").bare_config
+  local dap = require("dap")
 
-  metals_config.on_attach = onAttach
-    --function() completion.on_attach(); end
-  metals_config.init_options.statusBarProvider = 'on'
-  metals_config.handlers['textDocument/publishDiagnostics'] = shared_diagnostic_settings
-  metals_config.capabilities = capabilities
+  require('dotf.lsp.scala').setup(metals_config, capabilities, dap, shared_diagnostic_settings)
+  require('dotf.lsp.sumneko').setup(lsp_config)
+  require('dotf.lsp.haskell').setup(lsp_config)
 
   -- Others
-  local servers = {'hls', 'vimls'}
-  for _, lsp in ipairs(servers) do
-    lsp_config[lsp].setup {
-      on_attach = onAttach
-    }
-  end
-
-  --require('nlua.lsp.nvim').setup(lsp_config, {
-    --on_attach = onAttach,
-    --globals = {
-      ---- Colorbuddy
-      --"Color", "c", "Group", "g", "s"
+  --local servers = {'hls', 'vimls'}
+  --for _, lsp in ipairs(servers) do
+    --lsp_config[lsp].setup {
+      --on_attach = onAttach
     --}
+  --end
+
+  -- TODO cleanup rest...
+  
+  --local onAttach = function(client, bufnr)
+    --completion.on_attach()
+
+    -- format on save for selected buffers
+    --vim.api.nvim_command[[autocmd BufWritePre *.scala lua vim.lsp.buf.formatting_sync(nil, 1000)]]
+    --vim.api.nvim_command[[autocmd BufWritePre *.scala lua require('metals').organize_imports()]]
+    --vim.api.nvim_command[[autocmd BufWritePre *.sbt lua vim.lsp.buf.formatting_sync(nil, 1000)]]
+    --vim.api.nvim_command[[autocmd BufWritePre *.hs lua vim.lsp.buf.formatting_sync(nil, 1000)]]
+  --end
+
+  --lsp_config.util.default_config = vim.tbl_extend('force', lsp_config.util.default_config, {
+    --handlers = {['textDocument/publishDiagnostics'] = shared_diagnostic_settings},
+    --on_attach = onAttach,
+    --capabilities = capabilities
   --})
 
-  lsp_config.hls.setup {
-    settings = {
-      haskell = {
-        formattingProvider = 'stylish-haskell'
-      }
-    }
-  }
 
-  lsp_config.sumneko_lua.setup {
-    cmd = {sumneko_binary, "-E", sumneko_root_path .. '/main.lua'};
-    settings = {
-      Lua = {
-        runtime = {
-          version = 'LuaJIT',
-          path = vim.split(package.path, ';')
-        },
-        diagnostics = {
-          globals = {'vim'}
-        },
-        workspace = {
-          library = {
-            [fn.expand('$VIMRUNTIME/lua')] = true,
-            [fn.expand('$VIMRUNTIME/lua/vim/lsp')] = true
-          }
-        }
-      }
-    }
-  }
+
+  --lsp_config.hls.setup {
+    --settings = {
+      --haskell = {
+        --formattingProvider = 'stylish-haskell'
+      --}
+    --}
+  --}
+
+  --lsp_config.sumneko_lua.setup {
+    --cmd = {sumneko_binary, "-E", sumneko_root_path .. '/main.lua'};
+    --settings = {
+      --Lua = {
+        --runtime = {
+          --version = 'LuaJIT',
+          --path = vim.split(package.path, ';')
+        --},
+        --diagnostics = {
+          --globals = {'vim'}
+        --},
+        --workspace = {
+          --library = {
+            --[fn.expand('$VIMRUNTIME/lua')] = true,
+            --[fn.expand('$VIMRUNTIME/lua/vim/lsp')] = true
+          --}
+        --}
+      --}
+    --}
+  --}
 
   --lsp_config.dockerls.setup {}
   --lsp_config.html.setup {}
@@ -208,10 +237,20 @@ function M.setup()
   -- Treesitter Setup --
   ----------------------
 
-  require('nvim-treesitter.configs').setup {
-    ensure_installed = {'html', 'javascript', 'yaml', 'css', 'toml', 'lua', 'json'},
-    highlight = {enable = true}
-  }
+  --require('nvim-treesitter.configs').setup {
+    --ensure_installed = {'html', 'javascript', 'yaml', 'css', 'toml', 'lua', 'json'},
+    --highlight = {enable = true}
+  --}
+
+end
+
+local function lsp_workspace_symbols()
+  local input = fn.input("Query: ")
+  vim.api.nvim_command("normal :esc<CR>")
+  if not input or #input == 0 then
+    return
+  end
+  require('telescope.builtin').lsp_workspace_symbols({ query = input })
 end
 
 return M

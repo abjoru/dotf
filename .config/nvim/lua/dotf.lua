@@ -1,5 +1,4 @@
 local M = {}
-local cmd = vim.cmd
 
 -- Check if the installer flag has been set.
 -- We do not want to load plugin configs for
@@ -19,11 +18,8 @@ end
 function M.configure_plugins()
   if not is_install() then
     require('dotf/ui/settings').setup()
-    require('dotf/search/settings').setup()
     require('dotf/git/settings').setup()
     require('dotf/lsp/settings').setup()
-    require('nvim-autopairs').setup()
-    require('colorizer').setup()
   end
 end
 

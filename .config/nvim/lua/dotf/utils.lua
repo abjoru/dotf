@@ -1,6 +1,10 @@
 local M = {}
 local api = vim.api
 
+function M.toggle_nums()
+  vim.wo.number = not vim.wo.number
+end
+
 -- Create a new mapping for a given mode.
 function M.map(mode, lhs, rhs, opts)
   local options = {noremap = true, silent = true}

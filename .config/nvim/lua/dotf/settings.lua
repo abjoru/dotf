@@ -1,7 +1,9 @@
 local M = {}
 local g = vim.g
 local cmd = vim.cmd
-local utils = require('dotf/utils')
+local map = require('dotf/utils').map
+local opt = vim.opt
+local globals = vim.opt_global
 
 local indent = 2
 
@@ -10,11 +12,11 @@ local function tabsAndSpacesSettings()
   --cmd('set autoread')
   --cmd('set smartindent')
   --cmd('set list')
-  utils.opt('b', 'expandtab', true)
-  utils.opt('b', 'shiftwidth', indent)
-  utils.opt('b', 'tabstop', indent)
-  utils.opt('b', 'softtabstop', indent)
-  utils.opt('b', 'fileformat', 'unix')
+  opt.expandtab = true
+  opt.shiftwidth = indent
+  opt.tabstop = indent
+  opt.softtabstop = indent
+  opt.fileformat = 'unix'
 end
 
 local function uiSettings()
@@ -22,57 +24,72 @@ local function uiSettings()
   -- mode is shown in statusline, no need for another one
   cmd [[set noshowmode]]
 
-  utils.opt('o', 'laststatus', 2)
-  utils.opt('o', 'scrolloff', 7)      -- set 7 lines to the cursor - when moving vertically using j/k
-  utils.opt('o', 'splitbelow', true)  -- split below
-  utils.opt('o', 'splitright', true)  -- split on the right side
+  opt.scrolloff = 7      -- set 7 lines to the cursor - when moving vertically using j/k
+  opt.splitbelow = true  -- split below
+  opt.splitright = true  -- split on the right side
 
-  utils.opt('w', 'number', true)          -- show current line numbers
-  utils.opt('w', 'relativenumber', true)  -- enable rlative linenumbers
-  utils.opt('w', 'wrap', false)
-  utils.opt('w', 'cursorline', true)
-  utils.opt('w', 'signcolumn', 'yes')
+  opt.number = true          -- show current line numbers
+  opt.relativenumber = true  -- enable rlative linenumbers
+  opt.wrap = false
+  opt.cursorline = true
+  opt.signcolumn = 'yes'
 
-  utils.opt('o', 'termguicolors', true)
-  utils.opt('o', 'hidden', true)
-  utils.opt('o', 'showtabline', 1)
-  utils.opt('o', 'updatetime', 300)
-  utils.opt('o', 'showmatch', true)
-  utils.opt('o', 'laststatus', 2)
+  globals.shortmess:remove("F"):append("c")
+  globals.path:append("**")
+  globals.termguicolors = true
+  globals.hidden = true
+  globals.showtabline = 1
+  globals.updatetime = 300
+  globals.showmatch = true
+  globals.laststatus = 2
+  globals.completeopt = {'menu', 'menuone', 'noselect'}
+
+  --utils.opt('o', 'termguicolors', true)
+  --utils.opt('o', 'hidden', true)
+  --utils.opt('o', 'showtabline', 1)
+  --utils.opt('o', 'updatetime', 300)
+  --utils.opt('o', 'showmatch', true)
+  --utils.opt('o', 'laststatus', 2)
   --utils.opt('o', 'completeopt', 'menuone,noinsert,noselect')
-  cmd [[set completeopt=menuone,noinsert,noselect]]
-  vim.o.path = vim.o.path .. '**'
+  --cmd [[set completeopt=menuone,noinsert,noselect]]
+  --vim.o.path = vim.o.path .. '**'
 end
 
 local function backupSettings()
   cmd [[set nobackup]]
   cmd [[set nowritebackup]]
+  cmd [[set noswapfile]]
 
-  utils.opt('o', 'undofile', true)
-  utils.opt('o', 'undolevels', 1000)      -- max num of changes that can be undone
-  utils.opt('o', 'undoreload', 10000)     -- max num lines to save for undo on a buffer reload
+  globals.clipboard = 'unnamed'
+  globals.modeline = true
+  globals.undofile = true
+  globals.undolevels = 1000      -- max num of changes that can be undone
+  globals.undoreload = 10000     -- max num lines to save for undo on a buffer reload
 end
 
 local function searchSettings()
-  utils.opt('o', 'hlsearch', true)    -- highlight matches
-  utils.opt('o', 'incsearch', true)   -- search as chars are entered
-  utils.opt('o', 'ignorecase', true)  -- ignore case in searches
-  utils.opt('o', 'smartcase', true)   -- unless casing in query
+  --utils.opt('o', 'hlsearch', true)    -- highlight matches
+  --utils.opt('o', 'incsearch', true)   -- search as chars are entered
+  globals.ignorecase = true  -- ignore case in searches
+  globals.smartcase = true   -- unless casing in query
+  globals.wildignore = {
+    '*/tmp/*', '*.so', '*.swp', '*.zip', '*.class', '*.hi', '*.o', '*/target/*', '*/out/*', '.bloop',
+    '.metals', '.ammonite'
+  }
 end
 
 local function standardMappings()
   -- insert-mode mappings
-  utils.map('i', 'jj', '<ESC>')
+  map('i', 'jj', '<ESC>')
 
   -- normal-mode mappings
-  utils.map('n', '<leader>hs', ':nohlsearch<cr>')
-  utils.map('n', '<leader>xml', ':%!xmllint --format -<cr>')
-  utils.map('n', '<leader>fo', ':copen<cr>')
-  utils.map('n', '<leader>fc', ':cclose<cr>')
-  utils.map('n', '<leader>fn', ':cnext<cr>')
-  utils.map('n', '<leader>fp', ':cprevious<cr>')
-  --utils.map('n', '<leader>nn', ':NvimTreeToggle<CR>')
-  --utils.map('n', '<leader>nf', ':NvimTreeFindFile<CR>')
+  map('n', '<leader>hs', ':nohlsearch<cr>')
+  map('n', '<leader>xml', ':%!xmllint --format -<cr>')
+  map('n', '<leader>fo', ':copen<cr>')
+  map('n', '<leader>fc', ':cclose<cr>')
+  map('n', '<leader>fn', ':cnext<cr>')
+  map('n', '<leader>fp', ':cprevious<cr>')
+  map("n", "<leader>tv", ":vnew | :te<cr>")
 end
 
 function M.setup()
@@ -82,13 +99,6 @@ function M.setup()
   -- shorten time before the vim-leader-guide buffer appears
   cmd [[set timeoutlen=300]]
   cmd [[set ttimeoutlen=0]]
-
-  -- use system clipboard
-  cmd [[set clipboard=unnamed]]
-  -- disable swap
-  cmd [[set noswapfile]]
-  -- read modelines from files
-  cmd [[set modeline]]
 
   -- don't show line numbers in terminals
   cmd [[autocmd TermOpen * setlocal nonumber]]
@@ -114,21 +124,23 @@ function M.setup()
   -------------------
 
   -- make super tab strt from the top and go down
-  cmd [[let g:SuperTabDefaultCompletionType = '<c-n>']]
+  g["SuperTabDefaultCompletionType"] = "<c-n>"
+  --cmd [[let g:SuperTabDefaultCompletionType = '<c-n>']]
 
   -- enable mouse mode
-  utils.opt('o', 'mouse', 'a')
-
-  -- set messages to be short
-  utils.opt('o', 'shortmess', 'at')
+  --utils.opt('o', 'mouse', 'a')
+  globals.mouse = 'a'
 
   -- set soft wrap indent to be ` .`.
-  utils.opt('o', 'breakindent', true)
-  utils.opt('o', 'breakindentopt', 'shift:0')
-  utils.opt('o', 'showbreak', '\\ \\·')
+  --utils.opt('o', 'breakindent', true)
+  globals.breakindent = true
+  --utils.opt('o', 'breakindentopt', 'shift:0')
+  globals.breakindentopt = 'shift:0'
+  --utils.opt('o', 'showbreak', '\\ \\·')
+  globals.showbreak = '\\ \\·'
 
-  utils.opt('o', 'wildmenu', true)
-  utils.opt('o', 'wildignore', '*/tmp/*,*.so,*.swp,*.zip,*.class,*.hi,*.o,*/target/*,*/target,*/out,*/.bloop')
+  --utils.opt('o', 'wildmenu', true)
+
 end
 
 return M

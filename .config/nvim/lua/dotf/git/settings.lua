@@ -1,6 +1,6 @@
 local M = {}
 local g = vim.g
-local utils = require('dotf/utils')
+local map = require('dotf/utils').map
 
 function M.setup()
   --------------
@@ -13,11 +13,11 @@ function M.setup()
   -- Mappings --
   --------------
 
-  utils.map('n', '<leader>gc', ':Gcommit<CR>')
-  utils.map('n', '<leader>gs', ':Gstatus<CR>')
-  utils.map('n', '<leader>gl', ':Commits!<CR>')
-  utils.map('n', '<leader>gL', ':BCommits!<CR>')
-  utils.map('n', '<leader>gd', ':Gdiff<CR>')
+  map('n', '<leader>gc', ':Gcommit<CR>')
+  map('n', '<leader>gs', ':Gstatus<CR>')
+  map('n', '<leader>gl', ':Commits!<CR>')
+  map('n', '<leader>gL', ':BCommits!<CR>')
+  map('n', '<leader>gd', ':Gdiff<CR>')
 end
 
 return M
